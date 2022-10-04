@@ -1,0 +1,15 @@
+{% extends 'base_template.html' %}
+
+{% block page_content %}
+<h2><a href="{{ url_for('index') }}">Back to main</a></h2><br><br>
+<h2><a href="{{ url_for('toolkit') }}">Submit a new version</a></h2><br><br><br><br><br>
+<h2>Submitted toolkits:</h2>
+
+<ul>
+	{% for task in tasks %}
+	<li><a href="{{ url_for('toolkit_details', id=task.id) }}">{{ task.name }} ({{ task.id }} {% if current_user.admin
+			%}{{ task.user}}, {{ task.instance.ip }}{% endif %})</a></li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

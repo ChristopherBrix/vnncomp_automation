@@ -1,0 +1,47 @@
+{% extends 'base_template.html' %}
+
+{% block page_content %}
+
+<h2><a href="{{ url_for('index') }}">Back to main</a></h2><br><br><br><br><br>
+<h2>Benchmark details for {{ task.name }} ({{ task.id }})</h2>
+<br>Requested instance type: {{ task.aws_instance_type.get_aws_name() }} (IP: {{ task.instance.ip }})
+<br>Repository: {{ task.repository }}, hash: {{ task.hash }}
+<br>Script dir: {{ task.script_dir}}
+<br>VnnLib dir: {{ task.vnnlib_dir }}
+<br>Onnx dir: {{ task.onnx_dir }}
+<br>instances.csv file: {{ task.csv_file }}
+<br>Done?: {{ task.done }}
+{% if task.done %}
+(total runtime {{ task.total_runtime // (60*60) }} hours, {{ task.total_runtime % (60*60) // (60) }} minutes)
+{% else %}
+(runtime so far {{ task.total_runtime // (60*60) }} hours, {{ task.total_runtime % (60*60) // (60) }} minutes)
+{% if task.current_step.can_be_aborted() %}
+(<a href="{{ url_for('benchmark_abort', id=task.id) }}">abort</a>)
+{% else %}
+(cannot be aborted right now)
+{% endif %}
+{% endif %}
+
+<br>
+{% for step in task._db_steps %}
+<br>{{ step.description() }}:
+{% if step.done %}
+Done.
+{% elif step.active %}
+Running.
+{% else %}
+Pending.
+{% endif %}
+{% if step.logs != "" %}
+<pre class="console_log">{{ step.logs }}</pre>
+{% endif %}
+{% if step.note() != "" %}
+<strong>{{ step.note() }}</strong>
+{% endif %}
+<br><br>
+{% endfor %}
+
+<br><a href="{{ url_for('benchmark_resubmit', id=task.id) }}">Use data to populate submission form</a>
+<br>
+
+{% endblock %}

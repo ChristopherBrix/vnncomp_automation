@@ -1,0 +1,17 @@
+{% extends 'base_template.html' %}
+
+{% block page_content %}
+<h2>Edit the post-installation script</h2>
+
+<p class="pt-5"><strong>{{ message }}</strong></p>
+
+Use this form to edit the post-installation script. To give you the necessary time, please select the "pause" option
+during toolkit submission.
+{{ wtf.quick_form(form, action="") }}
+
+<br><br><a href="{{ url_for('toolkit_details', id=id)}}">Back to submission details</a>
+
+<br><br><br><br>
+<br><a href="{{ url_for('toolkit_list') }}">List of all submitted toolkits</a>
+
+{% endblock %}

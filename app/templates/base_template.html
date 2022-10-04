@@ -1,0 +1,53 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    body {
+        background: #e8f1f9;
+    }
+
+    pre {
+        height: 300px;
+    }
+
+    ul.form-control {
+        height: auto;
+        padding-left: 40px;
+    }
+
+    strong {
+        color: red;
+    }
+</style>
+{% endblock %}
+
+
+{% block title %}
+VNN-Comp 2022
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-lg-12 mx-lg-auto mx-md-auto">
+            <h1 class="pt-5 pb-2">VNN-Comp 2022</h1>
+
+            {% if current_user.is_anonymous %}
+            You're not logged in
+            {% else %}
+            Logged in as {{ current_user.username }} (<a href="{{ url_for('logout') }}">logout</a>)
+            {% endif %}
+
+            <!-- <br><br><b>I'm currently adding some functionality, in case of issues please try again in an hour. I'll post
+                an update in the GitHub issue once I'm done.</b> -->
+
+
+            {% block page_content %}{% endblock %}
+            <br><br>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base_template.html' %}
+
+{% block page_content %}
+
+<h2><a href="{{ url_for('index') }}">Back to main</a></h2><br><br><br><br><br>
+
+<br>Note: This list contains all submitted benchmarks, including duplicated and failed attempts. Please
+refer to the GitHub issue for the final list of benchmarks.
+<h2>Submitted benchmarks:</h2>
+
+<ul>
+	{% for task in tasks %}
+	<li><a href="{{ url_for('benchmark_details', id=task.id) }}">{{ task.name }} ({{ task.id }}{% if current_user.admin
+			%}, {{ task.instance.ip }}{% endif %})</a></li>
+	{% endfor %}
+</ul>
+
+{% endblock %}
