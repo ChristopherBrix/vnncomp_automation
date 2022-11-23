@@ -1,0 +1,81 @@
+CREATE TABLE task_steps (
+	_db_id INTEGER NOT NULL, 
+	_db_type VARCHAR, 
+	_db_task_id INTEGER, 
+	done BOOLEAN, 
+	active BOOLEAN, 
+	_db_aborted BOOLEAN, 
+	_db_run_as_root BOOLEAN, 
+	benchmark_name VARCHAR, 
+	run_networks VARCHAR, 
+	_db_results VARCHAR, 
+	benchmark_name2 VARCHAR, 
+	CONSTRAINT pk_task_steps PRIMARY KEY (_db_id), 
+	CONSTRAINT fk_task_steps__db_task_id_tasks FOREIGN KEY(_db_task_id) REFERENCES tasks (_db_id)
+);
+CREATE TABLE flasklogin_users (
+	id INTEGER NOT NULL, 
+	username VARCHAR(40) NOT NULL, 
+	password VARCHAR(200) NOT NULL, 
+	created_on DATETIME, 
+	last_login DATETIME, 
+	enabled BOOLEAN DEFAULT (0) NOT NULL, 
+	admin BOOLEAN DEFAULT (0) NOT NULL, 
+	CONSTRAINT pk_flasklogin_users PRIMARY KEY (id), 
+	CONSTRAINT uq_flasklogin_users_username UNIQUE (username)
+);
+CREATE TABLE tasks (
+	_db_id INTEGER NOT NULL, 
+	_db_type VARCHAR, 
+	_db_aws_instance_type INTEGER NOT NULL, 
+	_db_ami VARCHAR, 
+	_db_name VARCHAR, 
+	_db_repository VARCHAR, 
+	_db_hash VARCHAR, 
+	_db_script_dir VARCHAR, 
+	_db_current_step_id INTEGER, 
+	_db_total_runtime INTEGER, 
+	CONSTRAINT pk_tasks PRIMARY KEY (_db_id), 
+	CONSTRAINT fk_tasks__db_current_step_id_task_steps FOREIGN KEY(_db_current_step_id) REFERENCES task_steps (_db_id)
+);
+CREATE TABLE logs (
+	_db_id INTEGER NOT NULL, 
+	_db_step_id INTEGER, 
+	_db_text VARCHAR, 
+	CONSTRAINT pk_logs PRIMARY KEY (_db_id), 
+	CONSTRAINT fk_logs__db_step_id_task_steps FOREIGN KEY(_db_step_id) REFERENCES task_steps (_db_id)
+);
+CREATE TABLE benchmark_tasks (
+	_db_id INTEGER NOT NULL, 
+	_db_vnnlib_dir VARCHAR, 
+	_db_onnx_dir VARCHAR, 
+	_db_csv_file VARCHAR, 
+	_db_csv_onnx_base VARCHAR, 
+	_db_csv_vnnlib_base VARCHAR, 
+	CONSTRAINT pk_benchmark_tasks PRIMARY KEY (_db_id), 
+	CONSTRAINT fk_benchmark_tasks__db_id_tasks FOREIGN KEY(_db_id) REFERENCES tasks (_db_id)
+);
+CREATE TABLE toolkit_tasks (
+	_db_id INTEGER NOT NULL, 
+	_db_post_install_tool VARCHAR, 
+	_db_user_id INTEGER, 
+	_db_run_install_as_root BOOLEAN, 
+	_db_run_post_install_as_root BOOLEAN, 
+	_db_run_tool_as_root BOOLEAN, 
+	CONSTRAINT pk_toolkit_tasks PRIMARY KEY (_db_id), 
+	CONSTRAINT fk_toolkit_tasks__db_id_tasks FOREIGN KEY(_db_id) REFERENCES tasks (_db_id), 
+	CONSTRAINT fk_toolkit_tasks__db_user_id_flasklogin_users FOREIGN KEY(_db_user_id) REFERENCES flasklogin_users (id)
+);
+CREATE TABLE instances (
+	_db_id VARCHAR NOT NULL, 
+	_db_creation_timestamp DATETIME, 
+	_db_aws_instance_type INTEGER NOT NULL, 
+	_db_ami VARCHAR, 
+	_db_state VARCHAR, 
+	_db_reachability VARCHAR, 
+	_db_ip VARCHAR, 
+	_db_disabled BOOLEAN, 
+	_db_task_id VARCHAR, 
+	CONSTRAINT pk_instances PRIMARY KEY (_db_id), 
+	CONSTRAINT fk_instances__db_task_id_tasks FOREIGN KEY(_db_task_id) REFERENCES tasks (_db_id)
+);

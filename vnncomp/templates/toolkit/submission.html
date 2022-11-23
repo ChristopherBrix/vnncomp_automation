@@ -1,0 +1,85 @@
+{#{% extends 'base_template.html' %}#}
+{##}
+{#{% block page_content %}#}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% import "components.html" as components %}
+
+{{ components.head(title="VNN-Comp 2023") }}
+
+{{ components.loggedIn_navbar(current_user=current_user) }}
+
+<style>
+                    div.form-group {
+                        margin-bottom: 1rem !important;
+                    }
+
+                    div.checkbox {
+                        margin-bottom: 1rem !important;
+                    }
+                </style>
+
+<section class="bg-light">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <div class="col-12 col-lg-12">
+                <div style="padding: 1rem 1rem 1rem 0;">
+                <a href="/"
+                   class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0" style="padding-left: 0 !important;"
+                >
+                    <span class="d-flex align-items-center">
+                        <span class="small">
+                            < Back to Main Page
+                        </span>
+                    </span>
+                </a>
+</div>
+                <h2>Test a toolkit</h2>
+
+                {% if message %}
+                    <p class="pt-5"><strong>{{ message }}</strong></p>
+                {% endif %}
+
+                Use this form to submit a new toolkit for benchmarking.
+
+
+
+                {{ wtf.quick_form(form, action="/toolkit/submit") }}
+
+                <br>To configure licenses, you may define an additional post-install script. It is executed once, after
+                install_tool.sh was run.
+                <br><b>For Gurobi:</b> Because the script is executed as root, grbgetkey cannot be called with the -q
+                flag
+                (non-interactively), because Gurobi double-checks the username. Please use the following template: <i>printf
+                "y\n\n" | grbgetkey [KEY]</i>
+                <br>
+                <br>
+                Test-Inputs:
+                <ul>
+                    <li>nnenum
+                        <br>https://github.com/stanleybak/nnenum.git
+                        <br>c93a39cb568f58a26015bd151acafab34d2d4929
+                        <br>vnncomp_scripts
+                    </li>
+                    <li>Debona
+                        <br>https://github.com/ChristopherBrix/Debona
+                        <br>fc4cae6ea099ca9ffc4e016d87a89707052976a5
+                        <br>.
+                        <br>cd src; printf "y\n\n" | pipenv run grbgetkey [KEY]
+                    </li>
+                </ul>
+{#                <br><br><br><br>#}
+{#                <br><a href="{{ url_for('toolkit_list') }}">List of all submitted toolkits</a>#}
+
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{{ components.footer() }}
+{{ components.foot() }}
+
+{#{% endblock %}#}

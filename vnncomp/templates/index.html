@@ -1,0 +1,166 @@
+{#{% extends 'bootstrap/base.html' %}#}
+{#{% import "bootstrap/wtf.html" as wtf %}#}
+{##}
+{#{% block styles %}#}
+{#{{ super() }}#}
+{#<style>#}
+{#    body {#}
+{#        background: #e8f1f9;#}
+{#    }#}
+{##}
+{#    pre {#}
+{#        height: 300px;#}
+{#    }#}
+{#</style>#}
+{#{% endblock %}#}
+{##}
+{##}
+{#{% block title %}#}
+{#VNN-Comp 2022#}
+{#{% endblock %}#}
+{##}
+{##}
+{#{% block content %}#}
+
+{% import "components.html" as components %}
+
+{{ components.head(title="VNN-Comp 2023") }}
+
+{{ components.loggedIn_navbar(current_user=current_user) }}
+
+{#<div class="container">#}
+{#    <div class="row">#}
+{#        <div class="col-md-10 col-lg-12 mx-lg-auto mx-md-auto">#}
+{#            <h1 class="pt-5 pb-2">VNN-Comp 2022</h1>#}
+{#            Welcome!#}
+{#            <br>For all updates and information about the VNN-Comp 2022, please visit the main website: <a#}
+{#                href="https://sites.google.com/view/vnn2022">https://sites.google.com/view/vnn2022</a>#}
+{#            <br>#}
+{#            {% if current_user.is_anonymous %}#}
+{#            You're not logged in?? how is that even possible#}
+{#            {% else %}#}
+{#            Logged in as {{ current_user.username }} (<a href="{{ url_for('logout') }}">logout</a>)#}
+{#            {% endif %}#}
+{##}
+{#            <a href="{{ url_for('toolkit') }}">#}
+{#                <h3>Test and submit your toolkit!</h3>#}
+{#            </a>#}
+{##}
+{#            Or <a href="{{ url_for('toolkit_list') }}">view your submissions</a>.#}
+{##}
+{#            <!-- <br>You can use this website to submit benchmarks. Later, you will also be able to submit your tools so they#}
+{#            can#}
+{#            be automatically tested.#}
+{#            <br>#}
+{#            <h2>How to propose a benchmark</h2>#}
+{#            <h3>Step 1</h3>#}
+{#            To propose a new benchmark, please create a public git repository with all the necessary code.#}
+{#            <br>The repository must be structured as follows:#}
+{#            <ul>#}
+{#                <li>It must contain a generate_properties.py file which accepts the seed as the only command line#}
+{#                    parameter.</li>#}
+{#                <li>There must be a folder with all .vnnlib files, which may be identical to the folder containing the#}
+{#                    generate_properties.py file</li>#}
+{#                <li>There must be a folder with all .onnx files, which may be identical to the folder containing the#}
+{#                    generate_properties.py file</li>#}
+{#            </ul>#}
+{#            The generate_properties.py file will be run using Python 3.8 on a t2.large AWS instance.#}
+{#            <br>Click here for <a href="/benchmark/pip">a list of all installed packages</a>. If you need additional#}
+{#            packages, please#}
+{#            contact <a href="mailto:brix@cs.rwth-aachen.de">Christopher Brix</a>.#}
+{##}
+{#            <h3>Step 2</h3>#}
+{#            Once you submit the benchmark, it will be run automatically. Afterwards, please verify that it#}
+{#            terminated successfully:#}
+{#            <ul>#}
+{#                <li>Running it twice with different seeds must generate different outputs</li>#}
+{#                <li><a href="https://github.com/stanleybak/simple_adversarial_generator.git">randgen</a> should run on#}
+{#                    the generated files without errors.</li>#}
+{#            </ul>#}
+{#            If the benchmark failed, fix the error in your script and submit it again.#}
+{##}
+{#            <h3>Step 3</h3>#}
+{#            Once the test passes, copy the link to its result and poste a new comment on the <a#}
+{#                href="https://github.com/stanleybak/vnncomp2022/issues/2">GitHub issue</a>.#}
+{##}
+{##}
+{#            <br>#}
+{#            <br><a href=" {{ url_for('benchmark') }}">#}
+{#                <h3>Propose a new benchmark</h3>#}
+{#            </a>#}
+{#            <br><a href="{{ url_for('benchmark_list') }}">List of proposed benchmarks</a> -->#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+
+<!-- Basic features section-->
+<section class="bg-light masthead">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <div class="col-12 col-lg-12">
+                <h2 class="display-6 lh-1 mb-4">Welcome {% set the_first_name = current_user.username.split('@')[0] %}
+                    {{ the_first_name[0]|upper }}{{ the_first_name[1:] }}!</h2>
+                <p class="lead fw-normal text-muted mb-5 mb-lg-5">For all updates and information about the VNN-Comp
+                    2022, please visit the main website:
+                    <a href="https://sites.google.com/view/vnn2022">https://sites.google.com/view/vnn2022</a></p>
+                <div class="d-flex flex-column flex-lg-row align-items-center">
+                    <a class="me-lg-3 mb-4 mb-lg-0" href="{{ url_for('toolkit') }}">
+                        <button class="btn btn-dark rounded-pill px-3 mb-2 mb-lg-0">
+                                <span class="d-flex align-items-center">
+                                    <span class="fs-4">Test and submit your toolkit!</span>
+                                </span>
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<section style="background: white;">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <div class="col-12 col-lg-12">
+                <h2 class=" lh-1 mb-4">Your submitted toolkits:</h2>
+
+                <div class="table-wrap">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                            {% if current_user.admin %}
+                                <td>User</td>
+                                <td>IP</td>
+                            {% endif %}
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for task in tasks %}
+                            <tr>
+                                <th scope="row" style="vertical-align:middle;">{{ task.name }}</th>
+                                <td style="vertical-align:middle;">{{ task.id }}</td>
+                                {% if current_user.admin %}
+                                    <td style="vertical-align:middle;">{{ task.user }}</td>
+                                    <td style="vertical-align:middle;">{{ task.instance.ip }}</td>
+                                {% endif %}
+                                <td style="vertical-align:middle;"><a
+                                        href="{{ url_for('toolkit_details', id=task.id) }}"
+                                        class="btn btn-light">View</a></td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{{ components.footer() }}
+{{ components.foot() }}
+
+{#{% endblock %}#}
