@@ -17,13 +17,13 @@ python ./create_db_file.py &> ./data/create_db_file_output.txt;
 # END_SQL
 
 # https://stackoverflow.com/questions/38832802/sqlite3-dump-schema-into-sql-file-from-command-line
-sqlite3 ./data/vnncomp.sqlite .schema &> ./data/db_schema.txt;
+# sqlite3 ./data/vnncomp.sqlite .schema &> ./data/db_schema.txt;
 
 # https://stackoverflow.com/questions/75675/how-do-i-dump-the-data-of-some-sqlite3-tables
-sqlite3 ./data/vnncomp.sqlite .dump &> ./data/db_data_sql.txt;
+# sqlite3 ./data/vnncomp.sqlite .dump &> ./data/db_data_sql.txt;
 
 # https://stackoverflow.com/questions/75675/how-do-i-dump-the-data-of-some-sqlite3-tables
-sqlite3 ./data/vnncomp.sqlite <<'END_SQL' > ./data/db_data_csv.txt
+# sqlite3 ./data/vnncomp.sqlite <<'END_SQL' > ./data/db_data_csv.txt
 .mode csv
 .headers on
 .dump
