@@ -7,9 +7,11 @@ RUN mkdir -p "/var/www/html/vnncomp"
 WORKDIR "/var/www/html/vnncomp"
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
-COPY . .
+# COPY . .
 
-RUN rm -r "./data"
+# RUN rm -r "./data"
+
+RUN rm ./requirements.txt
 
 
 
