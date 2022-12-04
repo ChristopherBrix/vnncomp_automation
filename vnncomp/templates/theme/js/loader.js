@@ -30,6 +30,10 @@ function refresh_output(ids, timers) {
             $(`#${id}_logs`).css("display", "block");
             $(`#${id}_results`).css("display", "block");
             $(`#${id}_time`).css("display", "block");
+
+            // scroll at the bottom of log
+            $(`#${id}_logs`).scrollTop(function() { return this.scrollHeight; });
+            $(`#${id}_results`).scrollTop(function() { return this.scrollHeight; });
         })
     }
 
