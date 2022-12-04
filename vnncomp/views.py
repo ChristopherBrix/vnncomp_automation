@@ -180,14 +180,39 @@ def toolkit_details(id):
 
     return render_template("toolkit/details.html", task=task, task_step_ids=task_step_ids)
 
+@app.route("/toolkit/details/task/<id>", methods=["GET"])
+@login_required
+def toolkit_details_task_status(id):
+    task = ToolkitTask.get(int(id))
+    if task is None:
+        return jsonify({"error": "not found"})
+
+
+    if task.done:
+        return jsonify({
+            "done": True,
+            "output": f"(total runtime { task.total_runtime // (60*60) } hours, { task.total_runtime % (60*60) // (60) } minutes)"
+        })
+    else:
+
+        abort_text = ""
+        if task.current_step.can_be_aborted():
+            abort_text += f"<a href='{url_for('toolkit_abort', id=task.id)}'> abort </a>)"
+        else:
+            abort_text += "(cannot be aborted right now)"
+
+        return jsonify({
+            "done": False,
+            "output": f"(runtime so far { task.total_runtime // (60*60) } hours, { task.total_runtime % (60*60) // (60) } minutes) {abort_text}"
+        })
 
 @app.route("/toolkit/details/step/<id>", methods=["GET"])
 @login_required
-def toolkit_async(id):
+def toolkit_taskstep_async(id):
     # task = ToolkitTask.get(int(id))
     taskstep = TaskStep.query.get(id)
     if taskstep is None:
-        return render_template("404.html")
+        return jsonify({"error": "not found"})
 
     from datetime import datetime, timezone
 

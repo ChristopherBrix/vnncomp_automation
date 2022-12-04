@@ -14,6 +14,36 @@ function log_request(step_id) {
     });
 }
 
+function task_status_request(task_id) {
+    let settings = {
+        "url": `/toolkit/details/task/${task_id}`,
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+        },
+    };
+
+    return $.ajax(settings).then(e => {
+        // console.log(`pulled task ${step_id}`)
+        return e
+    });
+}
+
+function refresh_task_status(task_id){
+    task_status_request(task_id).then(e => {
+        if(e.output){
+            console.log(e)
+            $("#task_status").text(`${e.done}`.toUpperCase())
+            $("#task_output").html(e.output)
+        } else {
+            $("#task_status").text(e.error)
+            $("#task_output").html(e.error)
+        }
+    })
+    setTimeout(() => refresh_task_status(task_id), 5000)
+}
+
 function refresh_output(ids, timers) {
 
     for (const id of ids) {

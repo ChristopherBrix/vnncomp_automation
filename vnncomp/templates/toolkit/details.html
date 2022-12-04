@@ -41,20 +41,20 @@
                 </a>
             </div>
 
-            <p>Done?: {{ task.done }}</p>
-            <p>
-                {% if task.done %}
-                    (total runtime {{ task.total_runtime // (60*60) }} hours, {{ task.total_runtime % (60*60) // (60) }}
-                    minutes)
-                {% else %}
-                    (runtime so far {{ task.total_runtime // (60*60) }} hours,
-                    {{ task.total_runtime % (60*60) // (60) }} minutes)
-                    {% if task.current_step.can_be_aborted() %}
-                        (<a href="{{ url_for('toolkit_abort', id=task.id) }}">abort</a>)
-                    {% else %}
-                        (cannot be aborted right now)
-                    {% endif %}
-                {% endif %}
+            <p><b>Done?</b>: <span style="color:blue; font-weight: bold" id="task_status"></span></p>
+            <p id="task_output" style="font-weight: bold; color:blue">
+{#                {% if task.done %}#}
+{#                    (total runtime {{ task.total_runtime // (60*60) }} hours, {{ task.total_runtime % (60*60) // (60) }}#}
+{#                    minutes)#}
+{#                {% else %}#}
+{#                    (runtime so far {{ task.total_runtime // (60*60) }} hours,#}
+{#                    {{ task.total_runtime % (60*60) // (60) }} minutes)#}
+{#                    {% if task.current_step.can_be_aborted() %}#}
+{#                        (<a href="{{ url_for('toolkit_abort', id=task.id) }}">abort</a>)#}
+{#                    {% else %}#}
+{#                        (cannot be aborted right now)#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
             </p>
         </div>
     </div>
@@ -70,9 +70,11 @@
             timers[`${i}`] = new TimerUpdater();
             timers[`${i}`].updater();
         })
-
-
         refresh_output(ids, timers)
+
+
+        const task_id = {{ task._db_id }};
+        refresh_task_status(task_id)
 
         {#Object.entries(timers).forEach(e => e[1].updater())#}
     })
