@@ -3,7 +3,7 @@ from crypt import methods
 import time
 from typing import Dict, List, Optional
 
-from flask import flash, render_template, redirect, url_for, abort
+from flask import flash, render_template, redirect, url_for, abort, jsonify
 from flask_login import current_user
 
 from vnncomp.main import app
@@ -19,9 +19,36 @@ from vnncomp.utils.task_steps import ToolkitRun
 
 from flask_login import login_required, logout_user, current_user, login_user
 
+from vnncomp.utils.task_steps import (
+    BenchmarkClone,
+    BenchmarkCreate,
+    BenchmarkGithubExport,
+    BenchmarkInitialize,
+    BenchmarkRun,
+    TaskPause,
+    ToolkitCreate,
+    ToolkitGithubExport,
+    ToolkitInitialize,
+    ToolkitClone,
+    ToolkitInstall,
+    ToolkitPostInstall,
+    ToolkitRun,
+    ToolkitCreate,
+    ToolkitInitialize,
+    ToolkitClone,
+    ToolkitInstall,
+    ToolkitRun,
+    TaskAssign,
+    TaskAbortion,
+    TaskFailure,
+    TaskShutdown,
+    TaskStep,
+    TaskTimeout,
+)
 
 MAX_RUNNING_TASKS = 3
 print("this si running")
+
 
 def fetch_updates():
     global LAST_UPDATE
@@ -148,7 +175,41 @@ def toolkit_details(id):
     task = ToolkitTask.get(int(id))
     if task is None:
         return render_template("404.html")
-    return render_template("toolkit/details.html", task=task)
+
+    task_step_ids = [step._db_id for step in task._db_steps]
+
+    return render_template("toolkit/details.html", task=task, task_step_ids=task_step_ids)
+
+
+@app.route("/toolkit/details/step/<id>", methods=["GET"])
+@login_required
+def toolkit_async(id):
+    # task = ToolkitTask.get(int(id))
+    taskstep = TaskStep.query.get(id)
+    if taskstep is None:
+        return render_template("404.html")
+
+    from datetime import datetime, timezone
+
+    status = ""
+    if taskstep.aborted:
+        status = "Aborted."
+    elif taskstep.done:
+        status = "Done."
+    elif taskstep.active:
+        status = "Running."
+    else:
+        status = "Pending."
+
+
+    return jsonify({
+        "description": taskstep.description(),
+        "logs": taskstep.logs,
+        "results": taskstep.results,
+        "note": taskstep.note(),
+        "status": status,
+        "time": datetime.now(timezone.utc)
+    })
 
 
 @app.route("/toolkit/edit_post_install/<id>", methods=["GET", "POST"])
