@@ -24,10 +24,10 @@ python ./create_db_file.py &> ./data/create_db_file_output.txt;
 
 # https://stackoverflow.com/questions/75675/how-do-i-dump-the-data-of-some-sqlite3-tables
 # sqlite3 ./data/vnncomp.sqlite <<'END_SQL' > ./data/db_data_csv.txt
-.mode csv
-.headers on
-.dump
-END_SQL
+# .mode csv
+# .headers on
+# .dump
+# END_SQL
 
 
 gunicorn --bind 0.0.0.0:5000 wsgi
