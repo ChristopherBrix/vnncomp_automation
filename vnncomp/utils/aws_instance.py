@@ -13,8 +13,6 @@ from sqlalchemy import DateTime
 from vnncomp import db
 from vnncomp.utils.task import Task, ToolkitTask
 
-ROOT = "/home/ubuntu/vnncomp/vnncomp/"
-
 
 class AwsInstanceType(Enum):
     T2MICRO = 1
@@ -49,8 +47,9 @@ def _get(dir, script, params=None):
     if params is None:
         params = {}
     try:
+        root_dir = os.getenv("AWS_SCRIPT_ROOT")
         stdout = subprocess.check_output(
-            [os.path.join(ROOT, "scripts", dir, script)],
+            [os.path.join(root_dir, "scripts", dir, script)],
             env=dict(os.environ, **params),
             stderr=subprocess.STDOUT,
         ).decode("ascii", errors="ignore")
@@ -187,12 +186,13 @@ class AwsInstance(db.Model):
         if self.task is not None:
             self.task._db_total_runtime = int(duration)
         db.session.commit()
+        assert not self.disabled
         # if isinstance(self.task, ToolkitTask):
         #     assert type(self.task) is ToolkitTask
         #     self.task: ToolkitTask
         #     if self.task.user.admin:
         #         return
-        # _get("", "terminate_instance.sh", {"id": self.id})
+        _get("", "terminate_instance.sh", {"id": self.id})
 
     @classmethod
     def get_next_available(
@@ -270,21 +270,21 @@ class AwsManager:
         db.session.commit()
 
         for instance in instances:
-            # if (
-            #     not instance.disabled
-            #     and instance.creation_timestamp
-            #     < datetime.datetime.utcnow() - datetime.timedelta(hours=24)
-            # ):
-            #     print("Instance older than 48 hours, terminating", instance)
-            #     if (
-            #         instance.task is not None
-            #         and instance.creation_timestamp
-            #         > datetime.datetime.utcnow()
-            #         - datetime.timedelta(hours=48, minutes=10)
-            #     ):
-            #         instance.task.timeout()
-            #     else:
-            #         instance.terminate()
+            if (
+                not instance.disabled
+                and instance.creation_timestamp
+                < datetime.datetime.utcnow() - datetime.timedelta(hours=1)
+            ):
+                print("Instance older than 1 hours, terminating", instance)
+                if (
+                    instance.task is not None
+                    and instance.creation_timestamp
+                    > datetime.datetime.utcnow()
+                    - datetime.timedelta(hours=1, minutes=10)
+                ):
+                    instance.task.timeout()
+                else:
+                    instance.terminate()
 
             if (
                 not instance.disabled

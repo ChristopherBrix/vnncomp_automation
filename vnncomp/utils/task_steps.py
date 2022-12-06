@@ -15,15 +15,13 @@ if TYPE_CHECKING:
     from vnncomp.utils.task import Task
 
 
-ROOT = "/home/ubuntu/vnncomp/vnncomp/"
-
-
 def _ping(dir, script, params=None):
     if params is None:
         params = {}
-    print("pinging", [os.path.join(ROOT, "scripts", dir, script)])
+    root_dir = os.getenv("AWS_SCRIPT_ROOT")
+    print("pinging", [os.path.join(root_dir, "scripts", dir, script)])
     _ = subprocess.Popen(
-        [os.path.join(ROOT, "scripts", dir, script)],
+        [os.path.join(root_dir, "scripts", dir, script)],
         env=dict(os.environ, **params),
         stderr=subprocess.STDOUT,
     )

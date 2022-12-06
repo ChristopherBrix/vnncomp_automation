@@ -1,3 +1,0 @@
-/usr/local/lib/python3.8/site-packages/flask_sqlalchemy/__init__.py:872: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the future.  Set it to True or False to suppress this warning.
-  warnings.warn(FSADeprecationWarning(
-db file already existed.

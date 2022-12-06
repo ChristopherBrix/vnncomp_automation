@@ -27,13 +27,13 @@ class ToolkitSubmissionForm(FlaskForm):
         "AWS instance type",
         choices=[
             (AwsInstanceType.T2MICRO.value, AwsInstanceType.T2MICRO.get_aws_name()),
-            (AwsInstanceType.T2LARGE.value, AwsInstanceType.T2LARGE.get_aws_name()),
-            (AwsInstanceType.P32XLARGE.value, AwsInstanceType.P32XLARGE.get_aws_name()),
-            (
-                AwsInstanceType.M516XLARGE.value,
-                AwsInstanceType.M516XLARGE.get_aws_name(),
-            ),
-            (AwsInstanceType.G58XLARGE.value, AwsInstanceType.G58XLARGE.get_aws_name()),
+            # (AwsInstanceType.T2LARGE.value, AwsInstanceType.T2LARGE.get_aws_name()),
+            # (AwsInstanceType.P32XLARGE.value, AwsInstanceType.P32XLARGE.get_aws_name()),
+            # (
+            #     AwsInstanceType.M516XLARGE.value,
+            #     AwsInstanceType.M516XLARGE.get_aws_name(),
+            # ),
+            # (AwsInstanceType.G58XLARGE.value, AwsInstanceType.G58XLARGE.get_aws_name()),
         ],
     )
     ami = SelectField(
@@ -82,7 +82,7 @@ class ToolkitSubmissionForm(FlaskForm):
             ("vggnet16_2022", "vggnet16_2022"),
         ],
         validators=[Length(min=1)],
-        render_kw={"style": "list-style: none; background: #f8f9fa; border: 0px"}
+        render_kw={"style": "list-style: none; background: #f8f9fa; border: 0px"},
     )
     run_networks = SelectField(
         "Run all instances, only one per network file or only the first one per submission",
@@ -97,7 +97,9 @@ class ToolkitSubmissionForm(FlaskForm):
         "Run post-install script as root", default=True
     )
     run_tool_as_root = BooleanField("Run toolkit as root", default=True)
-    submit = SubmitField("Start Evaluation", render_kw={"style": "background: #212529; color: white"})
+    submit = SubmitField(
+        "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
+    )
 
 
 class ToolkitEditPostInstallForm(FlaskForm):
