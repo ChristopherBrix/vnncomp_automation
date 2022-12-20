@@ -19,6 +19,9 @@ from vnncomp.utils.task_steps import ToolkitRun
 
 from flask_login import login_required, logout_user, current_user, login_user
 
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+
 from vnncomp.utils.task_steps import (
     BenchmarkClone,
     BenchmarkCreate,
@@ -180,6 +183,7 @@ def toolkit_details(id):
 
     return render_template("toolkit/details.html", task=task, task_step_ids=task_step_ids)
 
+
 @app.route("/toolkit/details/task/<id>", methods=["GET"])
 @login_required
 def toolkit_details_task_status(id):
@@ -187,11 +191,10 @@ def toolkit_details_task_status(id):
     if task is None:
         return jsonify({"error": "not found"})
 
-
     if task.done:
         return jsonify({
             "done": True,
-            "output": f"(total runtime { task.total_runtime // (60*60) } hours, { task.total_runtime % (60*60) // (60) } minutes)"
+            "output": f"(total runtime {task.total_runtime // (60 * 60)} hours, {task.total_runtime % (60 * 60) // (60)} minutes)"
         })
     else:
 
@@ -203,8 +206,9 @@ def toolkit_details_task_status(id):
 
         return jsonify({
             "done": False,
-            "output": f"(runtime so far { task.total_runtime // (60*60) } hours, { task.total_runtime % (60*60) // (60) } minutes) {abort_text}"
+            "output": f"(runtime so far {task.total_runtime // (60 * 60)} hours, {task.total_runtime % (60 * 60) // (60)} minutes) {abort_text}"
         })
+
 
 @app.route("/toolkit/details/step/<id>", methods=["GET"])
 @login_required
@@ -225,7 +229,6 @@ def toolkit_taskstep_async(id):
         status = "Running."
     else:
         status = "Pending."
-
 
     return jsonify({
         "description": taskstep.description(),
@@ -359,6 +362,12 @@ def manual_update():
     fetch_updates()
     process_tasks()
     return "/"
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=manual_update, trigger="interval", seconds=10)
+scheduler.start()
+atexit.register(lambda: scheduler.shutdown())
 
 
 @app.errorhandler(404)

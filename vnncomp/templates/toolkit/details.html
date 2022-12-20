@@ -85,7 +85,6 @@
         padding: 1em;
         background: darkslategrey;
         color: white;
-        border-radius: 20px;
         display: none;
         max-height: 30em;
     }
@@ -105,24 +104,24 @@
 
                     <b id="{{ step._db_id }}_status"></b>
                 </span>
-                    {% if step.logs != "" %}
-                        <pre id="{{ step._db_id }}_logs" class="console_log"></pre>
+{#                    {% if step.logs != "" %}#}
+                        <pre id="{{ step._db_id }}_logs" class="console_log" style="display: none"></pre>
                         {#<pre class="console_log">{{ step.logs }}</pre>#}
                         {#<a href="/toolkit/details/step/{{ step._db_id }}">Link</a>#}
 
-                    {% endif %}
-                    {% if step.results != "" %}
-                        <pre id="{{ step._db_id }}_results" class="console_log"></pre>
-                    {% endif %}
+{#                    {% endif %}#}
+{#                    {% if step.results != "" %}#}
+                        <pre id="{{ step._db_id }}_results" class="console_log" style="display: none"></pre>
+{#                    {% endif %}#}
 
+{#                    {% if step.note() != "" %}#}
+                        <strong id="{{ step._db_id }}_note" style="display: none"></strong>
+{#                    {% endif %}#}
 
-                    {% if step.logs != "" or  step.results != "" %}
-                        <small id="{{ step._db_id }}_time"></small>
-                    {% endif %}
+{#                    {% if step.logs != "" or  step.results != "" %}#}
+                        <small id="{{ step._db_id }}_time" style="display: none"></small>
+{#                    {% endif %}#}
 
-                    {% if step.note() != "" %}
-                        <strong id="{{ step._db_id }}_note"></strong>
-                    {% endif %}
                 </div>
 
             </div>
