@@ -18,9 +18,7 @@ from vnncomp.utils.forms import (
 from vnncomp.utils.task_steps import ToolkitRun
 
 from flask_login import login_required, logout_user, current_user, login_user
-
-import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
+from flask_apscheduler import APScheduler
 
 from vnncomp.utils.task_steps import (
     BenchmarkClone,
@@ -363,11 +361,13 @@ def manual_update():
     process_tasks()
     return "/"
 
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=manual_update, trigger="interval", seconds=10)
+scheduler = APScheduler()
+scheduler.init_app(app)
 scheduler.start()
-atexit.register(lambda: scheduler.shutdown())
+@scheduler.task('interval', id='automatic_update', seconds=60, misfire_grace_time=10)
+def automatic_update():
+    with scheduler.app.app_context():
+        manual_update()
 
 
 @app.errorhandler(404)
