@@ -93,7 +93,7 @@ function refresh_output(ids, timers) {
                 note_elem.show();
             }
 
-            if( ee.status === "Done." ) {
+            if( ee.status === "Done." || ee.status === "Aborted." ) {
                 ids = ids.filter(e => e !== id)
                 timers[`${id}`].stop_updating = true;
                 return;
