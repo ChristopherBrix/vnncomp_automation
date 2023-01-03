@@ -82,7 +82,9 @@ def index():
     # abort(404)
     if current_user.is_authenticated:
         tasks = ToolkitTask.get_all_uservisible()
-        return render_template("index.html", tasks=tasks)
+        benchmark_tasks = BenchmarkTask.get_all()
+
+        return render_template("index.html", tasks=tasks, benchmark_tasks=benchmark_tasks)
     else:
         form = LoginForm()
         return render_template("index___.html",
@@ -94,6 +96,10 @@ def index():
 def toolkit_redirect():
     return redirect("/toolkit/details")
 
+@app.route("/benchmark", methods=["GET"])
+@login_required
+def benchmark_redirect():
+    return redirect("/benchmark/details")
 
 @app.route("/toolkit/form", methods=["GET"])
 @login_required
