@@ -98,8 +98,7 @@
     <div class="container px-5">
         <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
             <div class="col-12 col-lg-12">
-                <h2 class="display-6 lh-1 mb-4">Welcome {% set the_first_name = current_user.username.split('@')[0] %}
-                    {{ the_first_name[0]|upper }}{{ the_first_name[1:] }}!</h2>
+                <h2 class="display-6 lh-1 mb-4">Welcome <code class="white-code">{% set the_first_name = current_user.username.split('@')[0] %}{{ the_first_name[0]|upper }}{{ the_first_name[1:] }}</code>!</h2>
                 <p class="lead fw-normal text-muted mb-5 mb-lg-5">For all updates and information about the VNN-Comp
                     2022, please visit the main website:
                     <a href="https://sites.google.com/view/vnn2022">https://sites.google.com/view/vnn2022</a></p>
@@ -159,6 +158,49 @@
         </div>
     </div>
 </section>
+
+{#<section style="background: white;">#}
+{#    <div class="container px-5">#}
+{#        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">#}
+{#            <div class="col-12 col-lg-12">#}
+{#                <h2 class=" lh-1 mb-4">Your submitted toolkits:</h2>#}
+{##}
+{#                <div class="table-wrap">#}
+{#                    <table class="table table-striped">#}
+{#                        <thead>#}
+{#                        <tr>#}
+{#                            <th>Name</th>#}
+{#                            <th>ID</th>#}
+{#                            {% if current_user.admin %}#}
+{#                                <td>User</td>#}
+{#                                <td>IP</td>#}
+{#                            {% endif %}#}
+{#                            <th>Actions</th>#}
+{#                        </tr>#}
+{#                        </thead>#}
+{#                        <tbody>#}
+{#                        {% for task in benchmark_tasks %}#}
+{#                            <tr>#}
+{#                                <th scope="row" style="vertical-align:middle;">{{ task.name }}</th>#}
+{#                                <td style="vertical-align:middle;">{{ task.id }}</td>#}
+{#                                {% if current_user.admin %}#}
+{#                                    <td style="vertical-align:middle;">{{ task.user }}</td>#}
+{#                                    <td style="vertical-align:middle;">{{ task.instance.ip }}</td>#}
+{#                                {% endif %}#}
+{#                                <td style="vertical-align:middle;"><a#}
+{#                                        href="{{ url_for('benchmark_details', id=task.id) }}"#}
+{#                                        class="btn btn-light">View</a></td>#}
+{#                            </tr>#}
+{#                        {% endfor %}#}
+{##}
+{#                        </tbody>#}
+{#                    </table>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#    </div>#}
+{#</section>#}
 
 {{ components.footer() }}
 {{ components.foot() }}

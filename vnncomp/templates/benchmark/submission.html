@@ -1,36 +1,117 @@
-{% extends 'base_template.html' %}
+{#{% extends 'base_template.html' %}#}
+{##}
+{#{% block page_content %}#}
+{##}
+{#<h2><a href="{{ url_for('index') }}">Back to main</a></h2><br><br><br><br><br>#}
+{#<h2>Submit a benchmark</h2>#}
+{##}
+{#<p class="pt-5"><strong>{{ message }}</strong></p>#}
+{##}
+{#Use this form to submit a new proposed benchmark.#}
+{#<br>The specified scripts directory must contain a file called generate_properties.py which uses the first#}
+{#passed command line argument as the seed. You may save the .onnx and generated .vnnlib files in#}
+{#subdirectories.#}
+{#{{ wtf.quick_form(form, action="/benchmark/submit") }}#}
+{##}
+{##}
+{#Test-Inputs:#}
+{#<ul>#}
+{#    <li>mnistfc (fails, because the seed has no influence)#}
+{#        <br>https://github.com/pat676/vnn-21-fc-mnist#}
+{#        <br>fe23eb596c42eae9cf865c9c84be099326564095#}
+{#        <br>.#}
+{#        <br>vnnlib_properties#}
+{#        <br>onnx#}
+{#    </li>#}
+{#    <li>mnistfc (succeeds)#}
+{#        <br>https://github.com/pat676/vnn-comp21-benchmarks#}
+{#        <br>9da9287eaadc78b119cb225b1f77caf7be85dea6#}
+{#        <br>mnist-fc#}
+{#        <br>.#}
+{#        <br>.#}
+{#    </li>#}
+{#</ul><br><br><br><br>#}
+{#<br><a href="{{ url_for('benchmark_list') }}">List of all submitted benchmarks</a>#}
+{##}
+{#{% endblock %}#}
 
-{% block page_content %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-<h2><a href="{{ url_for('index') }}">Back to main</a></h2><br><br><br><br><br>
-<h2>Submit a benchmark</h2>
+{% import "components.html" as components %}
 
-<p class="pt-5"><strong>{{ message }}</strong></p>
+{{ components.head(title="VNN-Comp 2023") }}
 
-Use this form to submit a new proposed benchmark.
-<br>The specified scripts directory must contain a file called generate_properties.py which uses the first
-passed command line argument as the seed. You may save the .onnx and generated .vnnlib files in
-subdirectories.
-{{ wtf.quick_form(form, action="/benchmark/submit") }}
+{{ components.loggedIn_navbar(current_user=current_user) }}
+
+<style>
+    div.form-group {
+        margin-bottom: 1rem !important;
+    }
+
+    div.checkbox {
+        margin-bottom: 1rem !important;
+    }
+</style>
+
+<section class="bg-light">
+    <div class="container px-5" style="max-width: 960px">
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <div class="col-12 col-lg-12 lead fw-normal">
+                <div style="padding: 1rem 1rem 1rem 0;" >
+                    <a href="{{url_for('benchmark_redirect')}}"
+                       class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0" style="padding-left: 0 !important;"
+                    >
+                    <span class="d-flex align-items-center">
+                        <span class="small">
+                            < Back to Main Page
+                        </span>
+                    </span>
+                    </a>
+                </div>
+                <h2>Submit a benchmark</h2>
+
+                {% if message %}
+                    <p class="pt-5"><strong>{{ message }}</strong></p>
+                {% endif %}
+
+                <p>Use this form to submit a new proposed benchmark.</p>
+
+                <p>The specified scripts directory must contain a file called <code class="fancy-code">generate_properties.py</code> which uses the
+                    first
+                    passed command line argument as the <code class="fancy-code">seed</code>. You may save the <code class="fancy-code">.onnx</code> and generated <code class="fancy-code">.vnnlib</code> files in
+                    subdirectories.</p>
+
+                {{ wtf.quick_form(form, action="/benchmark/submit") }}
+
+                <br>
+                <br>
+                <p>Test-Inputs:</p>
+                <ul>
+                    <li><code>mnistfc</code> (fails, because the seed has no influence)
+                        <br><code>https://github.com/pat676/vnn-21-fc-mnist</code>
+                        <br><code>fe23eb596c42eae9cf865c9c84be099326564095</code>
+                        <br><code>.</code>
+                        <br><code>vnnlib_properties</code>
+                        <br><code>onnx</code>
+                    </li>
+                    <li><code>mnistfc</code> (succeeds)
+                        <br><code>https://github.com/pat676/vnn-comp21-benchmarks</code>
+                        <br><code>9da9287eaadc78b119cb225b1f77caf7be85dea6</code>
+                        <br><code>mnist-fc</code>
+                        <br><code>.</code>
+                        <br><code>.</code>
+                    </li>
+                </ul>
+                {#                <br><br><br><br>#}
+                {#                <br><a href="{{ url_for('toolkit_list') }}">List of all submitted toolkits</a>#}
 
 
-Test-Inputs:
-<ul>
-    <li>mnistfc (fails, because the seed has no influence)
-        <br>https://github.com/pat676/vnn-21-fc-mnist
-        <br>fe23eb596c42eae9cf865c9c84be099326564095
-        <br>.
-        <br>vnnlib_properties
-        <br>onnx
-    </li>
-    <li>mnistfc (succeeds)
-        <br>https://github.com/pat676/vnn-comp21-benchmarks
-        <br>9da9287eaadc78b119cb225b1f77caf7be85dea6
-        <br>mnist-fc
-        <br>.
-        <br>.
-    </li>
-</ul><br><br><br><br>
-<br><a href="{{ url_for('benchmark_list') }}">List of all submitted benchmarks</a>
+            </div>
 
-{% endblock %}
+        </div>
+    </div>
+</section>
+
+
+{{ components.footer() }}
+{{ components.foot() }}

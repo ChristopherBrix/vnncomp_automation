@@ -128,7 +128,7 @@ class BenchmarkSubmissionForm(FlaskForm):
         "Location the vnnlib path in instances.csv is based on"
     )
     csv_onnx_base = StringField("Location the onnx path in instances.csv is based on")
-    submit = SubmitField("Start Test")
+    submit = SubmitField("Start Test", render_kw={"style": "background: #212529; color: white"})
 
 
 class SignupForm(FlaskForm):
