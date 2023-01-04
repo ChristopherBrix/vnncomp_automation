@@ -81,10 +81,11 @@ def inject_current_user():
 def index():
     # abort(404)
     if current_user.is_authenticated:
-        tasks = ToolkitTask.get_all_uservisible()
-        benchmark_tasks = BenchmarkTask.get_all()
+        if False:
+            return toolkit_redirect()
+        else:
+            return benchmark_redirect()
 
-        return render_template("index.html", tasks=tasks, benchmark_tasks=benchmark_tasks)
     else:
         form = LoginForm()
         return render_template("index___.html",
@@ -317,7 +318,62 @@ def benchmark_list():
 @app.route("/benchmark/details/<id>", methods=["GET"])
 def benchmark_details(id):
     task = BenchmarkTask.get(int(id))
-    return render_template("benchmark/details.html", task=task)
+    task_step_ids = [step._db_id for step in task._db_steps]
+    return render_template("benchmark/details.html", task=task, task_step_ids=task_step_ids)
+
+@app.route("/benchmark/details/task/<id>", methods=["GET"])
+@login_required
+def benchmark_details_task_status(id):
+    task = BenchmarkTask.get(int(id))
+    if task is None:
+        return jsonify({"error": "not found"})
+
+    if task.done:
+        return jsonify({
+            "done": True,
+            "output": f"(total runtime {task.total_runtime // (60 * 60)} hours, {task.total_runtime % (60 * 60) // (60)} minutes)"
+        })
+    else:
+
+        abort_text = ""
+        if task.current_step.can_be_aborted():
+            abort_text += f"<a href='{url_for('benchmark_abort', id=task.id)}'> abort </a>)"
+        else:
+            abort_text += "(cannot be aborted right now)"
+
+        return jsonify({
+            "done": False,
+            "output": f"(runtime so far {task.total_runtime // (60 * 60)} hours, {task.total_runtime % (60 * 60) // (60)} minutes) {abort_text}"
+        })
+
+@app.route("/benchmark/details/step/<id>", methods=["GET"])
+@login_required
+def benchmark_taskstep_async(id):
+    # task = ToolkitTask.get(int(id))
+    taskstep = TaskStep.query.get(id)
+    if taskstep is None:
+        return jsonify({"error": "not found"})
+
+    from datetime import datetime, timezone
+
+    status = ""
+    if taskstep.aborted:
+        status = "Aborted."
+    elif taskstep.done:
+        status = "Done."
+    elif taskstep.active:
+        status = "Running."
+    else:
+        status = "Pending."
+
+    return jsonify({
+        "description": taskstep.description(),
+        "logs": taskstep.logs,
+        "results": taskstep.results,
+        "note": taskstep.note(),
+        "status": status,
+        "time": datetime.now(timezone.utc)
+    })
 
 
 @app.route("/benchmark/resubmit/<id>", methods=["GET"])

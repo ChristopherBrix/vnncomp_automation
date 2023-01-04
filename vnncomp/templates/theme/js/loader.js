@@ -1,4 +1,4 @@
-function log_request(step_id) {
+function get_toolkit_task_step(step_id) {
     let settings = {
         "url": `/toolkit/details/step/${step_id}`,
         "method": "GET",
@@ -14,7 +14,23 @@ function log_request(step_id) {
     });
 }
 
-function task_status_request(task_id) {
+function get_benchmark_task_step(step_id) {
+    let settings = {
+        "url": `/benchmark/details/step/${step_id}`,
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+        },
+    };
+
+    return $.ajax(settings).then(e => {
+        // console.log(`pulled task ${step_id}`)
+        return e
+    });
+}
+
+function get_toolkit_task_status(task_id) {
     let settings = {
         "url": `/toolkit/details/task/${task_id}`,
         "method": "GET",
@@ -30,8 +46,24 @@ function task_status_request(task_id) {
     });
 }
 
-function refresh_task_status(task_id){
-    task_status_request(task_id).then(e => {
+function get_benchmark_task_status(task_id) {
+    let settings = {
+        "url": `/benchmark/details/task/${task_id}`,
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+        },
+    };
+
+    return $.ajax(settings).then(e => {
+        // console.log(`pulled task ${step_id}`)
+        return e
+    });
+}
+
+function refresh_task_status(getter, task_id){
+    getter(task_id).then(e => {
         if(e.output){
             // console.log(e)
             $("#task_status").text(`${e.done}`.toUpperCase())
@@ -41,20 +73,41 @@ function refresh_task_status(task_id){
             $("#task_output").html(e.error)
         }
     })
-    setTimeout(() => refresh_task_status(task_id), 5000)
+    setTimeout(() => refresh_task_status(getter, task_id), 5000)
 }
 
 let refresh_output_called_once = false;
-function refresh_output(ids, timers) {
+function refresh_task_steps(getter, ids, timers) {
 
     for (const id of ids) {
-        log_request(id).then(ee => {
+        getter(id).then(ee => {
 
             let logs_elem = new $$($(`#${id}_logs`));
             let results_elem = new $$($(`#${id}_results`));
             let status_elem = new $$($(`#${id}_status`));
             let note_elem = new $$($(`#${id}_note`));
             let time_elem = new $$($(`#${id}_time`));
+
+            if(ee.logs.trim() === ""){
+                logs_elem.hide();
+            } else {
+                if (! logs_elem.isVisible()) {
+                    logs_elem.show();
+                    logs_elem.it_should_scroll_to_bottom() // initially scroll at the bottom
+                }
+                else logs_elem.should_it_scroll_to_bottom()
+            }
+
+            if(ee.results.trim() === ""){
+                results_elem.hide();
+            } else {
+                if (! results_elem.isVisible()) {
+                    results_elem.show();
+                    results_elem.it_should_scroll_to_bottom() // initially scroll at the bottom
+                }
+                else results_elem.should_it_scroll_to_bottom()
+            }
+
 
             logs_elem.$.text(`${ee.logs}`);
             results_elem.$.text(`${ee.results}`);
@@ -64,25 +117,6 @@ function refresh_output(ids, timers) {
             timers[`${id}`].prevTime = ee.time;
             timers[`${id}`].element = time_elem.$;
 
-            if(ee.logs.trim() === ""){
-                logs_elem.hide();
-            } else {
-                if (! logs_elem.isVisible()) {
-                    logs_elem.show();
-                    logs_elem.scroll_to_bottom() // initially scroll at the bottom
-                }
-                else logs_elem.scroll_to_bottom_if_currently_bottom_scrolled()
-            }
-
-            if(ee.results.trim() === ""){
-                results_elem.hide();
-            } else {
-                if (! results_elem.isVisible()) {
-                    results_elem.show();
-                    results_elem.scroll_to_bottom() // initially scroll at the bottom
-                }
-                else results_elem.scroll_to_bottom_if_currently_bottom_scrolled()
-            }
 
             if(! time_elem.isVisible())
                 time_elem.show();
@@ -96,14 +130,17 @@ function refresh_output(ids, timers) {
             if( ee.status === "Done." || ee.status === "Aborted." ) {
                 ids = ids.filter(e => e !== id)
                 timers[`${id}`].stop_updating = true;
-                return;
+                time_elem.hide();
             }
+
+            logs_elem.scroll_to_bottom_if_reminded();
+            results_elem.scroll_to_bottom_if_reminded();
 
         })
     }
 
     refresh_output_called_once = true;
-    setTimeout(() => refresh_output(ids, timers), 5000)
+    setTimeout(() => refresh_task_steps(getter, ids, timers), 5000)
 }
 
 jQuery.prototype.scroll_to_bottom = function() {
@@ -119,10 +156,24 @@ const $$ = function(elem){
     this.show = () => elem.css("display", "block")
     this.isVisible = () => elem.css("display") === "block"
     this.scroll_to_bottom = () => elem.scroll_to_bottom()
-    this.scroll_to_bottom_if_currently_bottom_scrolled = () => {
-        if (elem.scrollTop === elem.height())
-            elem.scroll_to_bottom()
+
+    let should_scroll_to_bottom_reminder = false;
+    this.should_it_scroll_to_bottom = () => {
+        if (this.$.scrollTop() +
+                    this.$.innerHeight() >=
+                    this.$[0].scrollHeight)
+            should_scroll_to_bottom_reminder = true;
+        else
+            should_scroll_to_bottom_reminder = false;
     }
+    this.it_should_scroll_to_bottom = () => {
+        should_scroll_to_bottom_reminder = true;
+    }
+    this.scroll_to_bottom_if_reminded = () => {
+        if(should_scroll_to_bottom_reminder)
+            this.scroll_to_bottom()
+    }
+
     this.$ = elem
 }
 

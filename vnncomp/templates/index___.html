@@ -1,3 +1,7 @@
+{% import "components.html" as components %}
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +58,7 @@
     </div>
 </nav>
 <!-- Mashead header-->
-<header class="masthead">
+<header class="masthead" style="background: #fff9c8;">
     <div class="container px-5">
         <div class="row gx-5 align-items-center">
             <div class="col-lg-6">
@@ -73,7 +77,7 @@
                         </a>
                         <a href="#!">
                             <button class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal"
-                                    data-bs-target="#loginModal">
+                                    data-bs-target="#loginModal" style="border: 1px solid grey; background: inherit;">
                                 <span class="d-flex align-items-center">
                                     <span class="fs-4">Log In</span>
                                 </span>
@@ -96,8 +100,8 @@
         <div class="row gx-5 justify-content-center">
             <div class="col-xl-8">
 
-                <div class="h2 fs-1 text-white mb-4">Intelligence is the ability to adapt to change.</div>
-                <div class="h6 fs-5 text-white mb-0">- Stephen Hawking</div>
+                <div class="h2 fs-1 mb-4">Intelligence is the ability to adapt to change.</div>
+                <div class="h6 fs-5 mb-0">- Stephen Hawking</div>
 
             </div>
         </div>
@@ -106,24 +110,13 @@
 
 
 <!-- Footer-->
-<footer class="bg-black text-center py-5">
-    <div class="container px-5">
-        <div class="text-white-50 small">
-            <div class="mb-2">&copy; VNN-Comp 2022. All Rights Reserved.</div>
-{#            <a href="#!">Privacy</a>#}
-{#            <span class="mx-1">&middot;</span>#}
-{#            <a href="#!">Terms</a>#}
-{#            <span class="mx-1">&middot;</span>#}
-{#            <a href="#!">FAQ</a>#}
-        </div>
-    </div>
-</footer>
+{{ components.footer() }}
 <!-- Feedback Modal-->
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-gradient-primary-to-secondary p-4">
-                <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Send feedback</h5>
+                <h5 class="modal-title font-alt " id="feedbackModalLabel">Send feedback</h5>
                 <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
@@ -202,7 +195,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-gradient-primary-to-secondary p-4">
-                <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Log In</h5>
+                <h5 class="modal-title font-alt " id="feedbackModalLabel">Log In</h5>
                 <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
@@ -251,7 +244,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-gradient-primary-to-secondary p-4">
-                <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Sign Up</h5>
+                <h5 class="modal-title font-alt " id="feedbackModalLabel">Sign Up</h5>
                 <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>

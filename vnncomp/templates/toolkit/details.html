@@ -23,13 +23,13 @@
                     </span>
             </a></p>
 
-            <h2>Toolkits details for {{ task.name }} ({{ task.id }})</h2>
+            <h2>Toolkits details for <code>{{ task.name }} ({{ task.id }})</code></h2>
 
-            <p><b>Requested instance type:</b> {{ task.aws_instance_type.get_aws_name() }}, {{ task.ami }}
-                (IP: {{ task.instance.ip }})</p>
-            <p><b>Repository:</b> {{ task.repository }}, <b>hash</b>: {{ task.hash }}</p>
-            <p><b>Script dir</b>: {{ task.script_dir }}</p>
-            <p><b>Run networks</b>: {{ task.run_networks }}</p>
+            <p><b>Requested instance type:</b> <code>{{ task.aws_instance_type.get_aws_name() }}</code>, <code>{{ task.ami }}</code>
+                (IP: <code>{{ task.instance.ip }}</code>)</p>
+            <p><b>Repository:</b> <code>{{ task.repository }}</code>, <b>hash</b>: <code>{{ task.hash }}</code></p>
+            <p><b>Script dir</b>: <code>{{ task.script_dir }}</code></p>
+            <p><b>Run networks</b>: <code>{{ task.run_networks }}</code></p>
 
             <div class="d-flex flex-column flex-lg-row align-items-center" style="margin-bottom: 1rem">
                 <a class="me-lg-3 mb-4 mb-lg-0" href="{{ url_for('toolkit_resubmit', id=task.id) }}">
@@ -70,13 +70,12 @@
             timers[`${i}`] = new TimerUpdater();
             timers[`${i}`].updater();
         })
-        refresh_output(ids, timers)
+        refresh_task_steps(get_toolkit_task_step, ids, timers)
 
 
         const task_id = {{ task._db_id }};
-        refresh_task_status(task_id)
+        refresh_task_status(get_toolkit_task_status, task_id)
 
-        {#Object.entries(timers).forEach(e => e[1].updater())#}
     })
 
 </script>
@@ -91,7 +90,7 @@
             <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
                 <div class="col-12 col-lg-12">
 
-                <span style="display:block; {% if step.logs != "" or step.results != "" or step.note() != "" %} margin-bottom: 1rem {% endif %}">{{ step.description() }}
+                <span style="display:block; ">{{ step.description() }}
                     {% if current_user.admin %} ({{ step._db_id }}) {% endif %}:
 
                     <b id="{{ step._db_id }}_status"></b>

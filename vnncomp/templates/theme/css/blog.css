@@ -10,7 +10,7 @@
     white-space: break-spaces;
     background-color: #f2f2f2;
     border-radius: 6px;
-    vertical-align: text-top;
+    vertical-align: baseline;
     color: inherit;
 }
 
@@ -19,13 +19,13 @@ h2 code.white-code{
     margin: 0;
     background-color: #0000009e;
     border-radius: 6px;
-    vertical-align: text-top;
+    vertical-align: baseline;
     color: white;
 }
 
 .console_log {
     padding: 1em;
-    background: darkslategrey;
+    background: #3a3a3a;
     color: white;
     display: none;
     max-height: 30em;
@@ -34,4 +34,8 @@ h2 code.white-code{
 .console_log_light{
     color: black;
     background: #ffe9e9;
+}
+
+code{
+    font-size: inherit;
 }
