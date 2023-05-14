@@ -1,5 +1,3 @@
-{#{% extends 'base_template.html' %}#}
-
 {% import "components.html" as components %}
 
 {{ components.head(title="VNN-Comp 2023") }}
@@ -42,19 +40,6 @@
             </div>
 
             <p><b>Done?</b>: <span style="color:blue; font-weight: bold" id="task_status"></span></p>
-            <p id="task_output" style="font-weight: bold; color:blue">
-{#                {% if task.done %}#}
-{#                    (total runtime {{ task.total_runtime // (60*60) }} hours, {{ task.total_runtime % (60*60) // (60) }}#}
-{#                    minutes)#}
-{#                {% else %}#}
-{#                    (runtime so far {{ task.total_runtime // (60*60) }} hours,#}
-{#                    {{ task.total_runtime % (60*60) // (60) }} minutes)#}
-{#                    {% if task.current_step.can_be_aborted() %}#}
-{#                        (<a href="{{ url_for('toolkit_abort', id=task.id) }}">abort</a>)#}
-{#                    {% else %}#}
-{#                        (cannot be aborted right now)#}
-{#                    {% endif %}#}
-{#                {% endif %}#}
             </p>
         </div>
     </div>
@@ -95,23 +80,15 @@
 
                     <b id="{{ step._db_id }}_status"></b>
                 </span>
-{#                    {% if step.logs != "" %}#}
                         <pre id="{{ step._db_id }}_logs" class="console_log" style="display: none"></pre>
                         {#<pre class="console_log">{{ step.logs }}</pre>#}
                         {#<a href="/toolkit/details/step/{{ step._db_id }}">Link</a>#}
 
-{#                    {% endif %}#}
-{#                    {% if step.results != "" %}#}
                         <pre id="{{ step._db_id }}_results" class="console_log" style="display: none"></pre>
-{#                    {% endif %}#}
 
-{#                    {% if step.note() != "" %}#}
                         <strong id="{{ step._db_id }}_note" style="display: none"></strong>
-{#                    {% endif %}#}
 
-{#                    {% if step.logs != "" or  step.results != "" %}#}
                         <small id="{{ step._db_id }}_time" style="display: none"></small>
-{#                    {% endif %}#}
 
                 </div>
 
@@ -119,10 +96,6 @@
         </div>
     </section>
 {% endfor %}
-{#<br><a href="{{ url_for('toolkit_resubmit', id=task.id) }}">Use data to populate submission form</a>#}
-
-
-{#{% endblock %}#}
 
 
 {{ components.footer() }}

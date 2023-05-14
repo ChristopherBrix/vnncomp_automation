@@ -48,7 +48,7 @@ from vnncomp.utils.task_steps import (
 )
 
 MAX_RUNNING_TASKS = 3
-print("this si running")
+print("Website should be online")
 
 
 def fetch_updates():
@@ -205,7 +205,7 @@ def toolkit_details_task_status(id):
 
         abort_text = ""
         if task.current_step.can_be_aborted():
-            abort_text += f"<a href='{url_for('toolkit_abort', id=task.id)}'> abort </a>)"
+            abort_text += f"(<a href='{url_for('toolkit_abort', id=task.id)}'> abort </a>)"
         else:
             abort_text += "(cannot be aborted right now)"
 
