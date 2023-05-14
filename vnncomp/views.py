@@ -205,7 +205,7 @@ def toolkit_details_task_status(id):
 
         abort_text = ""
         if task.current_step.can_be_aborted():
-            abort_text += f"(<a href='{url_for('toolkit_abort', id=task.id)}'> abort </a>)"
+            abort_text += f"(<a href='{url_for('toolkit_abort', id=task.id)}'>abort</a>)"
         else:
             abort_text += "(cannot be aborted right now)"
 
@@ -337,7 +337,7 @@ def benchmark_details_task_status(id):
 
         abort_text = ""
         if task.current_step.can_be_aborted():
-            abort_text += f"<a href='{url_for('benchmark_abort', id=task.id)}'> abort </a>)"
+            abort_text += f"(<a href='{url_for('benchmark_abort', id=task.id)}'>abort</a>)"
         else:
             abort_text += "(cannot be aborted right now)"
 
