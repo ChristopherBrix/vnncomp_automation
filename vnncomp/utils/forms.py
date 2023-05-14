@@ -113,21 +113,6 @@ class BenchmarkSubmissionForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     repository = StringField("Git clone URL", validators=[DataRequired()])
     hash = StringField("Commit hash", validators=[DataRequired()])
-    scripts_dir = StringField("Scripts directory", validators=[DataRequired()])
-    vnnlib_dir = StringField(
-        "Directory with generated vnnlib files, *relative* to the script directory from above"
-    )
-    onnx_dir = StringField(
-        "Directory with onnx files, *relative* to the script directory from above"
-    )
-    csv_file = StringField(
-        "Path to the instances.csv file (may be renamed), *relative* to the script directory from above",
-        default="instances.csv",
-    )
-    csv_vnnlib_base = StringField(
-        "Location the vnnlib path in instances.csv is based on"
-    )
-    csv_onnx_base = StringField("Location the onnx path in instances.csv is based on")
     submit = SubmitField("Start Test", render_kw={"style": "background: #212529; color: white"})
 
 

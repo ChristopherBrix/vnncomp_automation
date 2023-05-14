@@ -237,10 +237,10 @@ class BenchmarkCreate(TaskStep):
     __mapper_args__ = {"polymorphic_identity": "task_benchmark_create"}
 
     def _create(self):
-        from vnncomp.utils.aws_instance import AwsManager, AwsInstanceType
+        from vnncomp.utils.aws_instance import AwsManager
 
         success = AwsManager.start_new_toolkit_instance(
-            AwsInstanceType.T2LARGE, self._db_task.ami
+            self._db_task.aws_instance_type, self._db_task.ami
         )
         if success:
             db.session.commit()
@@ -258,6 +258,9 @@ class BenchmarkCreate(TaskStep):
     def while_active(self):
         super().while_active()
         self._create()
+
+    def description(self):
+        return "Instance creation"
 
     def status_check(self):
         return

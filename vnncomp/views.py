@@ -294,16 +294,16 @@ def benchmark_submit():
         return render_template("benchmark/submission.html", form=form, message=message)
 
     task = BenchmarkTask.save_new(
-        _aws_instance_type=AwsInstanceType.T2LARGE,
+        _aws_instance_type=AwsInstanceType.T2MICRO,
         _name=form.name.data,
         _repository=form.repository.data,
         _hash=form.hash.data,
-        _script_dir=form.scripts_dir.data,
-        _vnnlib_dir=form.vnnlib_dir.data,
-        _onnx_dir=form.onnx_dir.data,
-        _csv_file=form.csv_file.data,
-        _csv_onnx_base=form.csv_onnx_base.data,
-        _csv_vnnlib_base=form.csv_vnnlib_base.data,
+        _script_dir="",
+        _vnnlib_dir="vnnlib",
+        _onnx_dir="onnx",
+        _csv_file="instances.csv",
+        _csv_onnx_base="",
+        _csv_vnnlib_base="",
     )
 
     return redirect(url_for("benchmark_details", id=task.id))
@@ -383,12 +383,6 @@ def benchmark_resubmit(id):
     form.name.data = task.name
     form.repository.data = task.repository
     form.hash.data = task.hash
-    form.scripts_dir.data = task.script_dir
-    form.vnnlib_dir.data = task.vnnlib_dir
-    form.onnx_dir.data = task.onnx_dir
-    form.csv_file.data = task.csv_file
-    form.csv_onnx_base.data = task.csv_onnx_base
-    form.csv_vnnlib_base.data = task.csv_vnnlib_base
 
     return render_template("benchmark/submission.html", form=form)
 

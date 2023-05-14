@@ -322,7 +322,7 @@ class BenchmarkTask(Task):
             BenchmarkClone(self).add_to_db(),
             BenchmarkRun(self).add_to_db(),
             # BenchmarkGithubExport(self).add_to_db(),
-            # TaskShutdown(self).add_to_db(),
+            TaskShutdown(self).add_to_db(),
         ]
         self._db_current_step = self._db_steps[0]
         db.session.commit()

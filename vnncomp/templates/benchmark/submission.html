@@ -39,32 +39,21 @@
 
                 <p>Use this form to submit a new proposed benchmark.</p>
 
-                <p>The specified scripts directory must contain a file called <code class="fancy-code">generate_properties.py</code> which uses the
-                    first
-                    passed command line argument as the <code class="fancy-code">seed</code>. You may save the <code class="fancy-code">.onnx</code> and generated <code class="fancy-code">.vnnlib</code> files in
-                    subdirectories.</p>
+                <p>
+                    At root level, the specified scripts directory must contain the file <code class="fancy-code">generate_properties.py</code> which uses the first passed command line argument as the seed.
+                    After execution, the repository must also contain at root level:
+                    <ul>
+                        <li><code class="fancy-code">instances.csv</code> specifying the benchmark instances</li>
+                        <li><code class="fancy-code">vnnlib/</code> directory for (potentially generated) <code class="fancy-code">.vnnlib</code> files</li>
+                        <li><code class="fancy-code">onnx/</code> directory for (potentially generated) <code class="fancy-code">.onnx</code> files</li>
+                    </ul>
+                </p>
+                <p>
+                    Each row of <code class="fancy-code">instances.csv</code> must have the format <code class="fancy-code">ONNX_FILE,VNNLIB_FILE,TIMEOUT</code>.
+                    <br>All paths are relative to the root of the repository.
+                </p>
 
                 {{ wtf.quick_form(form, action="/benchmark/submit") }}
-
-                <br>
-                <br>
-                <p>Test-Inputs:</p>
-                <ul>
-                    <li><code>mnistfc</code> (fails, because the seed has no influence)
-                        <br><code>https://github.com/pat676/vnn-21-fc-mnist</code>
-                        <br><code>fe23eb596c42eae9cf865c9c84be099326564095</code>
-                        <br><code>.</code>
-                        <br><code>vnnlib_properties</code>
-                        <br><code>onnx</code>
-                    </li>
-                    <li><code>mnistfc</code> (succeeds)
-                        <br><code>https://github.com/pat676/vnn-comp21-benchmarks</code>
-                        <br><code>9da9287eaadc78b119cb225b1f77caf7be85dea6</code>
-                        <br><code>mnist-fc</code>
-                        <br><code>.</code>
-                        <br><code>.</code>
-                    </li>
-                </ul>
                 {#                <br><br><br><br>#}
                 {#                <br><a href="{{ url_for('toolkit_list') }}">List of all submitted toolkits</a>#}
 
