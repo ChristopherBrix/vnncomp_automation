@@ -298,7 +298,7 @@ def benchmark_submit():
         _name=form.name.data,
         _repository=form.repository.data,
         _hash=form.hash.data,
-        _script_dir="",
+        _script_dir=".",
         _vnnlib_dir="vnnlib",
         _onnx_dir="onnx",
         _csv_file="instances.csv",
