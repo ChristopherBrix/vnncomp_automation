@@ -9,7 +9,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && sudo chmod 600 /swapfile \
             && sudo mkswap /swapfile \
             && sudo swapon /swapfile \
-            && sudo apt-get install -y python3 python3-pip unzip git-lfs \
+            && sudo apt-get install -y python3 python3-pip unzip git-lfs libgl1-mesa-glx ffmpeg libsm6 libxext6 \
             && sudo python3 -m pip install --upgrade pip \
             && sudo python3 -m pip install torch==1.10.2 tensorflow==2.8.0 torchvision==0.11.3 onnxruntime==1.10.0 matplotlib==3.5.1 mxnet==1.9.1 opencv-python==4.7.0.72 \
             && sudo python3 -m pip freeze \
