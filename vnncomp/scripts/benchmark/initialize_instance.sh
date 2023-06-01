@@ -9,7 +9,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && sudo chmod 600 /swapfile \
             && sudo mkswap /swapfile \
             && sudo swapon /swapfile \
-            && sudo apt-get install -y python3 python3-pip unzip git-lfs libgl1-mesa-glx ffmpeg libsm6 libxext6 \
+            && sudo apt-get install -y python3 python3-pip unzip git-lfs libgl1-mesa-glx ffmpeg libsm6 libxext6 psmisc \
             && sudo python3 -m pip install --upgrade pip \
             && sudo python3 -m pip install \
                 matplotlib==3.5.1 \
@@ -18,7 +18,6 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 onnxruntime==1.15.0 \
                 opencv-python==4.7.0.72 \
                 pandas==2.0.2 \
-                psmisc==0.0.2 \
                 protobuf==3.20.0 \
                 scipy==1.10.1 \
                 skl2onnx==1.14.1 \
