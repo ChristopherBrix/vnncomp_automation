@@ -18,7 +18,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 onnxruntime==1.15.0 \
                 opencv-python==4.7.0.72 \
                 pandas==2.0.2 \
-                protobuf==3.20.0 \
+                protobuf==4.23.2 \
                 scipy==1.10.1 \
                 skl2onnx==1.14.1 \
                 tensorflow==2.8.0 \
