@@ -88,7 +88,7 @@ def index():
 
     else:
         form = LoginForm()
-        return render_template("index___.html",
+        return render_template("index.html",
                                form=form)
 
 
