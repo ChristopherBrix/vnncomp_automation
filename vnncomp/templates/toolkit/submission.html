@@ -49,29 +49,8 @@
                 <br><br>
                 <p>To configure licenses, you may define an additional post-install script. It is executed once, after
                     <code>install_tool.sh</code> was run.</p>
-                <p><b>For Gurobi:</b> Because the script is executed as root, <code>grbgetkey</code> cannot be called with the <code>-q</code>
-                flag
-                (non-interactively), because Gurobi double-checks the username. Please use the following template: <code>printf "y\n\n" | grbgetkey [KEY]</code>.</p>
                 <br>
                 <br>
-                <p>Test-Inputs:</p>
-                <ul>
-                    <li><code>nnenum</code>
-                        <br><code>https://github.com/stanleybak/nnenum.git</code>
-                        <br><code>c93a39cb568f58a26015bd151acafab34d2d4929</code>
-                        <br><code>vnncomp_scripts</code>
-                    </li>
-                    <li><code>Debona</code>
-                        <br><code>https://github.com/ChristopherBrix/Debona</code>
-                        <br><code>fc4cae6ea099ca9ffc4e016d87a89707052976a5</code>
-                        <br><code>.</code>
-                        <br><code>cd src; printf "y\n\n" | pipenv run grbgetkey [KEY]</code>
-                    </li>
-                </ul>
-{#                <br><br><br><br>#}
-{#                <br><a href="{{ url_for('toolkit_list') }}">List of all submitted toolkits</a>#}
-
-
             </div>
 
         </div>
