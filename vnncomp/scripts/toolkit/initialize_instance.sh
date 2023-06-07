@@ -12,6 +12,6 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && git clone https://github.com/ChristopherBrix/vnncomp2022_benchmarks \
             && cd vnncomp2022_benchmarks \
             && ./setup.sh \
-            && curl --retry 100 --retry-connrefused https://vnncomp.christopher-brix.de/update/${benchmark_id}/success \
-            || curl --retry 100 --retry-connrefused https://vnncomp.christopher-brix.de/update/${benchmark_id}/failure \
+            && curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
+            || curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure \
     ' >> logs/initialize_instance.log 2>&1 "

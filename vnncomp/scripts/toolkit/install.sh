@@ -11,7 +11,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             fi
             cd toolkit/${script_dir} \
                 && ${sudo} env SHELLOPTS=xtrace /bin/bash install_tool.sh v1 \
-                && curl --retry 100 --retry-connrefused https://vnncomp.christopher-brix.de/update/${benchmark_id}/success \
-                || curl --retry 100 --retry-connrefused https://vnncomp.christopher-brix.de/update/${benchmark_id}/failure
+                && curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
+                || curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure
         \\\" > >(tee logs/install.log) 2>&1 < /dev/null
     \" "

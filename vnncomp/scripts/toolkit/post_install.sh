@@ -20,7 +20,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 && cat post_install_tool.sh \
                 && chmod +x post_install_tool.sh \
                 && ${sudo} env SHELLOPTS=xtrace /bin/bash post_install_tool.sh \
-                && curl --retry 2 --retry-connrefused https://vnncomp.christopher-brix.de/update/${benchmark_id}/success \
-                || curl --retry 2 --retry-connrefused https://vnncomp.christopher-brix.de/update/${benchmark_id}/failure
+                && curl --retry 2 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
+                || curl --retry 2 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure
         ' > >(tee logs/post_install.log) 2>&1 < /dev/null
     \" "
