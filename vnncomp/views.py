@@ -288,6 +288,9 @@ def benchmark_pip():
 
 @app.route("/benchmark/submit", methods=["POST"])
 def benchmark_submit():
+    if not current_user.admin:
+        return "New benchmark submissions are no longer possible."
+
     form = BenchmarkSubmissionForm()
     if not form.validate_on_submit():
         message = "Error processing formular input."
