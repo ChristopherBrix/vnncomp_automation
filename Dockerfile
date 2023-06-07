@@ -12,27 +12,14 @@ RUN ./aws/install
 
 RUN mkdir -p "/var/www/html/vnncomp"
 WORKDIR "/var/www/html/vnncomp"
+
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
-# COPY . .
-
-# RUN rm -r "./data"
-
 RUN rm ./requirements.txt
 
-
-
-#RUN python -m venv venv
-#RUN source ./venv/bin/activate
-
-
-
 EXPOSE 5000
-#CMD flask --app main --debug run
 
 ENV PYTHONASYNCIODEBUG=1
 ENV AWS_SCRIPT_ROOT="/var/www/html/vnncomp/vnncomp/"
 
-#CMD python -m vnncomp.main
-#CMD gunicorn --bind 0.0.0.0:5000 wsgi
 CMD ["./launch_container.sh"]
