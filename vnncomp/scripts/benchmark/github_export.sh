@@ -1,14 +1,14 @@
 #!/bin/sh
 
-scp -i ~/.ssh/vnncomp.pem /home/ubuntu/.ssh/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
-scp -i ~/.ssh/vnncomp.pem /home/ubuntu/vnncomp/app/scripts/benchmark/webdav_uploader.py ubuntu@${benchmark_ip}:/home/ubuntu/
-scp -i ~/.ssh/vnncomp.pem /home/ubuntu/vnncomp/app/scripts/benchmark/postprocess_instances_file.py ubuntu@${benchmark_ip}:/home/ubuntu/
+scp -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/data/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
+scp -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/webdav_uploader.py ubuntu@${benchmark_ip}:/home/ubuntu/
+scp -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/postprocess_instances_file.py ubuntu@${benchmark_ip}:/home/ubuntu/
 ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} \
     "tmux new -d -s saving \" \
         bash -c \\\"
             set -x
             ssh-keyscan github.com >> ~/.ssh/known_hosts \
-                && git clone git@github.com:ChristopherBrix/vnncomp2022_benchmarks.git all_benchmarks \
+                && git clone git@github.com:ChristopherBrix/vnncomp2023_benchmarks.git all_benchmarks \
                 && rm -rf all_benchmarks/benchmarks/${name} \
                 && mkdir all_benchmarks/benchmarks/${name} all_benchmarks/benchmarks/${name}/vnnlib all_benchmarks/benchmarks/${name}/onnx \
                 && cp benchmark/${script_dir}/${vnnlib_dir}/*.vnnlib all_benchmarks/benchmarks/${name}/vnnlib/ \
@@ -22,7 +22,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 && git add benchmarks/${name} \
                 && cd benchmarks \
                 && find ${name}/vnnlib/* ${name}/onnx/* -type f -size +100M -exec git restore --staged \\\\\\\"{}\\\\\\\" \\\\\\\\; \
-                && find ${name}/vnnlib/* ${name}/onnx/* -type f -size +100M -exec sh -c \\\\\\\"python3 ~/webdav_uploader.py -n ${name} -r vnncomp2022/{} -l {} \\\\\\\" \\\\\\\\; \
+                && find ${name}/vnnlib/* ${name}/onnx/* -type f -size +100M -exec sh -c \\\\\\\"python3 ~/webdav_uploader.py -n ${name} -r vnncomp2023/{} -l {} \\\\\\\" \\\\\\\\; \
                 && git pull \
                 && git status \
                 && git commit -m \\\\\\\"Updated ${name}\\\\\\\" -m \\\\\\\"${repository} @ ${hash}, seed ${seed}\\\\\\\" \
