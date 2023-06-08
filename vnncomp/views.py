@@ -1,7 +1,9 @@
+from typing import Dict, List, Optional
+import time
 from argparse import ArgumentError
 from crypt import methods
-import time
-from typing import Dict, List, Optional
+import requests
+import yaml
 
 from flask import flash, render_template, redirect, url_for, abort, jsonify
 from flask_login import current_user
@@ -81,7 +83,7 @@ def inject_current_user():
 def index():
     # abort(404)
     if current_user.is_authenticated:
-        if False:
+        if True:
             return toolkit_redirect()
         else:
             return benchmark_redirect()
@@ -115,31 +117,61 @@ def toolkit():
 @app.route("/toolkit/submit", methods=["POST"])
 @login_required
 def submit():
-    form = ToolkitSubmissionForm()
+    form: ToolkitSubmissionForm = ToolkitSubmissionForm()
     if not form.validate_on_submit():
         message = "Error processing formular input."
         return render_template("toolkit/submission.html", form=form, message=message)
-    if not current_user.admin:
-        message = "Submission is closed."
-        return render_template("toolkit/submission.html", form=form, message=message)
+    # if not current_user.admin:
+    #     message = "Submission is closed."
+    #     return render_template("toolkit/submission.html", form=form, message=message)
 
+    yaml_config_url = f"{form.repository.data.replace('github.com', 'raw.githubusercontent.com')}/{form.hash.data}/{form.yaml_config_file.data}"
+    config_request = requests.get(yaml_config_url)
+    if config_request.status_code != 200:
+        message = f"Config ({yaml_config_url}) could not be loaded, error code {config_request.status_code}"
+        return render_template("toolkit/submission.html", form=form, message=message)
+    
+    parsed_config = yaml.safe_load(config_request.content)
+    for k in [
+        "name",
+        "ami",
+        "scripts_dir",
+        "manual_installation_step",
+        "run_installation_script_as_root",
+        "run_post_installation_script_as_root",
+        "run_toolkit_as_root",
+        "description",
+    ]:
+        if k not in parsed_config:
+            message = f"Config file ({yaml_config_url}) has no value for mandatory attribute {k}"
+            return render_template("toolkit/submission.html", form=form, message=message)
+    for k in [
+        "manual_installation_step",
+        "run_installation_script_as_root",
+        "run_post_installation_script_as_root",
+        "run_toolkit_as_root",
+    ]:
+        if not isinstance(parsed_config[k], bool):
+            message = f"Config file value for {k} must be boolean"
+            return render_template("toolkit/submission.html", form=form, message=message)
+    
     aws_instance_type: AwsInstanceType = AwsInstanceType(
         int(form.aws_instance_type.data)
     )
     task = ToolkitTask.save_new(
         _aws_instance_type=aws_instance_type,
-        _ami=form.ami.data,
-        _name=form.name.data,
+        _ami=parsed_config["ami"],
+        _name=parsed_config["name"],
         _repository=form.repository.data,
         _hash=form.hash.data,
-        _script_dir=form.scripts_dir.data,
-        _pause=form.pause.data,
+        _script_dir=parsed_config["scripts_dir"],
+        _pause=parsed_config["manual_installation_step"],
         _post_install_tool=form.post_install_tool.data,
         _benchmarks=form.benchmarks.data,
         _run_networks=form.run_networks.data,
-        _run_install_as_root=form.run_install_as_root.data,
-        _run_post_install_as_root=form.run_post_install_as_root.data,
-        _run_tool_as_root=form.run_tool_as_root.data,
+        _run_install_as_root=parsed_config["run_installation_script_as_root"],
+        _run_post_install_as_root=parsed_config["run_post_installation_script_as_root"],
+        _run_tool_as_root=parsed_config["run_toolkit_as_root"],
     )
 
     return redirect(url_for("toolkit_details", id=task.id))

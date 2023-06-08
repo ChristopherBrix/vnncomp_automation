@@ -22,7 +22,7 @@ class MultiCheckboxField(SelectMultipleField):
 class ToolkitSubmissionForm(FlaskForm):
     # https://stackoverflow.com/questions/22084886/add-a-css-class-to-a-field-in-wtform
 
-    name = StringField("Name", validators=[DataRequired()], render_kw={})
+
     aws_instance_type = SelectField(
         "AWS instance type",
         choices=[
@@ -36,29 +36,10 @@ class ToolkitSubmissionForm(FlaskForm):
             # (AwsInstanceType.G58XLARGE.value, AwsInstanceType.G58XLARGE.get_aws_name()),
         ],
     )
-    ami = SelectField(
-        "Amazon Machine Image (contact brix@cs.rwth-aachen.de if you want to use a different one)",
-        choices=[
-            (
-                "ami-0280f3286512b1b99",
-                "Deep Learning AMI (Ubuntu 18.04) Version 62.1 (MXNet-1.9, TensorFlow-2.7, PyTorch-1.11, Neuron, & others. NVIDIA CUDA, cuDNN, NCCL, Intel MKL-DNN, Docker, NVIDIA-Docker & EFA support) (ami-0280f3286512b1b99)",
-            ),
-            (
-                "ami-0892d3c7ee96c0bf7",
-                "Canonical, Ubuntu, 20.04 LTS, amd64 focal image (ami-0892d3c7ee96c0bf7)",
-            ),
-            (
-                "ami-0d70546e43a941d70",
-                "Ubuntu Server 22.04 LTS (ami-0d70546e43a941d70)",
-            ),
-        ],
-    )
-    repository = StringField("Git clone URL", validators=[DataRequired()])
+    repository = StringField("Git clone URL (format: https://github.com/ABC/DEF)", validators=[DataRequired()])
     hash = StringField("Commit hash", validators=[DataRequired()])
-    scripts_dir = StringField("Scripts directory", validators=[DataRequired()])
-    pause = BooleanField(
-        "Pause before executing the post-installation script? Needs manual interaction, please make sure not to leave the script hanging in this step for a long time to avoid large costs."
-    )
+    yaml_config_file = StringField("Yaml Config File, relative to repository root", validators=[DataRequired()], render_kw={})
+
     post_install_tool = TextAreaField(
         "Post installation script (e.g. for licenses). Can be updated after submission (e.g. to adapt the license to the specific AWS instance)."
     )
@@ -92,11 +73,6 @@ class ToolkitSubmissionForm(FlaskForm):
             ("first", "first per instance (for testing)"),
         ],
     )
-    run_install_as_root = BooleanField("Run install script as root", default=True)
-    run_post_install_as_root = BooleanField(
-        "Run post-install script as root", default=True
-    )
-    run_tool_as_root = BooleanField("Run toolkit as root", default=True)
     submit = SubmitField(
         "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
     )
