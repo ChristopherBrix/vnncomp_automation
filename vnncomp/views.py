@@ -1,4 +1,5 @@
 from typing import Dict, List, Optional
+import os
 import time
 from argparse import ArgumentError
 from crypt import methods
@@ -77,6 +78,10 @@ def scheduler_function():
 @app.context_processor
 def inject_current_user():
     return dict(current_user=current_user)
+
+@app.context_processor
+def inject_env():
+    return dict(env=os.environ)
 
 
 @app.route("/")
