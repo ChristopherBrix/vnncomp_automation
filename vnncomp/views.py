@@ -198,18 +198,10 @@ def toolkit_resubmit(id):
     assert type(task) is ToolkitTask
     form = ToolkitSubmissionForm()
     form.aws_instance_type.data = str(task.aws_instance_type.value)
-    form.ami.data = task.ami
-    form.name.data = task.name
     form.repository.data = task.repository
     form.hash.data = task.hash
-    form.scripts_dir.data = task.script_dir
-    form.pause.data = task.pause
     form.post_install_tool.data = task.post_install_tool
     form.benchmarks.data = task.benchmarks
-    form.run_networks.data = task.run_networks
-    form.run_install_as_root.data = task.run_install_as_root
-    form.run_post_install_as_root.data = task.run_post_install_as_root
-    form.run_tool_as_root.data = task.run_tool_as_root
 
     return render_template("toolkit/submission.html", form=form)
 
