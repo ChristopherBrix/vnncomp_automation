@@ -14,6 +14,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && sudo python3 -m pip install \
                 matplotlib==3.5.1 \
                 mxnet==1.9.1 \
+                numpy==1.23 \
                 onnx==1.14.0 \
                 onnxruntime==1.15.0 \
                 opencv-python==4.7.0.72 \
