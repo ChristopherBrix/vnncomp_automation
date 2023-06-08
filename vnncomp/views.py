@@ -125,6 +125,10 @@ def submit():
     #     message = "Submission is closed."
     #     return render_template("toolkit/submission.html", form=form, message=message)
 
+    if not form.repository.data.startswith("https://github.com/"):
+        message = f"Repository URL must have the format https://github.com/ABC/DEF"
+        return render_template("toolkit/submission.html", form=form, message=message)
+
     yaml_config_url = f"{form.repository.data.replace('github.com', 'raw.githubusercontent.com')}/{form.hash.data}/{form.yaml_config_file.data}"
     config_request = requests.get(yaml_config_url)
     if config_request.status_code != 200:
@@ -155,6 +159,14 @@ def submit():
             message = f"Config file value for {k} must be boolean"
             return render_template("toolkit/submission.html", form=form, message=message)
     
+    if parsed_config["ami"] not in [
+        "ami-0280f3286512b1b99",
+        "ami-0892d3c7ee96c0bf7",
+        "ami-0d70546e43a941d70",
+    ]:
+        message = f"AMI image {parsed_config['ami']} invalid"
+        return render_template("toolkit/submission.html", form=form, message=message)
+
     aws_instance_type: AwsInstanceType = AwsInstanceType(
         int(form.aws_instance_type.data)
     )
