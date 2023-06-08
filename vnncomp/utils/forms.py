@@ -27,13 +27,13 @@ class ToolkitSubmissionForm(FlaskForm):
         "AWS instance type",
         choices=[
             (AwsInstanceType.T2MICRO.value, AwsInstanceType.T2MICRO.get_aws_name()),
-            # (AwsInstanceType.T2LARGE.value, AwsInstanceType.T2LARGE.get_aws_name()),
-            # (AwsInstanceType.P32XLARGE.value, AwsInstanceType.P32XLARGE.get_aws_name()),
-            # (
-            #     AwsInstanceType.M516XLARGE.value,
-            #     AwsInstanceType.M516XLARGE.get_aws_name(),
-            # ),
-            # (AwsInstanceType.G58XLARGE.value, AwsInstanceType.G58XLARGE.get_aws_name()),
+            (AwsInstanceType.T2LARGE.value, AwsInstanceType.T2LARGE.get_aws_name()),
+            (AwsInstanceType.P32XLARGE.value, AwsInstanceType.P32XLARGE.get_aws_name()),
+            (
+                AwsInstanceType.M516XLARGE.value,
+                AwsInstanceType.M516XLARGE.get_aws_name(),
+            ),
+            (AwsInstanceType.G58XLARGE.value, AwsInstanceType.G58XLARGE.get_aws_name()),
         ],
     )
     repository = StringField("Git clone URL (format: https://github.com/ABC/DEF)", validators=[DataRequired()])
