@@ -14,5 +14,5 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 && ${sudo} env SHELLOPTS=xtrace /bin/bash run_all_categories.sh v1 ~/toolkit/${script_dir} . ~/logs/results_${benchmark_year}_${benchmark_name}.csv ~/logs/counterexamples ${benchmark_name} ${run_networks} \
                 && curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
                 || curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure
-        \\\" > >(tee logs/run_${benchmark_name}.log) 2>&1 < /dev/null
+        \\\" > >(tee logs/run_${benchmark_year}_${benchmark_name}.log) 2>&1 < /dev/null
     \" "
