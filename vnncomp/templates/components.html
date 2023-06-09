@@ -94,37 +94,31 @@
                 <i class="bi-list"></i>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <a href="https://sites.google.com/view/vnn2023" target="_blank" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0"
-                >
+                <a href="https://sites.google.com/view/vnn2023" target="_blank" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0">
                     <span class="d-flex align-items-center">
                         <span class="small">
                             Visit Main Website
                         </span>
                     </span>
                 </a>
-                <ul class="navbar-nav ms-auto me-1 my-3 my-lg-0">
-                    <li class="nav-item"><a class="nav-link me-lg-0" href="#">
-                        {% if current_user.is_anonymous %}
-                            How did u access this page without authentication?
-                        {% else %}
-                            {{ current_user.username }}
-                        {% endif %}
-
-                    </a></li>
-                    {#                <li class="nav-item"><a class="nav-link me-lg-3" href="#download">Download</a></li>#}
-                </ul>
                 {% if current_user.is_anonymous %}
-                    <a href="{{ url_for('login') }}" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0"
-                    >
-                        <span class="d-flex align-items-center">
-                            <span class="small">
-                                Login
-                            </span>
-                        </span>
-                    </a>
+                    <ul class="navbar-nav ms-auto me-1 my-3 my-lg-0">
+                        <li class="nav-item"><a class="nav-link me-lg-3" href="#" data-bs-toggle="modal"
+                            data-bs-target="#loginModal">Log In</a></li>
+                    </ul>
+                    <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal"
+                            data-bs-target="#signupModal">
+                                <span class="d-flex align-items-center">
+                                    <span class="small">Sign up</span>
+                                </span>
+                    </button>
                 {% else %}
-                    <a href="{{ url_for('logout') }}" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0"
-                    >
+                    <ul class="navbar-nav ms-auto me-1 my-3 my-lg-0">
+                        <li class="nav-item"><a class="nav-link me-lg-0" href="#">
+                           {{ current_user.username }}
+                        </a></li>
+                    </ul>
+                    <a href="{{ url_for('logout') }}" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0">
                         <span class="d-flex align-items-center">
                             <span class="small">
                                 Log Out
