@@ -160,6 +160,13 @@ class TaskStep(db.Model):
         if self._db_log is None:
             self._db_log = Log(self, text).save()
         else:
+            if text.startswith("ssh: connect to host"):
+                text = self._db_log.text + "\n" + text
+            if text == "Error loading logs, connection timed out.":
+                if self._db_log.text.endswith("Error loading logs, connection timed out."):
+                    pass
+                else:
+                    text = self._db_log.text + "\n" + text
             self._db_log.update(text)
 
 
