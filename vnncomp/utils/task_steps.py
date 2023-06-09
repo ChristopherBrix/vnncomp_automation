@@ -710,7 +710,8 @@ class ToolkitRun(TaskStep):
             "run.sh",
             {
                 "script_dir": self._db_task.script_dir,
-                "benchmark_name": self.benchmark_name,
+                "benchmark_year": self.benchmark_name[:4],
+                "benchmark_name": self.benchmark_name[5:],
                 "run_networks": self.run_networks,
                 "sudo": "sudo" if self.run_as_root else "",
                 "benchmark_id": str(self._db_task.id),

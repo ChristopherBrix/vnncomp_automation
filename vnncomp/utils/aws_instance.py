@@ -275,12 +275,12 @@ class AwsManager:
                 and instance.creation_timestamp
                 < datetime.datetime.utcnow() - datetime.timedelta(hours=1)
             ):
-                print("Instance older than 1 hours, terminating", instance)
+                print("Instance older than 12 hours, terminating", instance)
                 if (
                     instance.task is not None
                     and instance.creation_timestamp
                     > datetime.datetime.utcnow()
-                    - datetime.timedelta(hours=1, minutes=10)
+                    - datetime.timedelta(hours=12, minutes=10)
                 ):
                     instance.task.timeout()
                 else:
