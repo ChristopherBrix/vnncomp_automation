@@ -414,6 +414,8 @@ class BenchmarkGithubExport(TaskStep):
                 "csv_file": self._db_task.csv_file,
                 "benchmark_id": str(self._db_task.id),
                 "benchmark_ip": self._db_task.instance.ip,
+                "sciebo_username": os.environ["SCIEBO_USERNAME"],
+                "sciebo_password": os.environ["SCIEBO_PASSWORD"],
             },
         )
 

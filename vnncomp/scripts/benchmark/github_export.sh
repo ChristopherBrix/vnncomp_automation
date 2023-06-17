@@ -1,9 +1,9 @@
 #!/bin/sh
 
-scp -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/data/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
-scp -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/webdav_uploader.py ubuntu@${benchmark_ip}:/home/ubuntu/
-scp -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/postprocess_instances_file.py ubuntu@${benchmark_ip}:/home/ubuntu/
-ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} "echo 'export SCIEBO_USERNAME=\"${SCIEBO_USERNAME}\"; export SCIEBO_PASSWORD=\"${SCIEBO_PASSWORD}\";' >> ~/.bashrc"
+scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/data/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
+scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/webdav_uploader.py ubuntu@${benchmark_ip}:/home/ubuntu/
+scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/postprocess_instances_file.py ubuntu@${benchmark_ip}:/home/ubuntu/
+ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} "echo 'export SCIEBO_USERNAME=\"${sciebo_username}\"; export SCIEBO_PASSWORD=\"${sciebo_password}\";' >> ~/.bashrc"
 ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} \
     "tmux new -d -s saving \" \
         bash -c \\\"

@@ -48,14 +48,10 @@ client.mkdir("vnncomp2023/" + args["name"] + "/seed_676744409/onnx")
 client.mkdir("vnncomp2023/" + args["name"] + "/seed_676744409/vnnlib")
 
 # TODO This is a hack. The calling script will pass the whole path, but here we need the directory. We should fix that in the calling code, but it's easier here.
-args["remote_path"] = "/".join(args["remote_path"].split("/")[:-1])
-
-remote_path_check = client.check(args["remote_path"])
-if not remote_path_check:
-    raise Exception("Remote Path %s does not exist!" % args["remote_path"])
+upload_name = "/".join(args["local_path"].split("/")[-2:])
+remote_path = "vnncomp2023" + "/" + args["name"] + "/seed_676744409/" + upload_name
 
 upload_type = UploadType.NA
-upload_name = ""
 
 if os.path.isdir(args["local_path"]):
     upload_type = UploadType.Dir
@@ -63,10 +59,6 @@ elif os.path.isfile(args["local_path"]):
     upload_type = UploadType.File
 if upload_type == UploadType.NA:
     raise Exception("Upload path %s is neither a dir or file!" % args["local_path"])
-
-upload_name = os.path.basename(args["local_path"])
-
-remote_path = args["remote_path"] + "/" + args["name"] + "/seed_676744409/" + upload_name
 
 print("Uploading %s to remote path: %s " % (args["local_path"], remote_path))
 
