@@ -25,6 +25,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 tensorflow==2.8.0 \
                 torch==1.10.2 \
                 torchvision==0.11.3 \
+                webdavclient3==3.14.6 \
             && sudo python3 -m pip freeze \
             && git clone https://github.com/stanleybak/simple_adversarial_generator.git randgen \
             && cd randgen \
