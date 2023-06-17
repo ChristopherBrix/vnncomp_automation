@@ -66,7 +66,7 @@ if upload_type == UploadType.NA:
 
 upload_name = os.path.basename(args["local_path"])
 
-remote_path = args["remote_path"] + "/seed_676744409/" + upload_name
+remote_path = args["remote_path"] + "/" + args["name"] + "/seed_676744409/" + upload_name
 
 print("Uploading %s to remote path: %s " % (args["local_path"], remote_path))
 
