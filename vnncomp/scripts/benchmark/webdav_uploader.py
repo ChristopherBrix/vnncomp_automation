@@ -40,12 +40,12 @@ options = {
     "webdav_password": args["pass"],
 }
 client = Client(options)
-client.mkdir("vnncomp2022/" + args["name"])
-client.mkdir("vnncomp2022/" + args["name"] + "/seed_676744409")
-client.clean("vnncomp2022/" + args["name"] + "/seed_676744409")
-client.mkdir("vnncomp2022/" + args["name"] + "/seed_676744409")
-client.mkdir("vnncomp2022/" + args["name"] + "/seed_676744409/onnx")
-client.mkdir("vnncomp2022/" + args["name"] + "/seed_676744409/vnnlib")
+client.mkdir("vnncomp2023/" + args["name"])
+client.mkdir("vnncomp2023/" + args["name"] + "/seed_676744409")
+client.clean("vnncomp2023/" + args["name"] + "/seed_676744409")
+client.mkdir("vnncomp2023/" + args["name"] + "/seed_676744409")
+client.mkdir("vnncomp2023/" + args["name"] + "/seed_676744409/onnx")
+client.mkdir("vnncomp2023/" + args["name"] + "/seed_676744409/vnnlib")
 
 # TODO This is a hack. The calling script will pass the whole path, but here we need the directory. We should fix that in the calling code, but it's easier here.
 args["remote_path"] = "/".join(args["remote_path"].split("/")[:-1])

@@ -1,4 +1,5 @@
 #!/bin/sh
+# WARNING: The seed here must also be specified in the webdav_uploader script!
 
 ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} \
     "tmux new -d -s measurements \" \
