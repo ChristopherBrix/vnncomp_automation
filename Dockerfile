@@ -1,7 +1,7 @@
 # from nikolaik/python-nodejs:python3.8-nodejs14
 FROM python:3.8-slim-buster
 RUN apt-get update && \
-    apt-get install -y apache2-dev sqlite3 unzip less ssh && \
+    apt-get install -y apache2-dev sqlite3 unzip less ssh vim && \
     rm -rf /var/lib/apt/lists/*
 RUN pip install --upgrade pip setuptools wheel
 
