@@ -2,6 +2,7 @@
 # https://git.fh-aachen.de/embeddedutils/webdav_uploader
 
 from webdav3.client import Client
+from webdav3.exceptions import WebDavException
 import argparse
 import os
 
@@ -40,6 +41,13 @@ options = {
     "webdav_password": args["pass"],
 }
 client = Client(options)
+try:
+    client = Client(options).free()
+    print("Login successfull")
+except WebDavException as exception:
+    print("HTTP error encountered: ", exception.code)
+    raise
+
 client.mkdir("vnncomp2023/" + args["name"])
 client.mkdir("vnncomp2023/" + args["name"] + "/seed_676744409")
 client.clean("vnncomp2023/" + args["name"] + "/seed_676744409")
