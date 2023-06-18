@@ -3,10 +3,11 @@
 scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/data/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
 scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/webdav_uploader.py ubuntu@${benchmark_ip}:/home/ubuntu/
 scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/postprocess_instances_file.py ubuntu@${benchmark_ip}:/home/ubuntu/
-ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} "sudo sh -c \"echo 'export SCIEBO_USERNAME=\\\"${sciebo_username}\\\"; export SCIEBO_PASSWORD=\\\"${sciebo_password}\\\";' >> /etc/environment\""
 ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} \
     "tmux new -d -s saving \" \
         bash -c \\\"
+            export SCIEBO_USERNAME=\\\\\\\"${sciebo_username}\\\\\\\"
+            export SCIEBO_PASSWORD=\\\\\\\"${sciebo_password}\\\\\\\"
             set -x
             ssh-keyscan github.com >> ~/.ssh/known_hosts \
                 && git clone git@github.com:ChristopherBrix/vnncomp2023_benchmarks.git all_benchmarks \
