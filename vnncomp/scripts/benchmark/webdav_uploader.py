@@ -42,7 +42,7 @@ options = {
 }
 client = Client(options)
 try:
-    client = Client(options).free()
+    client.free()
     print("Login successfull")
 except WebDavException as exception:
     print("HTTP error encountered: ", exception.code)
