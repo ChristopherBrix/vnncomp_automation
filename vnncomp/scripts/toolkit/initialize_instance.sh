@@ -18,6 +18,9 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && ./setup.sh \
             && cd .. \
             && git clone https://github.com/ChristopherBrix/vnncomp2023_benchmarks \
+            && cd vnncomp2023_benchmarks \
+            && ./setup.sh \
+            && cd .. \
             && curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
             || curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure
         \\\" > >(tee -a logs/initialize_instance.log) 2>&1 < /dev/null
