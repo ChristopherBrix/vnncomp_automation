@@ -1,5 +1,6 @@
 from typing import Dict, List, Optional
 import os
+import re
 import time
 from argparse import ArgumentError
 from crypt import methods
@@ -130,8 +131,9 @@ def submit():
     #     message = "Submission is closed."
     #     return render_template("toolkit/submission.html", form=form, message=message)
 
-    if not form.repository.data.startswith("https://github.com/"):
-        message = f"Repository URL must have the format https://github.com/ABC/DEF"
+    pattern = re.compile("https://[a-zA-Z0-9_@]*github\.com/")
+    if not pattern.match(form.repository.data):
+        message = f"Repository URL must have the format https://github.com/ABC/DEF or https://PAT@github.com/ABC/DEF"
         return render_template("toolkit/submission.html", form=form, message=message)
 
     yaml_config_url = f"{form.repository.data.replace('github.com', 'raw.githubusercontent.com')}/{form.hash.data}/{form.yaml_config_file.data}"
