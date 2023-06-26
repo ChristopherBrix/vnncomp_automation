@@ -131,13 +131,20 @@ def submit():
     #     message = "Submission is closed."
     #     return render_template("toolkit/submission.html", form=form, message=message)
 
-    pattern = re.compile("https://[a-zA-Z0-9_@]*github\.com/")
-    if not pattern.match(form.repository.data):
+    pattern = re.compile("https://([a-zA-Z0-9_]*@)?github\.com/")
+    url: str = form.repository.data
+    if not pattern.match(url):
         message = f"Repository URL must have the format https://github.com/ABC/DEF or https://PAT@github.com/ABC/DEF"
         return render_template("toolkit/submission.html", form=form, message=message)
 
-    yaml_config_url = f"{form.repository.data.replace('github.com', 'raw.githubusercontent.com')}/{form.hash.data}/{form.yaml_config_file.data}"
-    config_request = requests.get(yaml_config_url)
+    pwd = None
+    if not url.startswith("https://github.com"):
+        assert "@" in url
+        pwd = url.split("@")[0][len("https://"):]
+        url = "https://" + "".join(url.split("@")[1:])
+
+    yaml_config_url = f"{url.replace('github.com', 'raw.githubusercontent.com')}/{form.hash.data}/{form.yaml_config_file.data}"
+    config_request = requests.get(yaml_config_url, auth=(None, pwd))
     if config_request.status_code != 200:
         message = f"Config ({yaml_config_url}) could not be loaded, error code {config_request.status_code}"
         return render_template("toolkit/submission.html", form=form, message=message)
