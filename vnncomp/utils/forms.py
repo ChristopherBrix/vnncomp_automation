@@ -36,7 +36,7 @@ class ToolkitSubmissionForm(FlaskForm):
             (AwsInstanceType.G58XLARGE.value, AwsInstanceType.G58XLARGE.get_aws_name()),
         ],
     )
-    repository = StringField("Git clone URL (format: https://github.com/ABC/DEF)", validators=[DataRequired()])
+    repository = StringField("Git clone URL (format: https://github.com/ABC/DEF or https://PAT@github.com/ABC/DEF)", validators=[DataRequired()])
     hash = StringField("Commit hash", validators=[DataRequired()])
     yaml_config_file = StringField("Yaml Config File, relative to repository root", validators=[DataRequired()], render_kw={})
 
