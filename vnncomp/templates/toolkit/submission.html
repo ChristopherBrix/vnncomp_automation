@@ -50,9 +50,8 @@
                 <p>To configure licenses, you may define an additional post-install script. It is executed once, after
                     <code>install_tool.sh</code> was run.</p>
                 <p>
-                    You must provide most configurations via a `.yaml` file.
-                    This file must be part of your repository.
-                    Please provide the url of the raw view (githubusercontent) This file must contain the following parameters:
+                    You must provide most configurations via a <code>.yaml</code> file.
+                    This file must be part of your repository and must contain the following parameters:
                     <pre class="console_log_light">
 name: Your Tool Name
 ami: [AMI string, see below], 
@@ -66,7 +65,11 @@ description: >
   
   It may even span multiple lines
 </pre>
-                    The AMI string can define any image supported by Amazon (Oregon region), must be one of
+                    If you set <code>manual_installation_step</code> to <code>True</code>, there will be a pause after the installation script is run.
+                    You can then edit the post-installation script to e.g. set up lincenses using output gather during the main installation phase.
+                    Afterwards, proceed by clicking the respective link on the submission detail page.
+                    <br>
+                    <br>The AMI string can define any image supported by Amazon (Oregon region), must be one of
                     <ul>
                         <li>ami-0280f3286512b1b99: Deep Learning AMI (Ubuntu 18.04) Version 62.1 (MXNet-1.9, TensorFlow-2.7, PyTorch-1.11, Neuron, & others. NVIDIA CUDA, cuDNN, NCCL, Intel MKL-DNN, Docker, NVIDIA-Docker & EFA support)"</li>
                         <li>ami-0892d3c7ee96c0bf7: Canonical, Ubuntu, 20.04 LTS, amd64 focal image</li>
