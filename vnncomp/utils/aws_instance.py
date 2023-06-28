@@ -20,6 +20,7 @@ class AwsInstanceType(Enum):
     P32XLARGE = 3
     M516XLARGE = 4
     G58XLARGE = 5
+    UNKNOWN = 999
 
     def get_aws_name(self):
         mapping = {
@@ -28,11 +29,12 @@ class AwsInstanceType(Enum):
             AwsInstanceType.P32XLARGE: "p3.2xlarge",
             AwsInstanceType.M516XLARGE: "m5.16xlarge",
             AwsInstanceType.G58XLARGE: "g5.8xlarge",
+            AwsInstanceType.UNKNOWN: "unknown",
         }
         return mapping[self]
 
     @classmethod
-    def get_from_type(cls, type) -> "AwsInstanceType":
+    def get_from_type(cls, type: str) -> "AwsInstanceType":
         mapping = {
             "t2.micro": AwsInstanceType.T2MICRO,
             "t2.large": AwsInstanceType.T2LARGE,
@@ -40,7 +42,7 @@ class AwsInstanceType(Enum):
             "m5.16xlarge": AwsInstanceType.M516XLARGE,
             "g5.8xlarge": AwsInstanceType.G58XLARGE,
         }
-        return mapping[type]
+        return mapping.get(type, AwsInstanceType.UNKNOWN)
 
 
 def _get(dir, script, params=None):
@@ -239,6 +241,9 @@ class AwsManager:
             db_instance: Optional[AwsInstance] = AwsInstance.query.get(instance["Id"])
             if db_instance is None:
                 aws_instance_type = AwsInstanceType.get_from_type(instance["Type"])
+                if aws_instance_type == AwsInstanceType.UNKNOWN:
+                    print("Running instance could not be identified - will be ignored:", instance)
+                    continue
                 db_instance = AwsInstance(
                     _id=instance["Id"],
                     _creation_timestamp=datetime.datetime.utcnow(),
