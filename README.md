@@ -22,11 +22,11 @@ The main logic can be found in
 This code is the snapshot of the code at the end of the VNN-COMP 2022.
 The process was a bit convoluted and sometimes hectic, so best-practices were not always followed.
 
-- An AWS access key needs to be stored in `~/.ssh/vnncomp.pem` to allow the server to manage AWS instances.
-- Some magic is required to start the webserver.
-- Some packages may be missing in the requirements, it's not clear how the Pipenv and requirements.txt need to be merged.
-- A cronjob needs to ping `/manual_update` to fetch updates from running AWS instances and to move to the next steps of defined pipelines.
-- Some code that was used during the competition is commented out.
+- An AWS key pair needs to be stored in `data/vnncomp.pem` (that name must also be used in AWS)
+- An AWS Access key needs to be stored in `data/awskey.csv`
+- To support uploading a benchmark to GitHub, create a new ssh key, enter the public key in GitHub and place the private `id_rsa` file in `data/id_rsa`
+- Use `docker build -t vnncomp:latest . ; docker run --env ROOT_URL="https://vnncomp.christopher-brix.de" --mount type=bind,source="$(pwd)",target=/var/www/html/vnncomp -it -p 5000:5000 vnncomp:latest` to build and run the container. 
+- For local usage, expose your localhost via `ngrok http 5000` (so AWS instances can ping it) and run `docker build -t vnncomp:latest . ; docker run --env ROOT_URL="$(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')" --env GIT_COMMIT=$(git rev-parse HEAD) --mount type=bind,source="$(pwd)",target=/var/www/html/vnncomp -it -p 5000:5000 vnncomp:latest`
 
 However, the code should still provide a good insight into how the competition was automated and should provide a good starting point for future iterations of the VNN-COMP or similiar events.
 
