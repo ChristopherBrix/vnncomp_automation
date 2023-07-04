@@ -326,6 +326,16 @@ def toolkit_abort(id):
     task.abort()
     return redirect(url_for("toolkit_details", id=id))
 
+@app.route("/toolkit/sanitize_abort/<id>", methods=["GET"])
+@login_required
+def toolkit_sanitize_abort(id):
+    if not current_user.admin:
+        return "You must be an admin to perform this action"
+    task = ToolkitTask.get(int(id))
+    if task.current_step is not None:
+        return f"The current step is {task.current_step}, no sanitization necessary"
+    task.sanitize_abort()
+    return redirect(url_for("toolkit_details", id=id))
 
 @app.route("/benchmark/form", methods=["GET"])
 def benchmark():

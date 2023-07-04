@@ -162,6 +162,12 @@ class Task(db.Model):
         self.update_current_step(self.current_step.next_step())
         self.current_step.execute()
 
+    def sanitize_abort(self):
+        assert self.current_step is None
+        self._current_step = self._db_steps[0]
+        db.session.commit()
+        self.abort()
+
     def timeout(self, check_status=True):
         if check_status:
             self.current_step.status_check()

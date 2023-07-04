@@ -25,6 +25,11 @@
             <p><b>Repository:</b> <code>{{ task.repository }}</code>, <b>hash</b>: <code>{{ task.hash }}</code></p>
             <p><b>Script dir</b>: <code>{{ task.script_dir }}</code></p>
             <p><b>Run networks</b>: <code>{{ task.run_networks }}</code></p>
+            {% if current_user.admin %}
+            {% if task.current_step == None %}
+                <a href="{{ url_for('toolkit_sanitize_abort', id=task.id) }}">Sanitize & abort</a>
+            {% endif %}
+            {% endif %}
 
             <div class="d-flex flex-column flex-lg-row align-items-center" style="margin-bottom: 1rem">
                 <a class="me-lg-3 mb-4 mb-lg-0" href="{{ url_for('toolkit_resubmit', id=task.id) }}">
