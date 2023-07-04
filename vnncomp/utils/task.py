@@ -164,7 +164,7 @@ class Task(db.Model):
 
     def sanitize_abort(self):
         assert self.current_step is None
-        self._current_step = self._db_steps[0]
+        self._db_current_step = self._db_steps[0]
         db.session.commit()
         self.abort()
 
