@@ -26,7 +26,8 @@
             <p><b>Script dir</b>: <code>{{ task.script_dir }}</code></p>
             <p><b>Run networks</b>: <code>{{ task.run_networks }}</code></p>
             {% if current_user.admin %}
-            {% if task.current_step == None %}
+            {% if not task.done and task.current_step == None %}
+                {{ task.current_step }}
                 <a href="{{ url_for('toolkit_sanitize_abort', id=task.id) }}">Sanitize & abort</a>
             {% endif %}
             {% endif %}
