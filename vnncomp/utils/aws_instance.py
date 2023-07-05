@@ -278,7 +278,7 @@ class AwsManager:
             if (
                 not instance.disabled
                 and instance.creation_timestamp
-                < datetime.datetime.utcnow() - datetime.timedelta(hours=1)
+                < datetime.datetime.utcnow() - datetime.timedelta(hours=12)
             ):
                 print("Instance older than 12 hours, terminating", instance)
                 if (
