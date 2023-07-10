@@ -496,8 +496,8 @@ class ToolkitTask(Task):
             self._db_steps.append(
                 ToolkitRun(self, benchmark, _run_networks, run_tool_as_root).add_to_db()
             )
-            # if current_user.admin:
-            #     self._db_steps.append(ToolkitGithubExport(self, benchmark).add_to_db())
+            if current_user.admin:
+                self._db_steps.append(ToolkitGithubExport(self, benchmark).add_to_db())
         self._db_steps.append(TaskShutdown(self).add_to_db())
         self._db_current_step = self._db_steps[0]
         db.session.commit()
