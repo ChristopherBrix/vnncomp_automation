@@ -756,9 +756,6 @@ class ToolkitGithubExport(TaskStep):
         super().__init__(task)
         self.benchmark_name2 = benchmark_name
 
-    def _get_sanitized_benchmark_name(self):
-        return "".join(c.lower() if c.isalnum() else "_" for c in self.benchmark_name2)
-
     def execute(self):
         super().execute()
         _ping(
@@ -766,7 +763,8 @@ class ToolkitGithubExport(TaskStep):
             "github_export.sh",
             {
                 "tool_name": self._db_task.sanitized_name,
-                "benchmark_name": self._get_sanitized_benchmark_name(),
+                "benchmark_year": self.benchmark_name2[:4],
+                "benchmark_name": self.benchmark_name2[5:],
                 "benchmark_id": str(self._db_task.id),
                 "benchmark_ip": self._db_task.instance.ip,
             },
@@ -780,7 +778,7 @@ class ToolkitGithubExport(TaskStep):
 
     def status_check(self):
         super().status_check()
-        self._update_log(f"github_export_{self._get_sanitized_benchmark_name()}.log")
+        self._update_log(f"github_export_{self.benchmark_name2}.log")
 
     def description(self):
         return f"Exporting to GitHub ({self.benchmark_name2})"
