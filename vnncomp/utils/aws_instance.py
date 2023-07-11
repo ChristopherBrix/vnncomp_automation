@@ -275,21 +275,21 @@ class AwsManager:
         db.session.commit()
 
         for instance in instances:
-            if (
-                not instance.disabled
-                and instance.creation_timestamp
-                < datetime.datetime.utcnow() - datetime.timedelta(hours=12)
-            ):
-                print("Instance older than 12 hours, terminating", instance)
-                if (
-                    instance.task is not None
-                    and instance.creation_timestamp
-                    > datetime.datetime.utcnow()
-                    - datetime.timedelta(hours=12, minutes=10)
-                ):
-                    instance.task.timeout()
-                else:
-                    instance.terminate()
+            # if (
+            #     not instance.disabled
+            #     and instance.creation_timestamp
+            #     < datetime.datetime.utcnow() - datetime.timedelta(hours=12)
+            # ):
+            #     print("Instance older than 12 hours, terminating", instance)
+            #     if (
+            #         instance.task is not None
+            #         and instance.creation_timestamp
+            #         > datetime.datetime.utcnow()
+            #         - datetime.timedelta(hours=12, minutes=10)
+            #     ):
+            #         instance.task.timeout()
+            #     else:
+            #         instance.terminate()
 
             if (
                 not instance.disabled
