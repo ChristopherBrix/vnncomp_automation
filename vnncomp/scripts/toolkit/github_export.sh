@@ -1,6 +1,6 @@
 #!/bin/sh
 
-scp -i ~/.ssh/vnncomp.pem /home/ubuntu/.ssh/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
+scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/data/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
 ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} \
     "tmux new -d -s saving \" \
         bash -c \\\"
@@ -15,7 +15,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             cp logs/results_${benchmark_name}.csv all_results/${tool_name}/${benchmark_name}/results.csv \
                 && cd all_results
             gzip ${tool_name}/${benchmark_name}/*.counterexample
-            ./merge_results_per_team.sh
+            ./SCORING/merge_results_per_team.sh
             git config --global user.name \\\\\\\"VNN-Comp Bot\\\\\\\" \
                 && git config --global user.email \\\\\\\"brix@cs.rwth-aachen.de\\\\\\\" \
                 && git add ${tool_name}/${benchmark_name} \
