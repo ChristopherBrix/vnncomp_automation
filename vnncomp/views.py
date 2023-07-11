@@ -14,6 +14,7 @@ from vnncomp.main import app
 from vnncomp.auth import login_required
 from vnncomp.utils.aws_instance import AwsInstanceType, AwsManager, AwsInstance
 from vnncomp.utils.task import BenchmarkTask, Task, ToolkitTask
+from vnncomp.utils.user import User
 from vnncomp.utils.forms import (
     ToolkitEditPostInstallForm,
     ToolkitSubmissionForm,
@@ -478,9 +479,14 @@ def update_failure(id):
 
 @app.route("/manual_update")
 def manual_update():
-    fetch_updates()
-    process_tasks()
-    return "/"
+    user = current_user
+    user: User = User.query.filter_by(username="ConnectToAWS@example.com").first()
+    if user.enabled:
+        fetch_updates()
+        process_tasks()
+    else:
+        return "Enable user ConnectToAWS@example.com to process tasks and connect to AWS"
+    return "ok"
 
 scheduler = APScheduler()
 scheduler.init_app(app)
