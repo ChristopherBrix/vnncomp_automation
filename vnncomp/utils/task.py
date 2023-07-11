@@ -200,6 +200,7 @@ class Task(db.Model):
                 step.abort()
 
     def step_failed(self, check_status=True):
+        print("Task", self, "failed.")
         if check_status:
             self.current_step.status_check()
         self._abort_all_uncompleted_steps()
