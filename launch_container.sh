@@ -36,6 +36,6 @@ cp /var/www/html/vnncomp/data/vnncomp.pem /root/.ssh/vnncomp.pem
 chmod 400 /root/.ssh/vnncomp.pem
 
 
-gunicorn --bind 0.0.0.0:5000 wsgi
+gunicorn --bind 0.0.0.0:5000 wsgi --threads 4
 
 # flask run --host=0.0.0.0
