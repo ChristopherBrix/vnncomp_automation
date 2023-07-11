@@ -491,7 +491,7 @@ def manual_update():
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
-@scheduler.task('interval', id='automatic_update', seconds=60, misfire_grace_time=10)
+@scheduler.task('interval', id='automatic_update', seconds=60*5, misfire_grace_time=10)
 def automatic_update():
     with scheduler.app.app_context():
         manual_update()
