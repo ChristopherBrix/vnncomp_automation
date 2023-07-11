@@ -6,7 +6,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
         bash -c \\\"
             set -x
             cd benchmark/${script_dir} \
-                && python3 generate_properties.py 676744409 \
+                && python3 generate_properties.py 896832480 \
                 && ls ${vnnlib_dir}/*.vnnlib \
                 && cd ~ \
                 && ls benchmark/${script_dir}/${csv_file} \
