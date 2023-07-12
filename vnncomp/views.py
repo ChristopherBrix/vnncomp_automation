@@ -390,14 +390,14 @@ def benchmark_list():
 
 
 @app.route("/benchmark/details/<id>", methods=["GET"])
-def benchmark_details(id):
+def benchmark_details(id: str):
     task = BenchmarkTask.get(int(id))
     task_step_ids = [step._db_id for step in task._db_steps]
     return render_template("benchmark/details.html", task=task, task_step_ids=task_step_ids)
 
 @app.route("/benchmark/details/task/<id>", methods=["GET"])
 @login_required
-def benchmark_details_task_status(id):
+def benchmark_details_task_status(id: str):
     task = BenchmarkTask.get(int(id))
     if task is None:
         return jsonify({"error": "not found"})
@@ -422,9 +422,9 @@ def benchmark_details_task_status(id):
 
 @app.route("/benchmark/details/step/<id>", methods=["GET"])
 @login_required
-def benchmark_taskstep_async(id):
+def benchmark_taskstep_async(id: str):
     # task = ToolkitTask.get(int(id))
-    taskstep = TaskStep.query.get(id)
+    taskstep = TaskStep.query.get(int(id))
     if taskstep is None:
         return jsonify({"error": "not found"})
 
@@ -451,7 +451,7 @@ def benchmark_taskstep_async(id):
 
 
 @app.route("/benchmark/resubmit/<id>", methods=["GET"])
-def benchmark_resubmit(id):
+def benchmark_resubmit(id: str):
     task: BenchmarkTask = BenchmarkTask.get(int(id))
     form = BenchmarkSubmissionForm()
     form.name.data = task.name
@@ -462,7 +462,7 @@ def benchmark_resubmit(id):
 
 
 @app.route("/benchmark/abort/<id>", methods=["GET"])
-def benchmark_abort(id):
+def benchmark_abort(id: str):
     task = BenchmarkTask.get(int(id))
     assert task.current_step.can_be_aborted() and not task.done
     task.abort()
@@ -470,8 +470,8 @@ def benchmark_abort(id):
 
 
 @app.route("/update/<id>/success")
-def update_success(id):
-    task: Task = Task.get(id)
+def update_success(id: str):
+    task: Task = Task.get(int(id))
     task.step_succeeded()
     if current_user.is_authenticated:
         return redirect(url_for("toolkit_details", id=id))
@@ -479,17 +479,17 @@ def update_success(id):
 
 
 @app.route("/force_step/<task_id>/<step_id>")
-def force_step(task_id, step_id):
+def force_step(task_id: str, step_id: str):
     if not current_user.admin:
         return "This feature is only available to admins!"
-    task: Task = Task.get(task_id)
-    task.force_step(step_id)
+    task: Task = Task.get(int(task_id))
+    task.force_step(int(step_id))
     return redirect(url_for("toolkit_details", id=task_id))
 
 
 @app.route("/update/<id>/failure")
-def update_failure(id):
-    task: Task = Task.get(id)
+def update_failure(id: str):
+    task: Task = Task.get(int(id))
     task.step_failed()
     return "OK"
 
