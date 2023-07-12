@@ -187,21 +187,28 @@ def submit():
     aws_instance_type: AwsInstanceType = AwsInstanceType(
         int(form.aws_instance_type.data)
     )
-    task = ToolkitTask.save_new(
-        _aws_instance_type=aws_instance_type,
-        _ami=parsed_config["ami"],
-        _name=parsed_config["name"],
-        _repository=form.repository.data,
-        _hash=form.hash.data,
-        _script_dir=parsed_config["scripts_dir"],
-        _pause=parsed_config["manual_installation_step"],
-        _post_install_tool=form.post_install_tool.data,
-        _benchmarks=form.benchmarks.data,
-        _run_networks=form.run_networks.data,
-        _run_install_as_root=parsed_config["run_installation_script_as_root"],
-        _run_post_install_as_root=parsed_config["run_post_installation_script_as_root"],
-        _run_tool_as_root=parsed_config["run_toolkit_as_root"],
-    )
+    selected_benchmarks = form.benchmarks.data
+    if form.reverse_order:
+        selected_benchmarks.reverse()
+    benchmarks_per_submission = form.split.data
+    if benchmarks_per_submission == 0:
+        benchmarks_per_submission = len(selected_benchmarks)
+    for i in range(0, len(selected_benchmarks), benchmarks_per_submission):
+        task = ToolkitTask.save_new(
+            _aws_instance_type=aws_instance_type,
+            _ami=parsed_config["ami"],
+            _name=parsed_config["name"],
+            _repository=form.repository.data,
+            _hash=form.hash.data,
+            _script_dir=parsed_config["scripts_dir"],
+            _pause=parsed_config["manual_installation_step"],
+            _post_install_tool=form.post_install_tool.data,
+            _benchmarks=selected_benchmarks[i:i+benchmarks_per_submission],
+            _run_networks=form.run_networks.data,
+            _run_install_as_root=parsed_config["run_installation_script_as_root"],
+            _run_post_install_as_root=parsed_config["run_post_installation_script_as_root"],
+            _run_tool_as_root=parsed_config["run_toolkit_as_root"],
+        )
 
     return redirect(url_for("toolkit_details", id=task.id))
 

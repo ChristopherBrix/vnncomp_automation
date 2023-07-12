@@ -7,6 +7,7 @@ from wtforms import (
     SelectField,
     SelectMultipleField,
     BooleanField,
+    IntegerField,
 )
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional
 from wtforms import widgets
@@ -86,6 +87,8 @@ class ToolkitSubmissionForm(FlaskForm):
             ("first", "first per instance (for testing)"),
         ],
     )
+    reverse_order = BooleanField("Reverse the order of benchmarks")
+    split = IntegerField("Split submission into several, each with N benchmarks", default=0)
     submit = SubmitField(
         "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
     )
