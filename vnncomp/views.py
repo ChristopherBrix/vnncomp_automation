@@ -128,9 +128,9 @@ def submit():
     if not form.validate_on_submit():
         message = "Error processing formular input."
         return render_template("toolkit/submission.html", form=form, message=message)
-    # if not current_user.admin:
-    #     message = "Submission is closed."
-    #     return render_template("toolkit/submission.html", form=form, message=message)
+    if not current_user.admin:
+        message = "Submission is closed."
+        return render_template("toolkit/submission.html", form=form, message=message)
 
     pattern = re.compile("https://([a-zA-Z0-9_]*@)?github\.com/")
     url: str = form.repository.data
