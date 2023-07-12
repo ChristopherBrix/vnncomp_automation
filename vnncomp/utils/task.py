@@ -203,10 +203,13 @@ class Task(db.Model):
         print("Task", self, "failed.")
         if check_status:
             self.current_step.status_check()
-        self._abort_all_uncompleted_steps()
-        TaskFailure(self).add_to_db()
-        self.update_current_step(self.current_step.next_step())
-        self.current_step.execute()
+        if self.current_step.retry_until_success():
+            self.current_step.execute()
+        else:
+            self._abort_all_uncompleted_steps()
+            TaskFailure(self).add_to_db()
+            self.update_current_step(self.current_step.next_step())
+            self.current_step.execute()
 
     def update_logs(self, step: TaskStep):
         if not step.save_logs():

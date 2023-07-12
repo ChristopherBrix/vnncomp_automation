@@ -119,6 +119,10 @@ class TaskStep(db.Model):
         """Whether this step can be aborted."""
         raise NotImplementedError("Must be implemented by child class")
 
+    def retry_until_success(self) -> bool:
+        """If true, failure will restart this step"""
+        return False
+
     def while_active(self):
         """Code to run during the execution."""
         return
@@ -774,6 +778,9 @@ class ToolkitGithubExport(TaskStep):
                 "benchmark_ip": self._db_task.instance.ip,
             },
         )
+
+    def retry_until_success(self) -> bool:
+        return True
 
     def can_be_aborted(self) -> bool:
         return True
