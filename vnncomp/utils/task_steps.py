@@ -128,13 +128,16 @@ class TaskStep(db.Model):
 
     def status_check(self):
         """Code to ensure step is in valid state."""
-        print("Status check", self._db_task.instance)
+        print(f"Status check {self._db_task} (currently in step {self})")
         if self._db_task.instance is None:
+            print(f"No instance connected.")
             if self.is_instance_loss_valid_end():
                 self._db_task.step_succeeded(check_status=False)
             else:
                 print("Status check for task", self._db_task, "detected that no instance is connected. Abort.")
                 self._db_task.step_failed(check_status=False)
+        else:
+            print(f"Instance {self._db_task.instance} connected.")
 
     def execute(self):
         """Code to execute."""
