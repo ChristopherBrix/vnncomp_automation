@@ -79,7 +79,7 @@
                 <div class="col-12 col-lg-12">
 
                 <span style="display:block; ">{{ step.description() }}
-                    {% if current_user.admin %} ({{ step._db_id }}) {% endif %}:
+                    {% if current_user.admin %} ({{ step._db_id }}, force this step (danger!): <a href="{{ url_for('force_step', task_id=task.id, step_id=step._db_id) }}">.</a>) {% endif %}:
 
                     <b id="{{ step._db_id }}_status"></b>
                 </span>

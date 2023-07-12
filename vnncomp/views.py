@@ -478,6 +478,15 @@ def update_success(id):
     return "OK"
 
 
+@app.route("/force_step/<task_id>/<step_id>")
+def force_step(task_id, step_id):
+    if not current_user.admin:
+        return "This feature is only available to admins!"
+    task: Task = Task.get(task_id)
+    task.force_step(step_id)
+    return redirect(url_for("toolkit_details", id=task_id))
+
+
 @app.route("/update/<id>/failure")
 def update_failure(id):
     task: Task = Task.get(id)

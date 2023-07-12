@@ -222,6 +222,24 @@ class Task(db.Model):
         self._db_current_step = step
         db.session.commit()
 
+    def force_step(self, step_id: int):
+        for step in self._db_steps:
+            if step._db_id < step_id:
+                step._db_aborted = False
+                step.done = True
+                step.active = False
+            elif step._db_id == step_id:
+                step._db_aborted = False
+                step.done = False
+                step.active = True
+                self._db_current_step = step
+            else:
+                assert step._db_id > step_id
+                step._db_aborted = False
+                step.done = False
+                step.active = False
+        db.session.commit()
+
     @classmethod
     def get_all(cls) -> List["Task"]:
         return cls.query.order_by(cls._db_id).all()
