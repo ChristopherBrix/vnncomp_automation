@@ -464,6 +464,7 @@ class ToolkitCreate(TaskStep):
 
     def while_active(self):
         super().while_active()
+        print("Trying to create instance for", self, self._db_task)
         self._create()
 
     def description(self):

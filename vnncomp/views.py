@@ -65,10 +65,11 @@ def fetch_updates():
 
 def process_tasks():
     for task in Task.get_in_progress():
-        print("Processing task", task)
+        print("Status check for task", task)
         task.current_step.status_check()
 
     for task in Task.get_in_progress():
+        print("Processing task", task)
         task.current_step.while_active()
 
 
