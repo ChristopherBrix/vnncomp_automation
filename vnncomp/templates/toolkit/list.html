@@ -93,6 +93,7 @@
                             {% if current_user.admin %}
                                 <td>User</td>
                                 <td>IP</td>
+                                <td>Benchmarks</td>
                             {% endif %}
                             <th>Actions</th>
                         </tr>
@@ -105,6 +106,11 @@
                                 {% if current_user.admin %}
                                     <td style="vertical-align:middle;">{{ task.user }}</td>
                                     <td style="vertical-align:middle;">{{ task.instance.ip }}</td>
+                                    <td style="vertical-align:middle;">
+                                        {% for benchmark in task.benchmarks %}
+                                            {{ benchmark }},
+                                        {% endfor %}
+                                    </td>
                                 {% endif %}
                                 <td style="vertical-align:middle;"><a
                                         href="{{ url_for('toolkit_details', id=task.id) }}"
