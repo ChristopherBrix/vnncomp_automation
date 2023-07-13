@@ -80,9 +80,12 @@
         <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
             <div class="col-12 col-lg-12">
                 <h2 class=" lh-1 mb-4">Your submitted toolkits:</h2>
+                {% if current_user.admin %}
+                <input type="text" id="toolname" onkeyup="filter()" placeholder="Search for names..">
+                {% endif %}
 
                 <div class="table-wrap">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="submissiontable">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -97,7 +100,7 @@
                         <tbody>
                         {% for task in tasks %}
                             <tr>
-                                <th scope="row" style="vertical-align:middle;">{{ task.name }}</th>
+                                <td scope="row" style="vertical-align:middle;">{{ task.name }}</td>
                                 <td style="vertical-align:middle;">{{ task.id }}</td>
                                 {% if current_user.admin %}
                                     <td style="vertical-align:middle;">{{ task.user }}</td>
@@ -118,7 +121,29 @@
     </div>
 </section>
 
+<script>
+function filter() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("toolname");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("submissiontable");
+  tr = table.getElementsByTagName("tr");
 
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+</script>
 
 {{ components.footer(current_user, env) }}
 {{ components.foot() }}
