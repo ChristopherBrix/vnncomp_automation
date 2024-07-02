@@ -1,6 +1,6 @@
 # VNN-COMP Automation
 
-This repository provides the code that was used to automate the [VNN-COMP 2022](https://vnncomp.christopher-brix.de).
+This repository provides the code that was used to automate the [VNN-COMP](https://vnncomp.christopher-brix.de).
 
 In the future, it will be updated to improve the process for the next iteration.
 
@@ -19,7 +19,7 @@ The main logic can be found in
 
 ## How to Set This Up?
 
-This code is the snapshot of the code at the end of the VNN-COMP 2022.
+This code is the snapshot of the code at the end of the VNN-COMP 2024.
 The process was a bit convoluted and sometimes hectic, so best-practices were not always followed.
 
 - An AWS key pair needs to be stored in `data/vnncomp.pem` (that name must also be used in AWS)

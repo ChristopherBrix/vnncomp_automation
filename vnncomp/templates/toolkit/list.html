@@ -1,46 +1,6 @@
-{#{% extends 'base_template.html' %}#}
-{##}
-{#{% block page_content %}#}
-{#<h2><a href="{{ url_for('index') }}">Back to main</a></h2><br><br>#}
-{#<h2><a href="{{ url_for('toolkit') }}">Submit a new version</a></h2><br><br><br><br><br>#}
-{#<h2>Submitted toolkits:</h2>#}
-{##}
-{#<ul>#}
-{#	{% for task in tasks %}#}
-{#	<li><a href="{{ url_for('toolkit_details', id=task.id) }}">{{ task.name }} ({{ task.id }} {% if current_user.admin#}
-{#			%}{{ task.user}}, {{ task.instance.ip }}{% endif %})</a></li>#}
-{#	{% endfor %}#}
-{#</ul>#}
-{##}
-{#{% endblock %}#}
-
-{#{% extends 'bootstrap/base.html' %}#}
-{#{% import "bootstrap/wtf.html" as wtf %}#}
-{##}
-{#{% block styles %}#}
-{#{{ super() }}#}
-{#<style>#}
-{#    body {#}
-{#        background: #e8f1f9;#}
-{#    }#}
-{##}
-{#    pre {#}
-{#        height: 300px;#}
-{#    }#}
-{#</style>#}
-{#{% endblock %}#}
-{##}
-{##}
-{#{% block title %}#}
-{#VNN-Comp 2022#}
-{#{% endblock %}#}
-{##}
-{##}
-{#{% block content %}#}
-
 {% import "components.html" as components %}
 
-{{ components.head(title="VNN-Comp 2023") }}
+{{ components.head(title="VNN-Comp 2024") }}
 
 {{ components.loggedIn_navbar(current_user=current_user) }}
 
@@ -52,8 +12,8 @@
             <div class="col-12 col-lg-12">
                 <h2 class="display-6 lh-1 mb-4">Welcome <code class="white-code">{% set the_first_name = current_user.username.split('@')[0] %}{{ the_first_name[0]|upper }}{{ the_first_name[1:] }}</code></h2>
                 <p class="lead fw-normal text-muted mb-5 mb-lg-5">For all updates and information about the VNN-Comp
-                    2022, please visit the main website:
-                    <a href="https://sites.google.com/view/vnn2022">https://sites.google.com/view/vnn2022</a></p>
+                    2024, please visit the main website:
+                    <a href="https://sites.google.com/view/vnn2024">https://sites.google.com/view/vnn2024</a></p>
                 <div class="d-flex flex-column flex-lg-row align-items-center">
                     <a class="me-lg-3 mb-4 mb-lg-0" href="{{ url_for('benchmark') }}">
                         <button class="btn btn-dark rounded-pill px-3 mb-2 mb-lg-0">

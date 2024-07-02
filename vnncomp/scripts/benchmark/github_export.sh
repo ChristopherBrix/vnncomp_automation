@@ -10,7 +10,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             export SCIEBO_PASSWORD=\\\\\\\"${sciebo_password}\\\\\\\"
             set -x
             ssh-keyscan github.com >> ~/.ssh/known_hosts \
-                && git clone git@github.com:ChristopherBrix/vnncomp2023_benchmarks.git all_benchmarks \
+                && git clone git@github.com:ChristopherBrix/vnncomp2024_benchmarks.git all_benchmarks \
                 && rm -rf all_benchmarks/benchmarks/${name} \
                 && mkdir all_benchmarks/benchmarks/${name} all_benchmarks/benchmarks/${name}/vnnlib all_benchmarks/benchmarks/${name}/onnx \
                 && cp benchmark/${script_dir}/${vnnlib_dir}/*.vnnlib all_benchmarks/benchmarks/${name}/vnnlib/ \
@@ -24,7 +24,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 && git add benchmarks/${name} \
                 && cd benchmarks \
                 && find ${name}/vnnlib/* ${name}/onnx/* -type f -size +100M -exec git restore --staged \\\\\\\"{}\\\\\\\" \\\\\\\\; \
-                && find ${name}/vnnlib/* ${name}/onnx/* -type f -size +100M -exec sh -c \\\\\\\"python3 ~/webdav_uploader.py -n ${name} -r vnncomp2023/{} -l {} \\\\\\\" \\\\\\\\; \
+                && find ${name}/vnnlib/* ${name}/onnx/* -type f -size +100M -exec sh -c \\\\\\\"python3 ~/webdav_uploader.py -n ${name} -r vnncomp2024/{} -l {} \\\\\\\" \\\\\\\\; \
                 && git pull \
                 && git status \
                 && git commit -m \\\\\\\"Updated ${name}\\\\\\\" -m \\\\\\\"${repository} @ ${hash}, seed ${seed}\\\\\\\" \

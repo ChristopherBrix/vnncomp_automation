@@ -48,16 +48,16 @@ except WebDavException as exception:
     print("HTTP error encountered: ", exception.code)
     raise
 
-client.mkdir("vnncomp2023/" + args["name"])
-client.mkdir("vnncomp2023/" + args["name"] + "/seed_896832480")
-client.clean("vnncomp2023/" + args["name"] + "/seed_896832480")
-client.mkdir("vnncomp2023/" + args["name"] + "/seed_896832480")
-client.mkdir("vnncomp2023/" + args["name"] + "/seed_896832480/onnx")
-client.mkdir("vnncomp2023/" + args["name"] + "/seed_896832480/vnnlib")
+client.mkdir("vnncomp2024/" + args["name"])
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_896832480")
+client.clean("vnncomp2024/" + args["name"] + "/seed_896832480")
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_896832480")
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_896832480/onnx")
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_896832480/vnnlib")
 
 # TODO This is a hack. The calling script will pass the whole path, but here we need the directory. We should fix that in the calling code, but it's easier here.
 upload_name = "/".join(args["local_path"].split("/")[-2:])
-remote_path = "vnncomp2023" + "/" + args["name"] + "/seed_896832480/" + upload_name
+remote_path = "vnncomp2024" + "/" + args["name"] + "/seed_896832480/" + upload_name
 
 upload_type = UploadType.NA
 

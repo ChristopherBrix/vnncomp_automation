@@ -7,7 +7,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             set -x
             ssh-keyscan github.com >> ~/.ssh/known_hosts \
                 && rm -rf all_results \
-                && git clone git@github.com:ChristopherBrix/vnncomp2023_results.git all_results \
+                && git clone git@github.com:ChristopherBrix/vnncomp2024_results.git all_results \
                 && rm -rf all_results/${tool_name}/${benchmark_year}_${benchmark_name} \
                 && mkdir -p all_results/${tool_name}/${benchmark_year}_${benchmark_name} \
                 && touch all_results/${tool_name}/${benchmark_year}_${benchmark_name}/.gitkeep

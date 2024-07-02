@@ -1,35 +1,8 @@
-{#{% extends 'bootstrap/base.html' %}#}
-{#{% import "bootstrap/wtf.html" as wtf %}#}
-{##}
-{#{% block styles %}#}
-{#{{ super() }}#}
-{#<style>#}
-{#    body {#}
-{#        background: #e8f1f9;#}
-{#    }#}
-{##}
-{#    pre {#}
-{#        height: 300px;#}
-{#    }#}
-{#</style>#}
-{#{% endblock %}#}
-{##}
-{##}
-{#{% block title %}#}
-{#VNN-Comp 2022#}
-{#{% endblock %}#}
-{##}
-{##}
-{#{% block content %}#}
-
 {% import 'components.html' as components %}
 
 {{ components.head(title="Login") }}
 {{ components.empty_navbar() }}
 
-{#<div class="container">#}
-{#    <div class="row">#}
-{#        <div class="col-md-10 col-lg-12 mx-lg-auto mx-md-auto">#}
 
 <style>
     form fieldset ul.errors{
@@ -48,67 +21,6 @@
 {%- endmacro %}
 
 
-{#<header class="masthead">#}
-{#    <div class="container px-5">#}
-{#        <div class="row gx-5 align-items-center">#}
-{##}
-{#            <div class="modal-body border-0 p-4">#}
-{##}
-{#                {% for message in get_flashed_messages() %}#}
-{#                <div class="alert alert-warning">#}
-{#                    <button type="button" class="close" data-dismiss="alert">#}
-{#                        x#}
-{#                    </button>#}
-{#                    {{ message }}#}
-{#                </div>#}
-{#                {% endfor %}#}
-{##}
-{#                <form id="contactForm" method="POST" action="/login">#}
-{#                    {{ form.csrf_token }}#}
-{#                    <!-- Email address input-->#}
-{#                    <div class="form-floating mb-3">#}
-{#                        <input class="form-control" id="email" type="email" placeholder="name@example.com" name="username"#}
-{#                               data-sb-validations="required,email"/>#}
-{#                        {{ form.username(placeholder='youremail@example.com', class_="form-control") }}#}
-{#                        {{ form.username.label }}#}
-{#                        {{ form_element_errors(form.username.errors) }}#}
-{##}
-{#                        <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>#}
-{#                        <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>#}
-{#                    </div>#}
-{#                    {{ form.username.label }}#}
-{#                    {{ form.username(placeholder='youremail@example.com') }}#}
-{#                    <!-- Phone number input-->#}
-{#                    <div class="form-floating mb-3">#}
-{##}
-{#                        <input class="form-control" id="phone" type="password" name="password" placeholder="(123) 456-7890"#}
-{#                               data-sb-validations="required"/>#}
-{#                        <label for="phone">Password</label>#}
-{#                        {{ form.password(class_="form-control") }}#}
-{#                        {{ form.password.label }}#}
-{#                        {{ form_element_errors(form.password.errors) }}#}
-{#                        <div class="invalid-feedback" data-sb-feedback="phone:required">A password is required.#}
-{#                        </div>#}
-{#                    </div>#}
-{##}
-{#                    <!-- Submit Button-->#}
-{#                    <div class="d-grid">#}
-{#                        <button class="btn btn-primary rounded-pill btn-lg" id="submitButton" type="submit">#}
-{#                            Log In#}
-{#                        </button>#}
-{#                         {{ form.submit(value="Log In", class_="btn btn-primary rounded-pill btn-lg") }}#}
-{#                    </div>#}
-{##}
-{#                    <div class="login-signup" style="text-align: center; margin-top: 20px;">#}
-{#                        <span>Don't have an account?</span>#}
-{#                        <a href="{{ url_for('signup') }}">Sign up.</a>#}
-{#                    </div>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</header>#}
-
 <header class="masthead">
     <div class="container px-5">
         <div class="row gx-5 align-items-center">
@@ -120,9 +32,6 @@
 
                 {% for message in get_flashed_messages() %}
                 <div class="alert alert-warning">
-{#                    <button type="button" class="close" data-dismiss="alert">#}
-{#                        x#}
-{#                    </button>#}
                     {{ message }}
                 </div>
                 {% endfor %}
@@ -131,8 +40,6 @@
                     {{ form.csrf_token }}
                     <!-- Email address input-->
                     <div class="form-floating mb-3">
-{#                        <input class="form-control" id="email" type="email" placeholder="name@example.com" name="username"#}
-{#                               data-sb-validations="required,email"/>#}
                         {{ form.username(placeholder='youremail@example.com', class_="form-control") }}
                         {{ form.username.label }}
                         {{ form_element_errors(form.username.errors) }}
@@ -140,14 +47,9 @@
                         <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
                         <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
                     </div>
-{#                    {{ form.username.label }}#}
-{#                    {{ form.username(placeholder='youremail@example.com') }}#}
                     <!-- Phone number input-->
                     <div class="form-floating mb-3">
 
-{#                        <input class="form-control" id="phone" type="password" name="password" placeholder="(123) 456-7890"#}
-{#                               data-sb-validations="required"/>#}
-{#                        <label for="phone">Password</label>#}
                         {{ form.password(class_="form-control") }}
                         {{ form.password.label }}
                         {{ form_element_errors(form.password.errors) }}
@@ -157,9 +59,6 @@
 
                     <!-- Submit Button-->
                     <div class="d-grid">
-{#                        <button class="btn btn-primary rounded-pill btn-lg" id="submitButton" type="submit">#}
-{#                            Log In#}
-{#                        </button>#}
                          {{ form.submit(value="Log In", class_="btn btn-primary rounded-pill btn-lg") }}
                     </div>
 
@@ -180,89 +79,7 @@
     </div>
 </header>
 
-{##}
-{#<div class="modal" id="loginModal" tabindex="-1" >#}
-{#    <div class="modal-dialog modal-dialog-centered">#}
-{#        <div class="modal-content">#}
-{#            <div class="modal-header bg-gradient-primary-to-secondary p-4">#}
-{#                <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Log In</h5>#}
-{#                <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal"#}
-{#                        aria-label="Close"></button>#}
-{#            </div>#}
-{#            <div class="modal-body border-0 p-4">#}
-{##}
-{#                {% for message in get_flashed_messages() %}#}
-{#                <div class="alert alert-warning">#}
-{#                    <button type="button" class="close" data-dismiss="alert">#}
-{#                        x#}
-{#                    </button>#}
-{#                    {{ message }}#}
-{#                </div>#}
-{#                {% endfor %}#}
-{##}
-{#                <form id="contactForm" method="POST" action="/login">#}
-{#                    {{ form.csrf_token }}#}
-{#                    <!-- Email address input-->#}
-{#                    <div class="form-floating mb-3">#}
-{#                        <input class="form-control" id="email" type="email" placeholder="name@example.com" name="username"#}
-{#                               data-sb-validations="required,email"/>#}
-{#                        {{ form.username(placeholder='youremail@example.com', class_="form-control") }}#}
-{#                        {{ form.username.label }}#}
-{#                        {{ form_element_errors(form.username.errors) }}#}
-{##}
-{#                        <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>#}
-{#                        <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>#}
-{#                    </div>#}
-{#                    {{ form.username.label }}#}
-{#                    {{ form.username(placeholder='youremail@example.com') }}#}
-{#                    <!-- Phone number input-->#}
-{#                    <div class="form-floating mb-3">#}
-{##}
-{#                        <input class="form-control" id="phone" type="password" name="password" placeholder="(123) 456-7890"#}
-{#                               data-sb-validations="required"/>#}
-{#                        <label for="phone">Password</label>#}
-{#                        {{ form.password(class_="form-control") }}#}
-{#                        {{ form.password.label }}#}
-{#                        {{ form_element_errors(form.password.errors) }}#}
-{#                        <div class="invalid-feedback" data-sb-feedback="phone:required">A password is required.#}
-{#                        </div>#}
-{#                    </div>#}
-{##}
-{#                    <!-- Submit Button-->#}
-{#                    <div class="d-grid">#}
-{#                        <button class="btn btn-primary rounded-pill btn-lg" id="submitButton" type="submit">#}
-{#                            Log In#}
-{#                        </button>#}
-{#                         {{ form.submit(value="Log In", class_="btn btn-primary rounded-pill btn-lg") }}#}
-{#                    </div>#}
-{##}
-{#                    <div class="login-signup" style="text-align: center; margin-top: 20px;">#}
-{#                        <span>Don't have an account?</span>#}
-{#                        <a href="{{ url_for('signup') }}">Sign up.</a>#}
-{#                    </div>#}
-{#                </form>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
-{##}
-{#<script>#}
-{##}
-{#        // $("#loginModal").modal("show");#}
-{##}
-{#        $(window).on("load", ()=>{#}
-{#            $("#loginModal").modal("show");#}
-{#            $("#myModal").modal({#}
-{#                backdrop: 'static',#}
-{#                keyboard: false#}
-{#            });#}
-{#        })#}
-{##}
-{##}
-{#</script>#}
 
 {{ components.footer(current_user, env) }}
 {{ components.foot() }}
 
-{##}
-{#{% endblock %}#}
