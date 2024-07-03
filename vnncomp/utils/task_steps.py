@@ -415,7 +415,7 @@ class BenchmarkGithubExport(TaskStep):
                 "repository": self._db_task.repository,
                 "hash": self._db_task.hash,
                 "name": self._db_task.sanitized_name,
-                "seed": "896832480",
+                "seed": "0",
                 "script_dir": self._db_task.script_dir,
                 "vnnlib_dir": self._db_task.vnnlib_dir,
                 "onnx_dir": self._db_task.onnx_dir,
