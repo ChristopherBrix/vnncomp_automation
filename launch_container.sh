@@ -7,6 +7,8 @@ else
   echo "Automatically applying db upgrades. To avoid this, do not set AUTO_APPLY_DB_UPGRADES"
 fi
 
+python init.py
+
 aws configure import --csv file://data/awskey.csv
 aws configure set region us-west-2
 mkdir /root/.ssh

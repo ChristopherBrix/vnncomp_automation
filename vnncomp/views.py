@@ -13,6 +13,7 @@ from flask_login import current_user
 from vnncomp.main import app
 from vnncomp.auth import login_required
 from vnncomp.utils.aws_instance import AwsInstanceType, AwsManager, AwsInstance
+from vnncomp.utils.settings import Settings
 from vnncomp.utils.task import BenchmarkTask, Task, ToolkitTask
 from vnncomp.utils.user import User
 from vnncomp.utils.forms import (
@@ -508,15 +509,39 @@ def update_failure(id: str):
     return "OK"
 
 
+@app.route("/admin")
+@login_required
+def admin():
+    if not current_user.admin:
+        return "You need to be an admin to access this page."
+    s = Settings.query.first()
+    print(s)
+    return render_template("admin/index.html", settings=s)
+
+@app.route("/admin/enable_aws", methods=["GET"])
+@login_required
+def enable_aws():
+    if not current_user.admin:
+        return "You must be an admin to perform this action"
+    Settings.enable_aws()
+    return redirect("/admin")
+
+@app.route("/admin/disable_aws", methods=["GET"])
+@login_required
+def disable_aws():
+    if not current_user.admin:
+        return "You must be an admin to perform this action"
+    Settings.disable_aws()
+    return redirect("/admin")
+
 @app.route("/manual_update")
 def manual_update():
     user = current_user
-    user: User = User.query.filter_by(username="ConnectToAWS@example.com").first()
-    if user.enabled:
+    if Settings.aws_enabled:
         fetch_updates()
         process_tasks()
     else:
-        return "Enable user ConnectToAWS@example.com to process tasks and connect to AWS"
+        return "Connection to AWS not enabled"
     return "ok"
 
 scheduler = APScheduler()

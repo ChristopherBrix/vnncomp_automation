@@ -1,0 +1,53 @@
+{% import "components.html" as components %}
+
+{{ components.head(title="VNN-Comp 2024") }}
+
+{{ components.loggedIn_navbar(current_user=current_user) }}
+
+
+<section style="padding-bottom: 2rem;" class="bg-light">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <p style="margin-bottom:0.5em"><a href="/"
+               class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0" style="padding-left: 0 !important;"
+            >
+                    <span class="d-flex align-items-center">
+                        <span class="small">
+                            < Back to Main Page
+                        </span>
+                    </span>
+            </a></p>
+
+            <h2>Admin Pannel</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <td>Setting</td>
+                        <td>Current Value</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AWS enabled</td>
+                        <td>{{ settings.aws_enabled }}</td>
+                        <td>
+                            {% if settings.aws_enabled %}
+                            <a href="{{ url_for('disable_aws') }}">Disable</a>
+                            {% else %}
+                            <a href="{{ url_for('enable_aws') }}">Enable</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<script>
+
+
+{{ components.footer(current_user, env) }}
+{{ components.foot() }}

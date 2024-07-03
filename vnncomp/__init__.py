@@ -55,6 +55,7 @@ def create_app():
     )
     from vnncomp.utils.aws_instance import AwsInstance, AwsManager
     from vnncomp.utils.user import User
+    from vnncomp.utils.settings import Settings
 
     Bootstrap(app)
 
