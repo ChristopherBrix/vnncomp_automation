@@ -1,6 +1,11 @@
 #!/bin/bash
 
-python ./create_db_file.py &> ./data/create_db_file_output.txt;
+if [[ -z "${AUTO_APPLY_DB_UPGRADES}" ]]; then
+  echo "Set AUTO_APPLY_DB_UPGRADES to automatically apply db upgrades."
+else
+  flask db upgrade
+  echo "Automatically applying db upgrades. To avoid this, do not set AUTO_APPLY_DB_UPGRADES"
+fi
 
 aws configure import --csv file://data/awskey.csv
 aws configure set region us-west-2
