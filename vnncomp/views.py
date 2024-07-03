@@ -392,6 +392,8 @@ def benchmark_list():
 @app.route("/benchmark/details/<id>", methods=["GET"])
 def benchmark_details(id: str):
     task = BenchmarkTask.get(int(id))
+    if task is None:
+        return render_template("404.html")
     task_step_ids = [step._db_id for step in task._db_steps]
     return render_template("benchmark/details.html", task=task, task_step_ids=task_step_ids)
 
