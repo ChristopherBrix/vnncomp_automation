@@ -64,15 +64,25 @@ def signup():
     """
     form = SignupForm()
     if form.validate_on_submit():
+        num_registered_users = User.query.count()
+        if num_registered_users == 0
+            is_first_user = True
+        else:
+            is_first_user = False
         existing_user = User.query.filter_by(username=form.username.data).first()
         if existing_user is None:
             user = User(username=form.username.data, enabled=False)
             user.set_password(form.password.data)
+            user.admin = is_first_user
+            user.enabled = is_first_user
             db.session.add(user)
-            db.session.commit()  # Create new user
-            flash(
-                "Your account was created, but needs to be activated by the organizers."
-            )
+            db.session.commit()
+            if is_first_user:
+                flash("Your account was created and assigned admin privileges.")
+            else:
+                flash(
+                    "Your account was created, but needs to be activated by the organizers."
+                )
             return redirect(url_for("login"))
         flash("A user already exists with that email address.")
     return render_template(
