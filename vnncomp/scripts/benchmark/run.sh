@@ -11,6 +11,6 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 && cd ~ \
                 && ls benchmark/${script_dir}/${csv_file} \
                 && curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
-                || curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure
+                || (find .; curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure)
         \\\" > >(tee logs/run.log) 2>&1 < /dev/null
     \" "
