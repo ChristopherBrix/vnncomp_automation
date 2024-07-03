@@ -279,7 +279,6 @@ def toolkit_details_task_status(id):
 @app.route("/toolkit/details/step/<id>", methods=["GET"])
 @login_required
 def toolkit_taskstep_async(id):
-    # task = ToolkitTask.get(int(id))
     taskstep = TaskStep.query.get(id)
     if taskstep is None:
         return jsonify({"error": "not found"})
@@ -331,6 +330,8 @@ def toolkit_edit_post_install(id):
 @login_required
 def toolkit_abort(id):
     task = ToolkitTask.get(int(id))
+    if task is None:
+        return render_template("404.html")
     assert task.current_step.can_be_aborted() and not task.done
     task.abort()
     return redirect(url_for("toolkit_details", id=id))
@@ -341,6 +342,8 @@ def toolkit_sanitize_abort(id):
     if not current_user.admin:
         return "You must be an admin to perform this action"
     task = ToolkitTask.get(int(id))
+    if task is None:
+        return render_template("404.html")
     if task.current_step is not None:
         return f"The current step is {task.current_step}, no sanitization necessary"
     task.sanitize_abort()
@@ -425,7 +428,6 @@ def benchmark_details_task_status(id: str):
 @app.route("/benchmark/details/step/<id>", methods=["GET"])
 @login_required
 def benchmark_taskstep_async(id: str):
-    # task = ToolkitTask.get(int(id))
     taskstep = TaskStep.query.get(int(id))
     if taskstep is None:
         return jsonify({"error": "not found"})
@@ -455,6 +457,8 @@ def benchmark_taskstep_async(id: str):
 @app.route("/benchmark/resubmit/<id>", methods=["GET"])
 def benchmark_resubmit(id: str):
     task: BenchmarkTask = BenchmarkTask.get(int(id))
+    if task is None:
+        return render_template("404.html")
     form = BenchmarkSubmissionForm()
     form.name.data = task.name
     form.repository.data = task.repository
@@ -466,6 +470,8 @@ def benchmark_resubmit(id: str):
 @app.route("/benchmark/abort/<id>", methods=["GET"])
 def benchmark_abort(id: str):
     task = BenchmarkTask.get(int(id))
+    if task is None:
+        return render_template("404.html")
     assert task.current_step.can_be_aborted() and not task.done
     task.abort()
     return redirect(url_for("benchmark_details", id=id))
@@ -474,6 +480,8 @@ def benchmark_abort(id: str):
 @app.route("/update/<id>/success")
 def update_success(id: str):
     task: Task = Task.get(int(id))
+    if task is None:
+        return render_template("404.html")
     task.step_succeeded()
     if current_user.is_authenticated:
         return redirect(url_for("toolkit_details", id=id))
@@ -485,6 +493,8 @@ def force_step(task_id: str, step_id: str):
     if not current_user.admin:
         return "This feature is only available to admins!"
     task: Task = Task.get(int(task_id))
+    if task is None:
+        return render_template("404.html")
     task.force_step(int(step_id))
     return redirect(url_for("toolkit_details", id=task_id))
 
@@ -492,6 +502,8 @@ def force_step(task_id: str, step_id: str):
 @app.route("/update/<id>/failure")
 def update_failure(id: str):
     task: Task = Task.get(int(id))
+    if task is None:
+        return render_template("404.html")
     task.step_failed()
     return "OK"
 
