@@ -21,10 +21,6 @@ class Settings(db.Model):
         server_default=sqlalchemy.sql.expression.literal(False),
     )
 
-    @property
-    def aws_enabled(self) -> bool:
-        return self._db_aws_enabled
-
     def __init__(
         self,
         aws_enabled: bool,
@@ -42,12 +38,16 @@ class Settings(db.Model):
 
     @classmethod
     def enable_aws(cls):
-        settings = Settings.query.first()
+        settings = cls.query.first()
         settings._db_aws_enabled = True
         db.session.commit()
     
     @classmethod
     def disable_aws(cls):
-        settings = Settings.query.first()
+        settings = cls.query.first()
         settings._db_aws_enabled = False
         db.session.commit()
+
+    @classmethod
+    def aws_enabled(cls) -> bool:
+        return cls.query.first()._db_aws_enabled

@@ -514,9 +514,7 @@ def update_failure(id: str):
 def admin():
     if not current_user.admin:
         return "You need to be an admin to access this page."
-    s = Settings.query.first()
-    print(s)
-    return render_template("admin/index.html", settings=s)
+    return render_template("admin/index.html", Settings=Settings)
 
 @app.route("/admin/enable_aws", methods=["GET"])
 @login_required
@@ -536,8 +534,7 @@ def disable_aws():
 
 @app.route("/manual_update")
 def manual_update():
-    user = current_user
-    if Settings.aws_enabled:
+    if Settings.aws_enabled():
         fetch_updates()
         process_tasks()
     else:

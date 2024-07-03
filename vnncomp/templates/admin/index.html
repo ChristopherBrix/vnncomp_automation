@@ -31,9 +31,9 @@
                 <tbody>
                     <tr>
                         <td>AWS enabled</td>
-                        <td>{{ settings.aws_enabled }}</td>
+                        <td>{{ Settings.aws_enabled() }}</td>
                         <td>
-                            {% if settings.aws_enabled %}
+                            {% if Settings.aws_enabled() %}
                             <a href="{{ url_for('disable_aws') }}">Disable</a>
                             {% else %}
                             <a href="{{ url_for('enable_aws') }}">Enable</a>
