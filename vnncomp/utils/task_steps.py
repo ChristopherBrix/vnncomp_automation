@@ -183,6 +183,13 @@ class TaskFailure(TaskStep):
     __mapper_args__ = {"polymorphic_identity": "task_failure"}
 
     def execute(self):
+        self._terminate()
+
+    def while_active(self):
+        super().while_active()
+        self._terminate()
+
+    def _terminate(self):
         super().execute()
         if self._db_task.instance is not None:
             if Settings.terminate_on_failure():
