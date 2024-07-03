@@ -9,6 +9,7 @@ from flask import url_for
 from sqlalchemy.orm import relationship
 
 from vnncomp import db
+from vnncomp.utils.settings import Settings
 
 if TYPE_CHECKING:
     from vnncomp.utils.aws_instance import AwsInstance
@@ -184,7 +185,10 @@ class TaskFailure(TaskStep):
     def execute(self):
         super().execute()
         if self._db_task.instance is not None:
-            self._db_task.instance.terminate()
+            if Settings.terminate_on_failure():
+                self._db_task.instance.terminate()
+            else:
+                print("[Warning] Not terminating instance on failure")
 
     def can_be_aborted(self) -> bool:
         return False

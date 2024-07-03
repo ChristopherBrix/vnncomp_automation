@@ -34,9 +34,20 @@
                         <td>{{ Settings.aws_enabled() }}</td>
                         <td>
                             {% if Settings.aws_enabled() %}
-                            <a href="{{ url_for('disable_aws') }}">Disable</a>
+                            <a href="{{ url_for('set_aws_enabled', new_value=0) }}">Disable</a>
                             {% else %}
-                            <a href="{{ url_for('enable_aws') }}">Enable</a>
+                            <a href="{{ url_for('set_aws_enabled', new_value=1) }}">Enable</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Terminate instances on failure</td>
+                        <td>{{ Settings.terminate_on_failure() }}</td>
+                        <td>
+                            {% if Settings.terminate_on_failure() %}
+                            <a href="{{ url_for('set_terminate_on_failure', new_value=0) }}">Disable</a>
+                            {% else %}
+                            <a href="{{ url_for('set_terminate_on_failure', new_value=1) }}">Enable</a>
                             {% endif %}
                         </td>
                     </tr>

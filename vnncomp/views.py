@@ -516,20 +516,20 @@ def admin():
         return "You need to be an admin to access this page."
     return render_template("admin/index.html", Settings=Settings)
 
-@app.route("/admin/enable_aws", methods=["GET"])
+@app.route("/admin/set_aws_enabled/<new_value>", methods=["GET"])
 @login_required
-def enable_aws():
+def set_aws_enabled(new_value: str):
     if not current_user.admin:
         return "You must be an admin to perform this action"
-    Settings.enable_aws()
+    Settings.set_aws_enabled(new_value == "1")
     return redirect("/admin")
 
-@app.route("/admin/disable_aws", methods=["GET"])
+@app.route("/admin/set_terminate_on_failure/<new_value>", methods=["GET"])
 @login_required
-def disable_aws():
+def set_terminate_on_failure(new_value: str):
     if not current_user.admin:
         return "You must be an admin to perform this action"
-    Settings.disable_aws()
+    Settings.set_terminate_on_failure(new_value == "1")
     return redirect("/admin")
 
 @app.route("/manual_update")

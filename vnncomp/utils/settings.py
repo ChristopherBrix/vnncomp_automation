@@ -20,34 +20,49 @@ class Settings(db.Model):
         default=False,
         server_default=sqlalchemy.sql.expression.literal(False),
     )
+    _db_aws_terminate_on_failure = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=True,
+        server_default=sqlalchemy.sql.expression.literal(True),
+    )
 
     def __init__(
         self,
         aws_enabled: bool,
+        terminate_on_failure: bool,
     ):
         self._db_aws_enabled = aws_enabled
+        self._db_aws_terminate_on_failure = terminate_on_failure
 
     @classmethod
     def init(cls):
         assert cls.query.count() <= 1
         settings = cls.query.first()
         if settings is None:
-            settings = cls(aws_enabled=False)
+            settings = cls(
+                aws_enabled=False,
+                terminate_on_failure=True,
+            )
             db.session.add(settings)
             db.session.commit()
 
     @classmethod
-    def enable_aws(cls):
-        settings = cls.query.first()
-        settings._db_aws_enabled = True
-        db.session.commit()
-    
+    def aws_enabled(cls) -> bool:
+        return cls.query.first()._db_aws_enabled
+
     @classmethod
-    def disable_aws(cls):
+    def set_aws_enabled(cls, aws_enabled: bool):
         settings = cls.query.first()
-        settings._db_aws_enabled = False
+        settings._db_aws_enabled = aws_enabled
         db.session.commit()
 
     @classmethod
-    def aws_enabled(cls) -> bool:
-        return cls.query.first()._db_aws_enabled
+    def terminate_on_failure(cls) -> bool:
+        return cls.query.first()._db_aws_terminate_on_failure
+    
+    @classmethod
+    def set_terminate_on_failure(cls, terminate_on_failure: bool):
+        settings = cls.query.first()
+        settings._db_aws_terminate_on_failure = terminate_on_failure
+        db.session.commit()
