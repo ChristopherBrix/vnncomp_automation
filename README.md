@@ -34,9 +34,7 @@ However, the code should still provide a good insight into how the competition w
 
 To ensure that this code can be reused, several steps are currently planned
 
- - Create a docker environment to make the setup reproducible
  - Clean up the code to fix issues introduced by last-minute changes and avoid code that's commented out because it's only necessary in certain situations
- - Improve the frontend
  - Implement feedback (configuration of submissions via .yaml file, better testing of benchmark submissions, etc.)
 
 This repository will be updated as those improvements are incorporated.
