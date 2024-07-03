@@ -65,7 +65,7 @@ def signup():
     form = SignupForm()
     if form.validate_on_submit():
         num_registered_users = User.query.count()
-        if num_registered_users == 0
+        if num_registered_users == 0:
             is_first_user = True
         else:
             is_first_user = False
