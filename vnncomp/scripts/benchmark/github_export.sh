@@ -12,8 +12,8 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             ssh-keyscan github.com >> ~/.ssh/known_hosts \
                 && git clone git@github.com:ChristopherBrix/vnncomp2024_benchmarks.git all_benchmarks \
                 && rm -rf all_benchmarks/benchmarks/${name} \
-                && mkdir all_benchmarks/benchmarks/${name} all_benchmarks/benchmarks/${name}/vnnlib all_benchmarks/benchmarks/${name}/onnx \
-                && cp benchmark/${script_dir}/${vnnlib_dir}/*.vnnlib all_benchmarks/benchmarks/${name}/vnnlib/ \
+                && mkdir all_benchmarks/benchmarks/${name} all_benchmarks/benchmarks/${name}/onnx \
+                && cp -r benchmark/${script_dir}/${vnnlib_dir} all_benchmarks/benchmarks/${name}/vnnlib \
                 && cp benchmark/${script_dir}/${onnx_dir}/*.onnx all_benchmarks/benchmarks/${name}/onnx/ \
                 && cp benchmark/${script_dir}/${csv_file} all_benchmarks/benchmarks/${name}/instances.csv \
                 && cd all_benchmarks \
