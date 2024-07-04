@@ -111,7 +111,7 @@ def enable_user(id):
     user: User = User.query.get(id)
     user.enable()
 
-    return redirect("/admin")
+    return redirect("/admin/users")
 
 
 @app.route("/disable_user/<id>", methods=["GET"])
@@ -123,7 +123,7 @@ def disable_user(id):
     user: User = User.query.get(id)
     user.disable()
 
-    return redirect("/admin")
+    return redirect("/admin/users")
 
 
 @login_manager.user_loader
