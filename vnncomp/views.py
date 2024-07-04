@@ -544,7 +544,7 @@ def set_aws_enabled(new_value: str):
     if not current_user.admin:
         return "You must be an admin to perform this action"
     Settings.set_aws_enabled(new_value == "1")
-    return redirect("/admin")
+    return redirect("/admin/settings")
 
 @app.route("/admin/set_terminate_on_failure/<new_value>", methods=["GET"])
 @login_required
@@ -552,7 +552,7 @@ def set_terminate_on_failure(new_value: str):
     if not current_user.admin:
         return "You must be an admin to perform this action"
     Settings.set_terminate_on_failure(new_value == "1")
-    return redirect("/admin")
+    return redirect("/admin/settings")
 
 @app.route("/admin/set_allow_non_admin_login/<new_value>", methods=["GET"])
 @login_required
@@ -560,7 +560,7 @@ def set_allow_non_admin_login(new_value: str):
     if not current_user.admin:
         return "You must be an admin to perform this action"
     Settings.set_allow_non_admin_login(new_value == "1")
-    return redirect("/admin")
+    return redirect("/admin/settings")
 
 @app.route("/manual_update")
 def manual_update():
