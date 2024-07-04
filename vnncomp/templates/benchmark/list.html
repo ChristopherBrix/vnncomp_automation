@@ -102,7 +102,7 @@
                             <th>Name</th>
                             <th>ID</th>
                             {% if current_user.admin %}
-                                {#                                <td>User</td>#}
+                                <td>URL</td>
                                 <td>IP</td>
                             {% endif %}
                             <th>Actions</th>
@@ -114,7 +114,7 @@
                                 <th scope="row" style="vertical-align:middle;">{{ task.name }}</th>
                                 <td style="vertical-align:middle;">{{ task.id }}</td>
                                 {% if current_user.admin %}
-                                    {#                                    <td style="vertical-align:middle;">{{ task.user }}</td>#}
+                                    <td style="vertical-align:middle;">{{ task.repository }}</td>
                                     <td style="vertical-align:middle;">{{ task.instance.ip }}</td>
                                 {% endif %}
                                 <td style="vertical-align:middle;"><a
