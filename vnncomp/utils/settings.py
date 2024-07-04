@@ -32,16 +32,32 @@ class Settings(db.Model):
         default=True,
         server_default=sqlalchemy.sql.expression.literal(True),
     )
+    _db_users_can_submit_benchmarks = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=False,
+        server_default=sqlalchemy.sql.expression.literal(False),
+    )
+    _db_users_can_submit_tools = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=False,
+        server_default=sqlalchemy.sql.expression.literal(False),
+    )
 
     def __init__(
         self,
         aws_enabled: bool,
         terminate_on_failure: bool,
         allow_non_admin_login: bool,
+        users_can_submit_benchmarks: bool,
+        users_can_submit_tools: bool,
     ):
         self._db_aws_enabled = aws_enabled
         self._db_aws_terminate_on_failure = terminate_on_failure
         self._db_allow_non_admin_login = allow_non_admin_login
+        self._db_users_can_submit_benchmarks = users_can_submit_benchmarks
+        self._db_users_can_submit_tools = users_can_submit_tools
 
     @classmethod
     def init(cls):
@@ -52,6 +68,8 @@ class Settings(db.Model):
                 aws_enabled=False,
                 terminate_on_failure=True,
                 allow_non_admin_login=True,
+                users_can_submit_benchmarks=False,
+                users_can_submit_tools=False,
             )
             db.session.add(settings)
             db.session.commit()
@@ -84,4 +102,24 @@ class Settings(db.Model):
     def set_allow_non_admin_login(cls, allow_non_admin_login: bool):
         settings = cls.query.first()
         settings._db_allow_non_admin_login = allow_non_admin_login
+        db.session.commit()
+
+    @classmethod
+    def users_can_submit_benchmarks(cls) -> bool:
+        return cls.query.first()._db_users_can_submit_benchmarks
+
+    @classmethod
+    def set_users_can_submit_benchmarks(cls, users_can_submit_benchmarks: bool):
+        settings = cls.query.first()
+        settings._db_users_can_submit_benchmarks = users_can_submit_benchmarks
+        db.session.commit()
+
+    @classmethod
+    def users_can_submit_tools(cls) -> bool:
+        return cls.query.first()._db_users_can_submit_tools
+
+    @classmethod
+    def set_users_can_submit_tools(cls, users_can_submit_tools: bool):
+        settings = cls.query.first()
+        settings._db_users_can_submit_tools = users_can_submit_tools
         db.session.commit()

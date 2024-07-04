@@ -34,9 +34,9 @@
                         <td>{{ Settings.aws_enabled() }}</td>
                         <td>
                             {% if Settings.aws_enabled() %}
-                            <a href="{{ url_for('set_aws_enabled', new_value=0) }}">Disable</a>
+                            <a href="{{ url_for('admin_settings_set', parameter='aws_enabled', new_value=0) }}">Disable</a>
                             {% else %}
-                            <a href="{{ url_for('set_aws_enabled', new_value=1) }}">Enable</a>
+                            <a href="{{ url_for('admin_settings_set', parameter='aws_enabled', new_value=1) }}">Enable</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -45,9 +45,9 @@
                         <td>{{ Settings.terminate_on_failure() }}</td>
                         <td>
                             {% if Settings.terminate_on_failure() %}
-                            <a href="{{ url_for('set_terminate_on_failure', new_value=0) }}">Disable</a>
+                            <a href="{{ url_for('admin_settings_set', parameter='terminate_on_failure', new_value=0) }}">Disable</a>
                             {% else %}
-                            <a href="{{ url_for('set_terminate_on_failure', new_value=1) }}">Enable</a>
+                            <a href="{{ url_for('admin_settings_set', parameter='terminate_on_failure', new_value=1) }}">Enable</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -56,11 +56,34 @@
                         <td>{{ Settings.allow_non_admin_login() }}</td>
                         <td>
                             {% if Settings.allow_non_admin_login() %}
-                            <a href="{{ url_for('set_allow_non_admin_login', new_value=0) }}">Disable</a>
+                            <a href="{{ url_for('admin_settings_set', parameter='allow_non_admin_login', new_value=0) }}">Disable</a>
                             {% else %}
-                            <a href="{{ url_for('set_allow_non_admin_login', new_value=1) }}">Enable</a>
+                            <a href="{{ url_for('admin_settings_set', parameter='allow_non_admin_login', new_value=1) }}">Enable</a>
                             {% endif %}
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Allow users to submit toolkits</td>
+                        <td>{{ Settings.users_can_submit_tools() }}</td>
+                        <td>
+                            {% if Settings.users_can_submit_tools() %}
+                            <a href="{{ url_for('admin_settings_set', parameter='users_can_submit_tools', new_value=0) }}">Disable</a>
+                            {% else %}
+                            <a href="{{ url_for('admin_settings_set', parameter='users_can_submit_tools', new_value=1) }}">Enable</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Allow users to submit benchmarks</td>
+                        <td>{{ Settings.users_can_submit_benchmarks() }}</td>
+                        <td>
+                            {% if Settings.users_can_submit_benchmarks() %}
+                            <a href="{{ url_for('admin_settings_set', parameter='users_can_submit_benchmarks', new_value=0) }}">Disable</a>
+                            {% else %}
+                            <a href="{{ url_for('admin_settings_set', parameter='users_can_submit_benchmarks', new_value=1) }}">Enable</a>
+                            {% endif %}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

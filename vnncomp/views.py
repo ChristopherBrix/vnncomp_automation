@@ -84,6 +84,10 @@ def inject_current_user():
     return dict(current_user=current_user)
 
 @app.context_processor
+def inject_settings():
+    return dict(Settings=Settings)
+
+@app.context_processor
 def inject_env():
     return dict(env=os.environ)
 
@@ -130,7 +134,7 @@ def submit():
     if not form.validate_on_submit():
         message = "Error processing formular input."
         return render_template("toolkit/submission.html", form=form, message=message)
-    if not current_user.admin:
+    if not current_user.admin and not Settings.users_can_submit_tools():
         message = "Submission is closed."
         return render_template("toolkit/submission.html", form=form, message=message)
 
@@ -373,6 +377,9 @@ def benchmark_submit():
     if not form.validate_on_submit():
         message = "Error processing formular input."
         return render_template("benchmark/submission.html", form=form, message=message)
+    if not current_user.admin and not Settings.users_can_submit_benchmarks():
+        message = "Submission is closed."
+        return render_template("benchmark/submission.html", form=form, message=message)
 
     task = BenchmarkTask.save_new(
         _aws_instance_type=AwsInstanceType.T2MICRO,
@@ -523,13 +530,6 @@ def admin():
         return "You need to be an admin to access this page."
     return render_template("admin/index.html")
 
-@app.route("/admin/settings")
-@login_required
-def admin_settings():
-    if not current_user.admin:
-        return "You need to be an admin to access this page."
-    return render_template("admin/settings.html", Settings=Settings)
-
 @app.route("/admin/users", methods=["GET"])
 @login_required
 def admin_users():
@@ -537,29 +537,30 @@ def admin_users():
         return "You need to be an admin to access this page."
     return render_template("admin/users.html", users=User.query.all())
 
-
-@app.route("/admin/set_aws_enabled/<new_value>", methods=["GET"])
+@app.route("/admin/settings")
 @login_required
-def set_aws_enabled(new_value: str):
+def admin_settings():
+    if not current_user.admin:
+        return "You need to be an admin to access this page."
+    return render_template("admin/settings.html")
+
+@app.route("/admin/settings/set/<parameter>/<new_value>", methods=["GET"])
+@login_required
+def admin_settings_set(parameter: str, new_value: str):
     if not current_user.admin:
         return "You must be an admin to perform this action"
-    Settings.set_aws_enabled(new_value == "1")
-    return redirect("/admin/settings")
-
-@app.route("/admin/set_terminate_on_failure/<new_value>", methods=["GET"])
-@login_required
-def set_terminate_on_failure(new_value: str):
-    if not current_user.admin:
-        return "You must be an admin to perform this action"
-    Settings.set_terminate_on_failure(new_value == "1")
-    return redirect("/admin/settings")
-
-@app.route("/admin/set_allow_non_admin_login/<new_value>", methods=["GET"])
-@login_required
-def set_allow_non_admin_login(new_value: str):
-    if not current_user.admin:
-        return "You must be an admin to perform this action"
-    Settings.set_allow_non_admin_login(new_value == "1")
+    if parameter == "aws_enabled":
+        Settings.set_aws_enabled(new_value == "1")
+    elif parameter == "terminate_on_failure":
+        Settings.set_terminate_on_failure(new_value == "1")
+    elif parameter == "allow_non_admin_login":
+        Settings.set_allow_non_admin_login(new_value == "1")
+    elif parameter == "users_can_submit_benchmarks":
+        Settings.set_users_can_submit_benchmarks(new_value == "1")
+    elif parameter == "users_can_submit_tools":
+        Settings.set_users_can_submit_tools(new_value == "1")
+    else:
+        return "Invalid parameter"
     return redirect("/admin/settings")
 
 @app.route("/manual_update")
