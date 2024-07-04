@@ -8,7 +8,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             cd benchmark/${script_dir} \
                 && (pip3 install -r requirements.txt || true) \
                 && python3 generate_properties.py 0 \
-                && ls ${vnnlib_dir}/*.vnnlib \
+                && (ls ${vnnlib_dir}/*.vnnlib || ls ${vnnlib_dir}/*/*.vnnlib) \
                 && cd ~ \
                 && ls benchmark/${script_dir}/${csv_file} \
                 && curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
