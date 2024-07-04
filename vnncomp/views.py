@@ -351,17 +351,20 @@ def toolkit_sanitize_abort(id):
     return redirect(url_for("toolkit_details", id=id))
 
 @app.route("/benchmark/form", methods=["GET"])
+@login_required
 def benchmark():
     form = BenchmarkSubmissionForm()
     return render_template("benchmark/submission.html", form=form)
 
 
 @app.route("/benchmark/pip", methods=["GET"])
+@login_required
 def benchmark_pip():
     return render_template("benchmark/pip.html")
 
 
 @app.route("/benchmark/submit", methods=["POST"])
+@login_required
 def benchmark_submit():
     # if not current_user.admin:
     #     return "New benchmark submissions are no longer possible."
@@ -388,12 +391,14 @@ def benchmark_submit():
 
 
 @app.route("/benchmark/details", methods=["GET"])
+@login_required
 def benchmark_list():
     tasks = BenchmarkTask.get_all()
     return render_template("benchmark/list.html", tasks=tasks)
 
 
 @app.route("/benchmark/details/<id>", methods=["GET"])
+@login_required
 def benchmark_details(id: str):
     task = BenchmarkTask.get(int(id))
     if task is None:
@@ -456,6 +461,7 @@ def benchmark_taskstep_async(id: str):
 
 
 @app.route("/benchmark/resubmit/<id>", methods=["GET"])
+@login_required
 def benchmark_resubmit(id: str):
     task: BenchmarkTask = BenchmarkTask.get(int(id))
     if task is None:
@@ -469,6 +475,7 @@ def benchmark_resubmit(id: str):
 
 
 @app.route("/benchmark/abort/<id>", methods=["GET"])
+@login_required
 def benchmark_abort(id: str):
     task = BenchmarkTask.get(int(id))
     if task is None:
@@ -490,6 +497,7 @@ def update_success(id: str):
 
 
 @app.route("/force_step/<task_id>/<step_id>")
+@login_required
 def force_step(task_id: str, step_id: str):
     if not current_user.admin:
         return "This feature is only available to admins!"
