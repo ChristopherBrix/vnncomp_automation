@@ -118,6 +118,15 @@
                            {{ current_user.username }}
                         </a></li>
                     </ul>
+                    {% if current_user.admin %}
+                        <a href="{{ url_for('admin') }}" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0">
+                            <span class="d-flex align-items-center">
+                                <span class="small">
+                                    Admin
+                                </span>
+                            </span>
+                        </a>
+                    {% endif %}
                     <a href="{{ url_for('logout') }}" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0">
                         <span class="d-flex align-items-center">
                             <span class="small">

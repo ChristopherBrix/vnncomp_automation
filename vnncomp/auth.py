@@ -101,19 +101,6 @@ def signup():
     )
 
 
-# @app.route("/admin", methods=["GET"])
-# @login_required
-# def admin():
-#     """
-#     Admin page
-#     """
-#     if not current_user.admin:
-#         return "You need to be an admin to access this page."
-
-#     # c = AwsInstance.query.
-
-#     return render_template("user/admin.html", users=User.query.all())
-
 
 @app.route("/enable_user/<id>", methods=["GET"])
 @login_required

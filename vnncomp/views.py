@@ -508,13 +508,27 @@ def update_failure(id: str):
     task.step_failed()
     return "OK"
 
-
 @app.route("/admin")
 @login_required
 def admin():
     if not current_user.admin:
         return "You need to be an admin to access this page."
-    return render_template("admin/index.html", Settings=Settings)
+    return render_template("admin/index.html")
+
+@app.route("/admin/settings")
+@login_required
+def admin_settings():
+    if not current_user.admin:
+        return "You need to be an admin to access this page."
+    return render_template("admin/settings.html", Settings=Settings)
+
+@app.route("/admin/users", methods=["GET"])
+@login_required
+def admin_users():
+    if not current_user.admin:
+        return "You need to be an admin to access this page."
+    return render_template("admin/users.html", users=User.query.all())
+
 
 @app.route("/admin/set_aws_enabled/<new_value>", methods=["GET"])
 @login_required
