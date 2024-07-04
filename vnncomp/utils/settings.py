@@ -26,14 +26,22 @@ class Settings(db.Model):
         default=True,
         server_default=sqlalchemy.sql.expression.literal(True),
     )
+    _db_allow_non_admin_login = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=True,
+        server_default=sqlalchemy.sql.expression.literal(True),
+    )
 
     def __init__(
         self,
         aws_enabled: bool,
         terminate_on_failure: bool,
+        allow_non_admin_login: bool,
     ):
         self._db_aws_enabled = aws_enabled
         self._db_aws_terminate_on_failure = terminate_on_failure
+        self._db_allow_non_admin_login = allow_non_admin_login
 
     @classmethod
     def init(cls):
@@ -43,6 +51,7 @@ class Settings(db.Model):
             settings = cls(
                 aws_enabled=False,
                 terminate_on_failure=True,
+                allow_non_admin_login=True,
             )
             db.session.add(settings)
             db.session.commit()
@@ -65,4 +74,14 @@ class Settings(db.Model):
     def set_terminate_on_failure(cls, terminate_on_failure: bool):
         settings = cls.query.first()
         settings._db_aws_terminate_on_failure = terminate_on_failure
+        db.session.commit()
+
+    @classmethod
+    def allow_non_admin_login(cls) -> bool:
+        return cls.query.first()._db_allow_non_admin_login
+
+    @classmethod
+    def set_allow_non_admin_login(cls, allow_non_admin_login: bool):
+        settings = cls.query.first()
+        settings._db_allow_non_admin_login = allow_non_admin_login
         db.session.commit()

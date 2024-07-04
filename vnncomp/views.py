@@ -532,6 +532,14 @@ def set_terminate_on_failure(new_value: str):
     Settings.set_terminate_on_failure(new_value == "1")
     return redirect("/admin")
 
+@app.route("/admin/set_allow_non_admin_login/<new_value>", methods=["GET"])
+@login_required
+def set_allow_non_admin_login(new_value: str):
+    if not current_user.admin:
+        return "You must be an admin to perform this action"
+    Settings.set_allow_non_admin_login(new_value == "1")
+    return redirect("/admin")
+
 @app.route("/manual_update")
 def manual_update():
     if Settings.aws_enabled():

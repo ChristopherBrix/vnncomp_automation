@@ -7,6 +7,7 @@ from vnncomp.main import app
 from vnncomp import login_manager, db
 from vnncomp.utils.aws_instance import AwsInstance
 from vnncomp.utils.forms import SignupForm, LoginForm
+from vnncomp.utils.settings import Settings
 from vnncomp.utils.user import User
 
 
@@ -28,9 +29,15 @@ def login():
         user: User = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(password=form.password.data):
             if user.enabled:
-                login_user(user)
-                next_page = request.args.get("next")
-                return redirect(next_page or url_for("index"))
+                if user.admin or Settings.allow_non_admin_login():
+                    login_user(user)
+                    next_page = request.args.get("next")
+                    return redirect(next_page or url_for("index"))
+                else:
+                    flash(
+                        "Currently, non-admin users are not allowed to log in."
+                    )
+                    return redirect(url_for("login"))
             else:
                 flash(
                     "Your account has not been activated. This needs to be done by the organizers."

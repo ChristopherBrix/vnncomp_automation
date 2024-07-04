@@ -51,6 +51,16 @@
                             {% endif %}
                         </td>
                     </tr>
+                    <tr>
+                        <td>Allow non-admin users to log in</td>
+                        <td>{{ Settings.allow_non_admin_login() }}</td>
+                        <td>
+                            {% if Settings.allow_non_admin_login() %}
+                            <a href="{{ url_for('set_allow_non_admin_login', new_value=0) }}">Disable</a>
+                            {% else %}
+                            <a href="{{ url_for('set_allow_non_admin_login', new_value=1) }}">Enable</a>
+                            {% endif %}
+                        </td>
                 </tbody>
             </table>
         </div>
