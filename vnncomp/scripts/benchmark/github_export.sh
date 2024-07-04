@@ -17,7 +17,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 && cp -r benchmark/${script_dir}/${onnx_dir} all_benchmarks/benchmarks/${name}/onnx \
                 && cp benchmark/${script_dir}/${csv_file} all_benchmarks/benchmarks/${name}/instances.csv \
                 && cd all_benchmarks \
-                && gzip benchmarks/${name}/onnx/* benchmarks/${name}/vnnlib/* \
+                && gzip -r benchmarks/${name}/onnx/* benchmarks/${name}/vnnlib/* \
                 && python3 ../postprocess_instances_file.py benchmarks/${name}/instances.csv \
                 && git config --global user.name \\\\\\\"VNN-Comp Bot\\\\\\\" \
                 && git config --global user.email \\\\\\\"brix@cs.rwth-aachen.de\\\\\\\" \
