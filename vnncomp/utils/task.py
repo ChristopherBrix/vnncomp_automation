@@ -365,6 +365,7 @@ class ToolkitTask(Task):
     _db_post_install_tool = db.Column(db.String)
     _db_user_id = db.Column(db.Integer, db.ForeignKey("flasklogin_users.id"))
     _db_user = relationship("User", back_populates="submitted_toolkits")
+    _db_run_networks = db.Column(db.String)
     _db_run_install_as_root = db.Column(db.Boolean)
     _db_run_post_install_as_root = db.Column(db.Boolean)
     _db_run_tool_as_root = db.Column(db.Boolean)
@@ -419,6 +420,10 @@ class ToolkitTask(Task):
         return self._db_user
 
     @property
+    def run_networks(self) -> str:
+        return self._db_run_networks
+
+    @property
     def run_install_as_root(self) -> bool:
         return self._db_run_install_as_root
 
@@ -442,6 +447,7 @@ class ToolkitTask(Task):
         _script_dir: str,
         _post_install_tool: str,
         _user: User,
+        _run_networks: str,
         _run_install_as_root: bool,
         _run_post_install_as_root: bool,
         _run_tool_as_root: bool,
@@ -459,6 +465,7 @@ class ToolkitTask(Task):
         self._db_post_install_tool = _post_install_tool
         self._db_results = ""
         self._db_user = _user
+        self._db_run_networks = _run_networks
         self._db_run_install_as_root = _run_install_as_root
         self._db_run_post_install_as_root = _run_post_install_as_root
         self._db_run_tool_as_root = _run_tool_as_root
@@ -493,6 +500,7 @@ class ToolkitTask(Task):
             _script_dir=_script_dir,
             _post_install_tool=_post_install_tool,
             _user=current_user,
+            _run_networks=_run_networks,
             _run_install_as_root=_run_install_as_root,
             _run_post_install_as_root=_run_post_install_as_root,
             _run_tool_as_root=_run_tool_as_root,

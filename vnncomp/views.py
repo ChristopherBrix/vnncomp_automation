@@ -248,6 +248,7 @@ def toolkit_resubmit(id):
     form.repository.data = task.repository
     form.hash.data = task.hash
     form.yaml_config_file.data = task.yaml_config_file
+    form.run_networks.data = task.run_networks
     form.post_install_tool.data = task.post_install_tool
     form.benchmarks.data = task.benchmarks
 
