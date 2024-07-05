@@ -20,6 +20,7 @@ from vnncomp.utils.forms import (
     ToolkitEditPostInstallForm,
     ToolkitSubmissionForm,
     BenchmarkSubmissionForm, LoginForm,
+    ToolkitSubmissionFormAdmin,
 )
 from vnncomp.utils.task_steps import ToolkitRun
 
@@ -120,7 +121,10 @@ def benchmark_redirect():
 @app.route("/toolkit/form", methods=["GET"])
 @login_required
 def toolkit():
-    form = ToolkitSubmissionForm()
+    if current_user.admin:
+        form = ToolkitSubmissionFormAdmin()
+    else:
+        form = ToolkitSubmissionForm()
     return render_template(
         "toolkit/submission.html",
         form=form,
@@ -130,7 +134,10 @@ def toolkit():
 @app.route("/toolkit/submit", methods=["POST"])
 @login_required
 def submit():
-    form: ToolkitSubmissionForm = ToolkitSubmissionForm()
+    if current_user.admin:
+        form: ToolkitSubmissionFormAdmin = ToolkitSubmissionFormAdmin()
+    else:
+        form: ToolkitSubmissionForm = ToolkitSubmissionForm()
     if not form.validate_on_submit():
         message = "Error processing formular input."
         return render_template("toolkit/submission.html", form=form, message=message)
@@ -194,10 +201,15 @@ def submit():
         int(form.aws_instance_type.data)
     )
     selected_benchmarks = form.benchmarks.data
-    if form.reverse_order:
-        selected_benchmarks.reverse()
-    benchmarks_per_submission = form.split.data
-    if benchmarks_per_submission == 0:
+    if current_user.admin:
+        assert type(form) is ToolkitSubmissionFormAdmin
+        if form.reverse_order:
+            selected_benchmarks.reverse()
+        benchmarks_per_submission = form.split.data
+        if benchmarks_per_submission == 0:
+            benchmarks_per_submission = len(selected_benchmarks)
+    else:
+        assert type(form) is ToolkitSubmissionForm
         benchmarks_per_submission = len(selected_benchmarks)
     for i in range(0, len(selected_benchmarks), benchmarks_per_submission):
         task = ToolkitTask.save_new(
@@ -228,7 +240,10 @@ def toolkit_resubmit(id):
     if task is None:
         return render_template("404.html")
     assert type(task) is ToolkitTask
-    form = ToolkitSubmissionForm()
+    if current_user.admin:
+        form: ToolkitSubmissionFormAdmin = ToolkitSubmissionFormAdmin()
+    else:
+        form = ToolkitSubmissionForm()
     form.aws_instance_type.data = str(task.aws_instance_type.value)
     form.repository.data = task.repository
     form.hash.data = task.hash

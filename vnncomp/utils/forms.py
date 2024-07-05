@@ -81,6 +81,11 @@ class ToolkitSubmissionForm(FlaskForm):
             ("first", "first per instance (for testing)"),
         ],
     )
+    submit = SubmitField(
+        "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
+    )
+
+class ToolkitSubmissionFormAdmin(ToolkitSubmissionForm):
     reverse_order = BooleanField("Reverse the order of benchmarks")
     split = IntegerField("Split submission into several, each with N benchmarks", default=0)
     submit = SubmitField(
