@@ -13,14 +13,6 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && sudo apt-get update \
             && sudo apt-get install -y python3 python3-pip unzip \
             && python3 -m pip install --upgrade pip \
-            && git clone https://github.com/ChristopherBrix/vnncomp2022_benchmarks \
-            && cd vnncomp2022_benchmarks \
-            && ./setup.sh \
-            && cd .. \
-            && git clone https://github.com/ChristopherBrix/vnncomp2023_benchmarks \
-            && cd vnncomp2023_benchmarks \
-            && ./setup.sh \
-            && cd .. \
             && git clone https://github.com/ChristopherBrix/vnncomp2024_benchmarks \
             && cd vnncomp2024_benchmarks \
             && ./setup.sh \
