@@ -193,6 +193,7 @@ def submit():
         "ami-0d70546e43a941d70",
         "ami-0cce14f90c7ec05b5",
         "ami-02fbb965167e007cb",
+        "ami-080fce32dc8c15ced",
     ]:
         message = f"AMI image {parsed_config['ami']} invalid"
         return render_template("toolkit/submission.html", form=form, message=message)
