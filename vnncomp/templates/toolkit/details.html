@@ -23,6 +23,8 @@
             <p><b>Requested instance type:</b> <code>{{ task.aws_instance_type.get_aws_name() }}</code>, <code>{{ task.ami }}</code>
                 (IP: <code>{{ task.instance.ip }}</code>, ID: <code>{{ task.instance.id }}</code>)</p>
             <p><b>Repository:</b> <code>{{ task.repository }}</code>, <b>hash</b>: <code>{{ task.hash }}</code></p>
+            <p><b>Config file:</b> <code>{{ task.yaml_config_file }}</code></p>
+            <p><b>Config content:</b> <br><code>{{ task.yaml_config_content | safe }}</code></p>
             <p><b>Script dir</b>: <code>{{ task.script_dir }}</code></p>
             <p><b>Run networks</b>: <code>{{ task.run_networks }}</code></p>
             {% if current_user.admin %}

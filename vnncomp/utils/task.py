@@ -360,6 +360,8 @@ class BenchmarkTask(Task):
 class ToolkitTask(Task):
     __tablename__ = "toolkit_tasks"
     _db_id = db.Column(None, db.ForeignKey("tasks._db_id"), primary_key=True)
+    _db_yaml_config_file = db.Column(db.String)
+    _db_yaml_config_content = db.Column(db.String)
     _db_post_install_tool = db.Column(db.String)
     _db_user_id = db.Column(db.Integer, db.ForeignKey("flasklogin_users.id"))
     _db_user = relationship("User", back_populates="submitted_toolkits")
@@ -370,6 +372,14 @@ class ToolkitTask(Task):
     __mapper_args__ = {
         "polymorphic_identity": "toolkit_task",
     }
+
+    @property
+    def yaml_config_file(self) -> str:
+        return self._db_yaml_config_file
+
+    @property
+    def yaml_config_content(self) -> str:
+        return self._db_yaml_config_content
 
     @property
     def post_install_tool(self) -> str:
@@ -427,6 +437,8 @@ class ToolkitTask(Task):
         _name: str,
         _repository: str,
         _hash: str,
+        _yaml_config_file: str,
+        _yaml_config_content: str,
         _script_dir: str,
         _post_install_tool: str,
         _user: User,
@@ -442,6 +454,8 @@ class ToolkitTask(Task):
             _hash=_hash,
             _script_dir=_script_dir,
         )
+        self._db_yaml_config_file = _yaml_config_file
+        self._db_yaml_config_content = _yaml_config_content
         self._db_post_install_tool = _post_install_tool
         self._db_results = ""
         self._db_user = _user
@@ -457,6 +471,8 @@ class ToolkitTask(Task):
         _name: str,
         _repository: str,
         _hash: str,
+        _yaml_config_file: str,
+        _yaml_config_content: str,
         _script_dir: str,
         _pause: bool,
         _post_install_tool: str,
@@ -472,6 +488,8 @@ class ToolkitTask(Task):
             _name=_name,
             _repository=_repository,
             _hash=_hash,
+            _yaml_config_file=_yaml_config_file,
+            _yaml_config_content=_yaml_config_content,
             _script_dir=_script_dir,
             _post_install_tool=_post_install_tool,
             _user=current_user,

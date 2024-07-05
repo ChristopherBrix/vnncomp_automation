@@ -206,6 +206,8 @@ def submit():
             _name=parsed_config["name"],
             _repository=form.repository.data,
             _hash=form.hash.data,
+            _yaml_config_file=form.yaml_config_file.data,
+            _yaml_config_content=config_request.content.decode("utf-8"),
             _script_dir=parsed_config["scripts_dir"],
             _pause=parsed_config["manual_installation_step"],
             _post_install_tool=form.post_install_tool.data,
@@ -230,6 +232,7 @@ def toolkit_resubmit(id):
     form.aws_instance_type.data = str(task.aws_instance_type.value)
     form.repository.data = task.repository
     form.hash.data = task.hash
+    form.yaml_config_file.data = task.yaml_config_file
     form.post_install_tool.data = task.post_install_tool
     form.benchmarks.data = task.benchmarks
 
