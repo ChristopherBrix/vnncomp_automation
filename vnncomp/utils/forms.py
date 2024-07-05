@@ -88,6 +88,7 @@ class ToolkitSubmissionForm(FlaskForm):
 class ToolkitSubmissionFormAdmin(ToolkitSubmissionForm):
     reverse_order = BooleanField("Reverse the order of benchmarks")
     split = IntegerField("Split submission into several, each with N benchmarks", default=0)
+    export_results = BooleanField("Upload results to GitHub")
     submit = SubmitField(
         "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
     )

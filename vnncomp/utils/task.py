@@ -488,6 +488,7 @@ class ToolkitTask(Task):
         _run_install_as_root: bool,
         _run_post_install_as_root: bool,
         _run_tool_as_root: bool,
+        _export_results: bool,
     ) -> "ToolkitTask":
         task = ToolkitTask(
             _aws_instance_type=_aws_instance_type,
@@ -515,6 +516,7 @@ class ToolkitTask(Task):
             _run_install_as_root,
             _run_post_install_as_root,
             _run_tool_as_root,
+            _export_results,
         )
         task._db_current_step.execute()
         return task
@@ -527,6 +529,7 @@ class ToolkitTask(Task):
         run_install_as_root: bool,
         run_post_install_as_root: bool,
         run_tool_as_root: bool,
+        export_results: bool = False,
     ):
         self._db_steps = [
             ToolkitCreate(self).add_to_db(),
@@ -544,7 +547,7 @@ class ToolkitTask(Task):
             self._db_steps.append(
                 ToolkitRun(self, benchmark, _run_networks, run_tool_as_root).add_to_db()
             )
-            if current_user.admin:
+            if export_results:
                 self._db_steps.append(ToolkitGithubExport(self, benchmark).add_to_db())
         self._db_steps.append(TaskShutdown(self).add_to_db())
         self._db_current_step = self._db_steps[0]

@@ -203,14 +203,16 @@ def submit():
     selected_benchmarks = form.benchmarks.data
     if current_user.admin:
         assert type(form) is ToolkitSubmissionFormAdmin
-        if form.reverse_order:
+        if form.reverse_order.data:
             selected_benchmarks.reverse()
         benchmarks_per_submission = form.split.data
         if benchmarks_per_submission == 0:
             benchmarks_per_submission = len(selected_benchmarks)
+        export_results = form.export_results.data
     else:
         assert type(form) is ToolkitSubmissionForm
         benchmarks_per_submission = len(selected_benchmarks)
+        export_results = False
     for i in range(0, len(selected_benchmarks), benchmarks_per_submission):
         task = ToolkitTask.save_new(
             _aws_instance_type=aws_instance_type,
@@ -228,6 +230,7 @@ def submit():
             _run_install_as_root=parsed_config["run_installation_script_as_root"],
             _run_post_install_as_root=parsed_config["run_post_installation_script_as_root"],
             _run_tool_as_root=parsed_config["run_toolkit_as_root"],
+            _export_results=export_results,
         )
 
     return redirect(url_for("toolkit_details", id=task.id))
