@@ -2,7 +2,6 @@
 
 scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/data/id_rsa ubuntu@${benchmark_ip}:/home/ubuntu/.ssh/id_rsa
 scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/webdav_uploader.py ubuntu@${benchmark_ip}:/home/ubuntu/
-scp -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem /var/www/html/vnncomp/vnncomp/scripts/benchmark/postprocess_instances_file.py ubuntu@${benchmark_ip}:/home/ubuntu/
 ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark_ip} \
     "tmux new -d -s saving \" \
         bash -c \\\"
@@ -18,7 +17,6 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
                 && cp benchmark/${script_dir}/${csv_file} all_benchmarks/benchmarks/${name}/instances.csv \
                 && cd all_benchmarks \
                 && gzip -r benchmarks/${name}/onnx/* benchmarks/${name}/vnnlib/* \
-                && python3 ../postprocess_instances_file.py benchmarks/${name}/instances.csv \
                 && git config --global user.name \\\\\\\"VNN-Comp Bot\\\\\\\" \
                 && git config --global user.email \\\\\\\"brix@cs.rwth-aachen.de\\\\\\\" \
                 && git add benchmarks/${name} \
