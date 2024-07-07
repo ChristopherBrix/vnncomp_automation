@@ -20,6 +20,12 @@ class Settings(db.Model):
         default=False,
         server_default=sqlalchemy.sql.expression.literal(False),
     )
+    _db_aws_terminate_at_end = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=True,
+        server_default=sqlalchemy.sql.expression.literal(True),
+    )
     _db_aws_terminate_on_failure = db.Column(
         db.Boolean,
         nullable=False,
@@ -48,12 +54,14 @@ class Settings(db.Model):
     def __init__(
         self,
         aws_enabled: bool,
+        terminate_at_end: bool,
         terminate_on_failure: bool,
         allow_non_admin_login: bool,
         users_can_submit_benchmarks: bool,
         users_can_submit_tools: bool,
     ):
         self._db_aws_enabled = aws_enabled
+        self._db_aws_terminate_at_end = terminate_at_end
         self._db_aws_terminate_on_failure = terminate_on_failure
         self._db_allow_non_admin_login = allow_non_admin_login
         self._db_users_can_submit_benchmarks = users_can_submit_benchmarks
@@ -66,6 +74,7 @@ class Settings(db.Model):
         if settings is None:
             settings = cls(
                 aws_enabled=False,
+                terminate_at_end=False,
                 terminate_on_failure=True,
                 allow_non_admin_login=True,
                 users_can_submit_benchmarks=False,
@@ -82,6 +91,16 @@ class Settings(db.Model):
     def set_aws_enabled(cls, aws_enabled: bool):
         settings = cls.query.first()
         settings._db_aws_enabled = aws_enabled
+        db.session.commit()
+
+    @classmethod
+    def terminate_at_end(cls) -> bool:
+        return cls.query.first()._db_aws_terminate_at_end
+
+    @classmethod
+    def set_terminate_at_end(cls, terminate_at_end: bool):
+        settings = cls.query.first()
+        settings._db_terminate_at_end = terminate_at_end
         db.session.commit()
 
     @classmethod

@@ -247,7 +247,19 @@ class TaskShutdown(TaskStep):
 
     def execute(self):
         super().execute()
-        self._db_task.instance.terminate()
+        self._terminate()
+
+    def while_active(self):
+        super().while_active()
+        self._terminate()
+
+    def _terminate(self):
+        super().execute()
+        if self._db_task.instance is not None:
+            if Settings.terminate_at_end():
+                self._db_task.instance.terminate()
+            else:
+                print("[Warning] Not terminating instance at job end.")
 
     def can_be_aborted(self) -> bool:
         return False

@@ -41,6 +41,16 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Termiante instances at end of job</td>
+                        <td>{{ Settings.terminate_at_end() }}</td>
+                        <td>
+                            {% if Settings.terminate_at_end() %}
+                            <a href="{{ url_for('admin_settings_set', parameter='terminate_at_end', new_value=0) }}">Disable</a>
+                            {% else %}
+                            <a href="{{ url_for('admin_settings_set', parameter='terminate_at_end', new_value=1) }}">Enable</a>
+                            {% endif %}
+                    </tr>
+                    <tr>
                         <td>Terminate instances on failure</td>
                         <td>{{ Settings.terminate_on_failure() }}</td>
                         <td>

@@ -575,6 +575,8 @@ def admin_settings_set(parameter: str, new_value: str):
         return "You must be an admin to perform this action"
     if parameter == "aws_enabled":
         Settings.set_aws_enabled(new_value == "1")
+    elif parameter == "terminate_at_end":
+        Settings.set_aws_terminate(new_value == "1")
     elif parameter == "terminate_on_failure":
         Settings.set_terminate_on_failure(new_value == "1")
     elif parameter == "allow_non_admin_login":
