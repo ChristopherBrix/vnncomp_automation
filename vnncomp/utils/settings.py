@@ -100,7 +100,7 @@ class Settings(db.Model):
     @classmethod
     def set_terminate_at_end(cls, terminate_at_end: bool):
         settings = cls.query.first()
-        settings._db_terminate_at_end = terminate_at_end
+        settings._db_aws_terminate_at_end = terminate_at_end
         db.session.commit()
 
     @classmethod
