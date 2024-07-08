@@ -223,6 +223,7 @@ class Task(db.Model):
         db.session.commit()
 
     def force_step(self, step_id: int):
+        new_active_step = None
         for step in self._db_steps:
             if step._db_id < step_id:
                 step._db_aborted = False
@@ -233,12 +234,15 @@ class Task(db.Model):
                 step.done = False
                 step.active = True
                 self._db_current_step = step
+                new_active_step = step
             else:
                 assert step._db_id > step_id
                 step._db_aborted = False
                 step.done = False
                 step.active = False
         db.session.commit()
+        assert new_active_step is not None
+        new_active_step.execute()
 
     @classmethod
     def get_all(cls) -> List["Task"]:
