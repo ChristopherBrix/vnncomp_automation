@@ -57,10 +57,10 @@ def _get(dir, script, params=None):
             timeout=30,
         ).decode("ascii", errors="ignore")
     except subprocess.CalledProcessError as exc:
-        print("Status : FAIL", exc.returncode, exc.output)
+        print("Status : FAIL", exc.returncode, exc.stdout, exc.stderr)
         raise AWSException(exc)
     except subprocess.TimeoutExpired as exc:
-        print("Status : TIMEOUT", exc.returncode, exc.output)
+        print("Status : TIMEOUT", exc.stdout, exc.stderr)
         raise AWSException(exc)
     else:
         print(f"Running '{script}' with '{params}' yielded '{stdout[-1000:]}'")
