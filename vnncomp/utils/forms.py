@@ -55,6 +55,7 @@ class ToolkitSubmissionForm(FlaskForm):
             ("2024_collins_aerospace_benchmark", "2024_collins_aerospace_benchmark"),
             ("2024_collins_rul_cnn_2023", "2024_collins_rul_cnn_2023"),
             ("2024_collins_yolo_robustness_2023", "2024_collins_yolo_robustness_2023"),
+            ("2024_cora", "2024_cora"),
             ("2024_dist_shift_2023", "2024_dist_shift_2023"),
             ("2024_linearizenn", "2024_linearizenn"),
             ("2024_lsnc", "2024_lsnc"),
