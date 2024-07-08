@@ -11,7 +11,7 @@ from flask import flash, render_template, redirect, url_for, abort, jsonify
 from flask_login import current_user
 
 from vnncomp.main import app
-from vnncomp.auth import login_required
+from vnncomp.auth import admin_permissions_required, login_required
 from vnncomp.utils.aws_instance import AwsInstanceType, AwsManager, AwsInstance
 from vnncomp.utils.settings import Settings
 from vnncomp.utils.task import BenchmarkTask, Task, ToolkitTask
@@ -367,9 +367,8 @@ def toolkit_abort(id):
 
 @app.route("/toolkit/sanitize_abort/<id>", methods=["GET"])
 @login_required
+@admin_permissions_required
 def toolkit_sanitize_abort(id):
-    if not current_user.admin:
-        return "You must be an admin to perform this action"
     task = ToolkitTask.get(int(id))
     if task is None:
         return render_template("404.html")
@@ -394,9 +393,6 @@ def benchmark_pip():
 @app.route("/benchmark/submit", methods=["POST"])
 @login_required
 def benchmark_submit():
-    # if not current_user.admin:
-    #     return "New benchmark submissions are no longer possible."
-
     form = BenchmarkSubmissionForm()
     if not form.validate_on_submit():
         message = "Error processing formular input."
@@ -529,9 +525,8 @@ def update_success(id: str):
 
 @app.route("/force_step/<task_id>/<step_id>")
 @login_required
+@admin_permissions_required
 def force_step(task_id: str, step_id: str):
-    if not current_user.admin:
-        return "This feature is only available to admins!"
     task: Task = Task.get(int(task_id))
     if task is None:
         return render_template("404.html")
@@ -549,30 +544,26 @@ def update_failure(id: str):
 
 @app.route("/admin")
 @login_required
+@admin_permissions_required
 def admin():
-    if not current_user.admin:
-        return "You need to be an admin to access this page."
     return render_template("admin/index.html")
 
 @app.route("/admin/users", methods=["GET"])
 @login_required
+@admin_permissions_required
 def admin_users():
-    if not current_user.admin:
-        return "You need to be an admin to access this page."
     return render_template("admin/users.html", users=User.query.all())
 
 @app.route("/admin/settings")
 @login_required
+@admin_permissions_required
 def admin_settings():
-    if not current_user.admin:
-        return "You need to be an admin to access this page."
     return render_template("admin/settings.html")
 
 @app.route("/admin/settings/set/<parameter>/<new_value>", methods=["GET"])
 @login_required
+@admin_permissions_required
 def admin_settings_set(parameter: str, new_value: str):
-    if not current_user.admin:
-        return "You must be an admin to perform this action"
     if parameter == "aws_enabled":
         Settings.set_aws_enabled(new_value == "1")
     elif parameter == "terminate_at_end":

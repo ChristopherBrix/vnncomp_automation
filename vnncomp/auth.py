@@ -1,6 +1,7 @@
 """Routes for user authentication."""
 from crypt import methods
-from flask import redirect, render_template, flash, request, session, url_for
+from functools import wraps
+from flask import current_app, redirect, render_template, flash, request, session, url_for
 from flask_login import login_required, logout_user, current_user, login_user
 
 from vnncomp.main import app
@@ -9,6 +10,14 @@ from vnncomp.utils.aws_instance import AwsInstance
 from vnncomp.utils.forms import SignupForm, LoginForm
 from vnncomp.utils.settings import Settings
 from vnncomp.utils.user import User
+
+def admin_permissions_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if not current_user.admin:
+            return current_app.login_manager.unauthorized()
+        return func(*args, **kwargs)
+    return decorated_view
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -104,10 +113,8 @@ def signup():
 
 @app.route("/enable_user/<id>", methods=["GET"])
 @login_required
+@admin_permissions_required
 def enable_user(id):
-    if not current_user.admin:
-        return "You need to be an admin to access this page."
-
     user: User = User.query.get(id)
     user.enable()
 
@@ -116,10 +123,8 @@ def enable_user(id):
 
 @app.route("/disable_user/<id>", methods=["GET"])
 @login_required
+@admin_permissions_required
 def disable_user(id):
-    if not current_user.admin:
-        return "You need to be an admin to access this page."
-
     user: User = User.query.get(id)
     user.disable()
 
