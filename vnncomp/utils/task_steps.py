@@ -166,6 +166,7 @@ class TaskStep(db.Model):
         if self._db_task.instance is None:
             return
         text = self._db_task.instance.get_logs(filename)
+        print("Got logs from server")
         if self._db_log is None:
             self._db_log = Log(self, text).save()
         else:
@@ -177,6 +178,7 @@ class TaskStep(db.Model):
                 else:
                     text = self._db_log.text + "\n" + text
             self._db_log.update(text)
+        print("Done updating logs")
 
 
 class TaskFailure(TaskStep):
