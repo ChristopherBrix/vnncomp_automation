@@ -11,6 +11,7 @@ from sqlalchemy import DateTime
 
 
 from vnncomp import db
+from vnncomp.utils.settings import Settings
 from vnncomp.utils.task import Task, ToolkitTask
 
 
@@ -279,17 +280,18 @@ class AwsManager:
         db.session.commit()
 
         for instance in instances:
+            timeout_in_hours = Settings.instance_timeout()
             if (
                 not instance.disabled
                 and instance.creation_timestamp
-                < datetime.datetime.utcnow() - datetime.timedelta(hours=12)
+                < datetime.datetime.utcnow() - datetime.timedelta(hours=timeout_in_hours)
             ):
-                print("Instance older than 12 hours, terminating", instance)
+                print(f"Instance older than {timeout_in_hours} hours, terminating", instance)
                 if (
                     instance.task is not None
                     and instance.creation_timestamp
                     > datetime.datetime.utcnow()
-                    - datetime.timedelta(hours=12, minutes=10)
+                    - datetime.timedelta(hours={timeout_in_hours}, minutes=10)
                 ):
                     instance.task.timeout()
                 else:

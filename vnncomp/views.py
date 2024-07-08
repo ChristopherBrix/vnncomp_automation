@@ -7,7 +7,7 @@ from crypt import methods
 import requests
 import yaml
 
-from flask import flash, render_template, redirect, url_for, abort, jsonify
+from flask import flash, render_template, redirect, request, url_for, abort, jsonify
 from flask_login import current_user
 
 from vnncomp.main import app
@@ -560,10 +560,11 @@ def admin_users():
 def admin_settings():
     return render_template("admin/settings.html")
 
-@app.route("/admin/settings/set/<parameter>/<new_value>", methods=["GET"])
+@app.route("/admin/settings/set/<parameter>", methods=["GET"])
 @login_required
 @admin_permissions_required
-def admin_settings_set(parameter: str, new_value: str):
+def admin_settings_set(parameter: str):
+    new_value = request.args.get("new_value")
     if parameter == "aws_enabled":
         Settings.set_aws_enabled(new_value == "1")
     elif parameter == "terminate_at_end":
@@ -576,6 +577,11 @@ def admin_settings_set(parameter: str, new_value: str):
         Settings.set_users_can_submit_benchmarks(new_value == "1")
     elif parameter == "users_can_submit_tools":
         Settings.set_users_can_submit_tools(new_value == "1")
+    elif parameter == "instance_timeout":
+        try:
+            Settings.set_instance_timeout(int(new_value))
+        except ValueError:
+            return "Invalid parameter"
     else:
         return "Invalid parameter"
     return redirect("/admin/settings")

@@ -50,6 +50,12 @@ class Settings(db.Model):
         default=False,
         server_default=sqlalchemy.sql.expression.literal(False),
     )
+    _db_instance_timeout = db.Column(
+        db.Integer,
+        nullable=False,
+        default=4,
+        server_default=sqlalchemy.sql.expression.literal(4),
+    )
 
     def __init__(
         self,
@@ -59,6 +65,7 @@ class Settings(db.Model):
         allow_non_admin_login: bool,
         users_can_submit_benchmarks: bool,
         users_can_submit_tools: bool,
+        instance_timeout: int,
     ):
         self._db_aws_enabled = aws_enabled
         self._db_aws_terminate_at_end = terminate_at_end
@@ -66,6 +73,7 @@ class Settings(db.Model):
         self._db_allow_non_admin_login = allow_non_admin_login
         self._db_users_can_submit_benchmarks = users_can_submit_benchmarks
         self._db_users_can_submit_tools = users_can_submit_tools
+        self._db_instance_timeout = instance_timeout
 
     @classmethod
     def init(cls):
@@ -79,6 +87,7 @@ class Settings(db.Model):
                 allow_non_admin_login=True,
                 users_can_submit_benchmarks=False,
                 users_can_submit_tools=False,
+                instance_timeout=4,
             )
             db.session.add(settings)
             db.session.commit()
@@ -141,4 +150,14 @@ class Settings(db.Model):
     def set_users_can_submit_tools(cls, users_can_submit_tools: bool):
         settings = cls.query.first()
         settings._db_users_can_submit_tools = users_can_submit_tools
+        db.session.commit()
+
+    @classmethod
+    def instance_timeout(cls) -> int:
+        return cls.query.first()._db_instance_timeout
+
+    @classmethod
+    def set_instance_timeout(cls, instance_timeout: int):
+        settings = cls.query.first()
+        settings._db_instance_timeout = instance_timeout
         db.session.commit()
