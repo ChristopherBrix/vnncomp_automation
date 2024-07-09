@@ -11,7 +11,10 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             set -x
             wget -qO - https://apt.repos.neuron.amazonaws.com/GPG-PUB-KEY-AMAZON-AWS-NEURON.PUB | sudo apt-key add - \
             && sudo apt-get update \
-            && sudo apt-get install -y python3 python3-pip unzip \
+            && sudo apt-get install -y python3 python3-pip unzip gnutls-bin \
+            && git config --global http.sslVerify false \
+            && git config --global http.postBuffer 1048576000 \
+            && git config --global https.postBuffer 1048576000 \
             && python3 -m pip install --upgrade pip \
             && git clone https://github.com/ChristopherBrix/vnncomp2024_benchmarks \
             && cd vnncomp2024_benchmarks \
