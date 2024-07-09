@@ -271,6 +271,7 @@ def toolkit_resubmit(id):
 @login_required
 def toolkit_list():
     tasks = ToolkitTask.get_all_uservisible()
+    tasks.reverse()
     return render_template("toolkit/list.html", tasks=tasks)
 
 
