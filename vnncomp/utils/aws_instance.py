@@ -324,6 +324,18 @@ class AwsManager:
         except AWSException:
             return False
 
+    @classmethod
+    def start_new_toolkit_instance_static_eni(cls, type: AwsInstanceType, ami: str) -> bool:
+        try:
+            _get(
+                "toolkit",
+                "create_new_instance_static_eni.sh",
+                {"type": type.get_aws_name(), "ami": ami},
+            )
+            return True
+        except AWSException:
+            return False
+
 
 class AWSException(Exception):
     pass

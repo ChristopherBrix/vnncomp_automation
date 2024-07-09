@@ -475,9 +475,14 @@ class ToolkitCreate(TaskStep):
     def _create(self):
         from vnncomp.utils.aws_instance import AwsManager
 
-        success = AwsManager.start_new_toolkit_instance(
-            self._db_task.aws_instance_type, self._db_task.ami
-        )
+        if self._db_task.user.id == 5:
+            success = AwsManager.start_new_toolkit_instance_static_eni(
+                self._db_task.aws_instance_type, self._db_task.ami
+            )
+        else:
+            success = AwsManager.start_new_toolkit_instance(
+                self._db_task.aws_instance_type, self._db_task.ami
+            )
         if success:
             db.session.commit()
             self._db_task.step_succeeded()
