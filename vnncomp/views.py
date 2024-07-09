@@ -204,6 +204,7 @@ def submit():
         int(form.aws_instance_type.data)
     )
     selected_benchmarks = form.benchmarks.data
+    pause = parsed_config["manual_installation_step"]
     if current_user.admin:
         assert type(form) is ToolkitSubmissionFormAdmin
         if form.reverse_order.data:
@@ -212,6 +213,8 @@ def submit():
         if benchmarks_per_submission == 0:
             benchmarks_per_submission = len(selected_benchmarks)
         export_results = form.export_results.data
+        if not pause:
+            pause = form.force_pause.data
     else:
         assert type(form) is ToolkitSubmissionForm
         benchmarks_per_submission = len(selected_benchmarks)
@@ -231,7 +234,7 @@ def submit():
             _yaml_config_file=form.yaml_config_file.data,
             _yaml_config_content=config_request.content.decode("utf-8"),
             _script_dir=parsed_config["scripts_dir"],
-            _pause=parsed_config["manual_installation_step"],
+            _pause=pause,
             _post_install_tool=form.post_install_tool.data,
             _benchmarks=selected_benchmarks[i:i+benchmarks_per_submission],
             _run_networks=form.run_networks.data,
