@@ -357,7 +357,7 @@ class AwsManager:
             return False
 
     @classmethod
-    def delete_eni(cls, user: User) -> bool:
+    def delete_eni(cls, user: User):
         try:
             assert user.eni is not None
             _get(
@@ -365,12 +365,11 @@ class AwsManager:
                 "delete_eni.sh",
                 {"eni_id": user.eni},
             )
-            user.mac = None
-            user.eni = None
-            db.session.commit()
-            return True
         except AWSException:
-            return False
+            pass
+        user.mac = None
+        user.eni = None
+        db.session.commit()
 
 
 class AWSException(Exception):
