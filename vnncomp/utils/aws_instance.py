@@ -13,6 +13,7 @@ from sqlalchemy import DateTime
 from vnncomp import db
 from vnncomp.utils.settings import Settings
 from vnncomp.utils.task import Task, ToolkitTask
+from vnncomp.utils.user import User
 
 
 class AwsInstanceType(Enum):
@@ -325,13 +326,48 @@ class AwsManager:
             return False
 
     @classmethod
-    def start_new_toolkit_instance_static_eni(cls, type: AwsInstanceType, ami: str) -> bool:
+    def start_new_toolkit_instance_with_eni(cls, type: AwsInstanceType, ami: str, eni: str) -> bool:
         try:
             _get(
                 "toolkit",
-                "create_new_instance_static_eni.sh",
-                {"type": type.get_aws_name(), "ami": ami},
+                "create_new_instance_with_eni.sh",
+                {"type": type.get_aws_name(), "ami": ami, "eni": eni},
             )
+            return True
+        except AWSException:
+            return False
+
+    @classmethod
+    def assign_new_eni(cls, user: User) -> bool:
+        try:
+            stdout = _get(
+                "",
+                "create_new_eni.sh",
+                {"user": user.username},
+            )
+            json_output = json.loads(stdout)
+            assert len(json_output) == 1
+            mac = json_output['NetworkInterface']['MacAddress']
+            network_id = json_output['NetworkInterface']['NetworkInterfaceId']
+            user.mac = mac
+            user.eni = network_id
+            db.session.commit()
+            return True
+        except AWSException:
+            return False
+
+    @classmethod
+    def delete_eni(cls, user: User) -> bool:
+        try:
+            assert user.eni is not None
+            _get(
+                "",
+                "delete_eni.sh",
+                {"eni_id": user.eni},
+            )
+            user.mac = None
+            user.eni = None
+            db.session.commit()
             return True
         except AWSException:
             return False

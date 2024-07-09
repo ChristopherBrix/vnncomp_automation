@@ -37,6 +37,7 @@ class ToolkitSubmissionForm(FlaskForm):
             (AwsInstanceType.G58XLARGE.value, AwsInstanceType.G58XLARGE.get_aws_name()),
         ],
     )
+    eni = StringField("AWS ENI (ensures tools submitted by you always get the same MAC address. If you share this value with others, you can share one MAC address.) Leave empty to get a random MAC address. You can find your ENI in your profile.", validators=[Optional()])
     repository = StringField("Git clone URL (format: https://github.com/ABC/DEF or https://PAT@github.com/ABC/DEF)", validators=[DataRequired()])
     hash = StringField("Commit hash", validators=[DataRequired()])
     yaml_config_file = StringField("Yaml Config File, relative to repository root", validators=[DataRequired()], render_kw={})

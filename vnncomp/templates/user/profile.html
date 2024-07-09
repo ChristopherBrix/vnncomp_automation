@@ -1,0 +1,24 @@
+{% import "components.html" as components %}
+
+{{ components.head(title="VNN-Comp 2024") }}
+
+{{ components.loggedIn_navbar(current_user=current_user) }}
+
+
+<!-- Basic features section-->
+<section class="bg-light masthead">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <div class="col-12 col-lg-12">
+                <h2 class="display-6 lh-1 mb-4">Welcome <code class="white-code">{% set the_first_name = current_user.username.split('@')[0] %}{{ the_first_name[0]|upper }}{{ the_first_name[1:] }}</code></h2>
+                If you want your instances to use a consistent MAC address, please use this eni: <code>{{ current_user.eni }}</code>
+                <br>You may share this eni with your team members. They can then use it to launch instances with the same MAC address as you.
+                <br>Please note that per ENI, only one tool can be run at any given time.
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{{ components.footer(current_user, env) }}
+{{ components.foot() }}

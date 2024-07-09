@@ -16,7 +16,8 @@
                     <thead>
                         <tr>
                             <td>User</td>
-                            <td>Action</td>
+                            <td>Enabled?</td>
+                            <td>ENI/MAC</td>
                             <td>Total runtime</td>
                         </tr>
                     </thead>
@@ -29,6 +30,13 @@
                                 <a href="{{ url_for('disable_user', id=user.id) }}">Disable</a>
                                 {% else %}
                                 <a href="{{ url_for('enable_user', id=user.id) }}">Enable</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.eni %}
+                                {{ user.eni }} / {{ user.mac }} (<a href="{{ url_for('admin_user_delete_eni', id=user.id) }}">Delete</a>)
+                                {% else %}
+                                <a href="{{ url_for('admin_user_assign_eni', id=user.id) }}">Assign ENI</a>
                                 {% endif %}
                             </td>
                             <td>

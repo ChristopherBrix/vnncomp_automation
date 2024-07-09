@@ -125,6 +125,7 @@ def toolkit():
         form = ToolkitSubmissionFormAdmin()
     else:
         form = ToolkitSubmissionForm()
+    form.eni.data = current_user.eni
     return render_template(
         "toolkit/submission.html",
         form=form,
@@ -215,9 +216,14 @@ def submit():
         assert type(form) is ToolkitSubmissionForm
         benchmarks_per_submission = len(selected_benchmarks)
         export_results = False
+    if form.eni.data == "":
+        eni = None
+    else:
+        eni = form.eni.data
     for i in range(0, len(selected_benchmarks), benchmarks_per_submission):
         task = ToolkitTask.save_new(
             _aws_instance_type=aws_instance_type,
+            _eni=eni,
             _ami=parsed_config["ami"],
             _name=parsed_config["name"],
             _repository=form.repository.data,
@@ -250,6 +256,7 @@ def toolkit_resubmit(id):
     else:
         form = ToolkitSubmissionForm()
     form.aws_instance_type.data = str(task.aws_instance_type.value)
+    form.eni.data = task.eni
     form.repository.data = task.repository
     form.hash.data = task.hash
     form.yaml_config_file.data = task.yaml_config_file
@@ -542,6 +549,11 @@ def update_failure(id: str):
     task.step_failed()
     return "OK"
 
+@app.route("/user/profile")
+@login_required
+def user_profile():
+    return render_template("user/profile.html")
+
 @app.route("/admin")
 @login_required
 @admin_permissions_required
@@ -585,6 +597,26 @@ def admin_settings_set(parameter: str):
     else:
         return "Invalid parameter"
     return redirect("/admin/settings")
+
+@app.route("/admin/users/<id>/assign_eni", methods=["GET"])
+@login_required
+@admin_permissions_required
+def admin_user_assign_eni(id: str):
+    user = User.query.get(int(id))
+    if user is None:
+        return render_template("404.html")
+    AwsManager.assign_new_eni(user)
+    return redirect(url_for("admin_users"))
+
+@app.route("/admin/users/<id>/delete_eni", methods=["GET"])
+@login_required
+@admin_permissions_required
+def admin_user_delete_eni(id: str):
+    user = User.query.get(int(id))
+    if user is None:
+        return render_template("404.html")
+    AwsManager.delete_eni(user)
+    return redirect(url_for("admin_users"))
 
 @app.route("/manual_update")
 def manual_update():

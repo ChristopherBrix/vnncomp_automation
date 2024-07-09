@@ -118,6 +118,13 @@
                            {{ current_user.username }}
                         </a></li>
                     </ul>
+                    <a href="{{ url_for('user_profile') }}" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0">
+                        <span class="d-flex align-items-center">
+                            <span class="small">
+                                Profile
+                            </span>
+                        </span>
+                    </a>
                     {% if current_user.admin %}
                         <a href="{{ url_for('admin') }}" class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0">
                             <span class="d-flex align-items-center">

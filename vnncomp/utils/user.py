@@ -36,6 +36,8 @@ class User(UserMixin, db.Model):
     submitted_toolkits: List["ToolkitTask"] = relationship(
         "ToolkitTask", back_populates="_db_user"
     )
+    eni = db.Column(db.String(200), nullable=True)
+    mac = db.Column(db.String(200), nullable=True)
 
     def set_password(self, password):
         """Create hashed password."""

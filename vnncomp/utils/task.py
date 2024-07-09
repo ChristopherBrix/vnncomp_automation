@@ -364,6 +364,7 @@ class BenchmarkTask(Task):
 class ToolkitTask(Task):
     __tablename__ = "toolkit_tasks"
     _db_id = db.Column(None, db.ForeignKey("tasks._db_id"), primary_key=True)
+    _db_eni = db.Column(db.String)
     _db_yaml_config_file = db.Column(db.String)
     _db_yaml_config_content = db.Column(db.String)
     _db_post_install_tool = db.Column(db.String)
@@ -377,6 +378,10 @@ class ToolkitTask(Task):
     __mapper_args__ = {
         "polymorphic_identity": "toolkit_task",
     }
+
+    @property
+    def eni(self) -> str:
+        return self._db_eni
 
     @property
     def yaml_config_file(self) -> str:
@@ -442,6 +447,7 @@ class ToolkitTask(Task):
     def __init__(
         self,
         _aws_instance_type: "AwsInstanceType",
+        _eni: str,
         _ami: str,
         _name: str,
         _repository: str,
@@ -464,6 +470,7 @@ class ToolkitTask(Task):
             _hash=_hash,
             _script_dir=_script_dir,
         )
+        self._db_eni = _eni
         self._db_yaml_config_file = _yaml_config_file
         self._db_yaml_config_content = _yaml_config_content
         self._db_post_install_tool = _post_install_tool
@@ -478,6 +485,7 @@ class ToolkitTask(Task):
     def save_new(
         cls,
         _aws_instance_type: "AwsInstanceType",
+        _eni: str,
         _ami: str,
         _name: str,
         _repository: str,
@@ -496,6 +504,7 @@ class ToolkitTask(Task):
     ) -> "ToolkitTask":
         task = ToolkitTask(
             _aws_instance_type=_aws_instance_type,
+            _eni=_eni,
             _ami=_ami,
             _name=_name,
             _repository=_repository,
