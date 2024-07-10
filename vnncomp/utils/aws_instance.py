@@ -81,7 +81,6 @@ class AwsInstance(db.Model):
     _db_state = db.Column(db.String)
     _db_reachability = db.Column(db.String)
     _db_ip = db.Column(db.String)
-    _db_disabled = db.Column(db.Boolean)
     _db_task_id = db.Column(db.String, db.ForeignKey("tasks._db_id"))
 
     @property
@@ -113,10 +112,6 @@ class AwsInstance(db.Model):
         return self._db_ip
 
     @property
-    def disabled(self) -> bool:
-        return self._db_disabled
-
-    @property
     def task(self) -> Task:
         return self._db_task
 
@@ -133,7 +128,6 @@ class AwsInstance(db.Model):
         _state: str,
         _reachability: str,
         _ip: str,
-        _disabled: bool,
     ):
         self._db_id = _id
         self._db_creation_timestamp = _creation_timestamp
@@ -142,7 +136,6 @@ class AwsInstance(db.Model):
         self._db_state = _state
         self._db_reachability = _reachability
         self._db_ip = _ip
-        self._db_disabled = _disabled
 
     def save(self):
         db.session.add(self)
@@ -194,7 +187,6 @@ class AwsInstance(db.Model):
         if self.task is not None:
             self.task._db_total_runtime = int(duration)
         db.session.commit()
-        assert not self.disabled
         # if isinstance(self.task, ToolkitTask):
         #     assert type(self.task) is ToolkitTask
         #     self.task: ToolkitTask
@@ -210,14 +202,13 @@ class AwsInstance(db.Model):
             (AwsInstance._db_state == "running")
             & (AwsInstance._db_reachability == "ok")
             & (AwsInstance._db_ip != "")
-            & (AwsInstance._db_disabled == False)
             & (AwsInstance._db_task_id == None)
             & (AwsInstance._db_aws_instance_type == aws_instance_type.value)
             & (AwsInstance._db_ami == ami)
         ).first()
 
     def __str__(self):
-        return f"{self.id}: {self.aws_instance_type} {self.ip} ({self.state}, {self.reachability}) {self.disabled} {self.task}"
+        return f"{self.id}: {self.aws_instance_type} {self.ip} ({self.state}, {self.reachability}) {self.task}"
 
     def __eq__(self, other):
         return self.id == other.id
@@ -240,10 +231,13 @@ class AwsManager:
             state = instance["State"]["Name"]
             if state == "terminated":
                 continue
-            tags = []
+            tags = dict()
             if instance["Tags"] is not None:
                 for tag in instance["Tags"]:
-                    tags.append(tag["Value"])
+                    tags[tag["Key"]] = tag["Value"]
+            if "IgnoreForVNNComp" in tags:
+                print("Ignoring instance", instance)
+                continue
             db_instance: Optional[AwsInstance] = AwsInstance.query.get(instance["Id"])
             if db_instance is None:
                 aws_instance_type = AwsInstanceType.get_from_type(instance["Type"])
@@ -258,7 +252,6 @@ class AwsManager:
                     _state=state,
                     _reachability="none",
                     _ip=instance["Ip"],
-                    _disabled="manager" in tags,
                 ).save()
             else:
                 db_instance._db_state = state
@@ -283,8 +276,7 @@ class AwsManager:
         for instance in instances:
             timeout_in_hours = Settings.instance_timeout()
             if (
-                not instance.disabled
-                and instance.creation_timestamp
+                instance.creation_timestamp
                 < datetime.datetime.utcnow() - datetime.timedelta(hours=timeout_in_hours)
             ):
                 print(f"Instance older than {timeout_in_hours} hours, terminating", instance)
@@ -299,8 +291,7 @@ class AwsManager:
                     instance.terminate()
 
             if (
-                not instance.disabled
-                and instance.creation_timestamp
+                instance.creation_timestamp
                 < datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
                 and instance.task is None
             ):
