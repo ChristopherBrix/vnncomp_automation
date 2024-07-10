@@ -18,7 +18,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && python3 -m pip install --upgrade pip \
             && git clone https://github.com/ChristopherBrix/vnncomp2024_benchmarks \
             && cd vnncomp2024_benchmarks \
-            && (./setup.sh || true) \
+            && ./setup.sh \
             && cd .. \
             && curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/success \
             || curl --retry 100 --retry-connrefused ${ROOT_URL}/update/${benchmark_id}/failure
