@@ -15,6 +15,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             && git config --global http.sslVerify false \
             && git config --global http.postBuffer 1048576000 \
             && git config --global https.postBuffer 1048576000 \
+            && (sudo mv /usr/lib/python3.12/EXTERNALLY-MANAGED /usr/lib/python3.12/EXTERNALLY-MANAGED.old || true) \
             && python3 -m pip install --upgrade pip \
             && git clone https://github.com/ChristopherBrix/vnncomp2024_benchmarks \
             && cd vnncomp2024_benchmarks \
