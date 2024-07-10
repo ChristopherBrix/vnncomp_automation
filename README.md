@@ -30,7 +30,7 @@ Currently, the code is set up to use the AWS region `us-west-2`. If you want to 
 User Name,Access key ID,Secret access key
 default,[ID],[SECRET]
 ```
-- Create an AWS security group with the name `sshonly` that allows TCP inbound and arbitrary outbound traffic. The group id must be updated in `vnncomp/scripts/create_new_eni.sh`
+- Create an AWS security group with the name `sshonly` that allows TCP inbound and arbitrary outbound traffic. The group id must be updated in `vnncomp/scripts/create_new_eni.sh`. You can get the correct subnet id from the "Create network interface" form on AWS.
 - To support uploading a benchmark to GitHub, create a new ssh key, enter the public key in GitHub and place the private `id_rsa` file in `data/id_rsa`
 - Use `docker build -t vnncomp:latest . ; docker run --name vnncomp --restart=always --env ROOT_URL=$WEBSITE_ROOT_URL --env GIT_COMMIT=$(git rev-parse HEAD) --env SCIEBO_USERNAME=$SCIEBO_USERNAME --env SCIEBO_PASSWORD=$SCIEBO_PASSWORD --env AUTO_APPLY_DB_UPGRADES=1 --mount type=bind,source="$(pwd)",target=/var/www/html/vnncomp -d -t -p 5000:5000 vnncomp:latest` with appropriate values for the environment variables to build and run the container. 
 - For local usage, expose your localhost via `ngrok http 5000` (so AWS instances can ping it) and run `docker build -t vnncomp:latest . ; docker run --name vnncomp --env ROOT_URL="$(curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')" --env GIT_COMMIT=LOCAL --mount type=bind,source="$(pwd)",target=/var/www/html/vnncomp -it --rm -p 5000:5000 vnncomp:latest`. You can then open the website locally at `127.0.0.1:5000` and open a shell in this docker container using `docker exec -it vnncomp bash`.
