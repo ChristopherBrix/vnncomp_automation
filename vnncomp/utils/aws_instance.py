@@ -284,7 +284,7 @@ class AwsManager:
                     instance.task is not None
                     and instance.creation_timestamp
                     > datetime.datetime.utcnow()
-                    - datetime.timedelta(hours={timeout_in_hours}, minutes=10)
+                    - datetime.timedelta(hours=timeout_in_hours, minutes=10)
                 ):
                     instance.task.timeout()
                 else:
