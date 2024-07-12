@@ -586,6 +586,29 @@ class TaskPause(TaskStep):
     def _success_link(self):
         return url_for("update_success", id=self._db_task.id)
 
+class ToolkitRestart(TaskStep):
+    __mapper_args__ = {"polymorphic_identity": "task_toolkit_restart"}
+
+    def execute(self):
+        super().execute()
+        _ping(
+            "toolkit",
+            "restart.sh",
+            {
+                "benchmark_id": str(self._db_task.id),
+                "benchmark_ip": self._db_task.instance.ip,
+            },
+        )
+
+    def can_be_aborted(self) -> bool:
+        return False
+
+    def is_instance_loss_valid_end(self):
+        return False
+
+    def description(self):
+        return "Restart"
+
 
 class ToolkitInitialize(TaskStep):
     __mapper_args__ = {"polymorphic_identity": "task_toolkit_initialize"}

@@ -83,6 +83,7 @@ class ToolkitSubmissionForm(FlaskForm):
         ],
     )
     pause_after_postinstallation = BooleanField("Pause after the post-installation script is run. Use this if you want to connect with the instance via ssh to debug issues. In the post-installation script, append your public key to /home/ubuntu/.ssh/authorized_keys.")
+    restart_after_postinstallation = BooleanField("Restart the instance after the post-installation script is run. May be necessary to reload GPU drivers.")
     submit = SubmitField(
         "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
     )

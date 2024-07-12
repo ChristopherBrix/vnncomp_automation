@@ -46,6 +46,7 @@ from vnncomp.utils.task_steps import (
     ToolkitClone,
     ToolkitInstall,
     ToolkitRun,
+    ToolkitRestart,
     TaskAssign,
     TaskAbortion,
     TaskFailure,
@@ -243,6 +244,7 @@ def submit():
             _run_tool_as_root=parsed_config["run_toolkit_as_root"],
             _export_results=export_results,
             _pause_after_postinstallation=form.pause_after_postinstallation.data,
+            _restart_after_postinstallation=form.restart_after_postinstallation.data,
         )
 
     return redirect(url_for("toolkit_details", id=task.id))
@@ -268,6 +270,7 @@ def toolkit_resubmit(id):
     form.post_install_tool.data = task.post_install_tool
     form.benchmarks.data = task.benchmarks
     form.pause_after_postinstallation.data = task.pause_after_postinstallation
+    form.restart_after_postinstallation.data = task.restart_after_postinstallation
 
     return render_template("toolkit/submission.html", form=form)
 

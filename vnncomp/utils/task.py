@@ -18,6 +18,7 @@ from vnncomp.utils.task_steps import (
     BenchmarkInitialize,
     BenchmarkRun,
     TaskPause,
+    ToolkitRestart,
     ToolkitCreate,
     ToolkitGithubExport,
     ToolkitInitialize,
@@ -375,6 +376,7 @@ class ToolkitTask(Task):
     _db_run_post_install_as_root = db.Column(db.Boolean)
     _db_run_tool_as_root = db.Column(db.Boolean)
     _db_pause_after_postinstallation = db.Column(db.Boolean)
+    _db_restart_after_postinstallation = db.Column(db.Boolean)
 
     __mapper_args__ = {
         "polymorphic_identity": "toolkit_task",
@@ -449,6 +451,10 @@ class ToolkitTask(Task):
     def pause_after_postinstallation(self) -> bool:
         return self._db_pause_after_postinstallation
 
+    @property
+    def restart_after_postinstallation(self) -> bool:
+        return self._db_restart_after_postinstallation
+
     def __init__(
         self,
         _aws_instance_type: "AwsInstanceType",
@@ -467,6 +473,7 @@ class ToolkitTask(Task):
         _run_post_install_as_root: bool,
         _run_tool_as_root: bool,
         _pause_after_postinstallation: bool,
+        _restart_after_postinstallation: bool,
     ):
         super().__init__(
             _aws_instance_type=_aws_instance_type,
@@ -487,6 +494,7 @@ class ToolkitTask(Task):
         self._db_run_post_install_as_root = _run_post_install_as_root
         self._db_run_tool_as_root = _run_tool_as_root
         self._db_pause_after_postinstallation = _pause_after_postinstallation
+        self._db_restart_after_postinstallation = _restart_after_postinstallation
 
     @classmethod
     def save_new(
@@ -509,6 +517,7 @@ class ToolkitTask(Task):
         _run_tool_as_root: bool,
         _export_results: bool,
         _pause_after_postinstallation: bool,
+        _restart_after_postinstallation: bool,
     ) -> "ToolkitTask":
         task = ToolkitTask(
             _aws_instance_type=_aws_instance_type,
@@ -527,6 +536,7 @@ class ToolkitTask(Task):
             _run_post_install_as_root=_run_post_install_as_root,
             _run_tool_as_root=_run_tool_as_root,
             _pause_after_postinstallation=_pause_after_postinstallation,
+            _restart_after_postinstallation=_restart_after_postinstallation
         )
 
         db.session.add(task)
@@ -540,6 +550,7 @@ class ToolkitTask(Task):
             _run_tool_as_root,
             _export_results,
             _pause_after_postinstallation,
+            _restart_after_postinstallation,
         )
         task._db_current_step.execute()
         return task
@@ -554,6 +565,7 @@ class ToolkitTask(Task):
         run_tool_as_root: bool,
         export_results: bool,
         pause_after_postinstallation: bool,
+        restart_after_postinstallation: bool,
     ):
         self._db_steps = [
             ToolkitCreate(self).add_to_db(),
@@ -569,6 +581,8 @@ class ToolkitTask(Task):
         )
         if pause_after_postinstallation:
             self._db_steps.append(TaskPause(self).add_to_db())
+        if restart_after_postinstallation:
+            self._db_steps.append(ToolkitRestart(self).add_to_db())
         for benchmark in benchmarks:
             self._db_steps.append(
                 ToolkitRun(self, benchmark, _run_networks, run_tool_as_root).add_to_db()
