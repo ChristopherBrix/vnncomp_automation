@@ -49,15 +49,15 @@ except WebDavException as exception:
     raise
 
 client.mkdir("vnncomp2024/" + args["name"])
-client.mkdir("vnncomp2024/" + args["name"] + "/seed_0")
-client.clean("vnncomp2024/" + args["name"] + "/seed_0")
-client.mkdir("vnncomp2024/" + args["name"] + "/seed_0")
-client.mkdir("vnncomp2024/" + args["name"] + "/seed_0/onnx")
-client.mkdir("vnncomp2024/" + args["name"] + "/seed_0/vnnlib")
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_933540974")
+client.clean("vnncomp2024/" + args["name"] + "/seed_933540974")
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_933540974")
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_933540974/onnx")
+client.mkdir("vnncomp2024/" + args["name"] + "/seed_933540974/vnnlib")
 
 # TODO This is a hack. The calling script will pass the whole path, but here we need the directory. We should fix that in the calling code, but it's easier here.
 upload_name = "/".join(args["local_path"].split("/")[-2:])
-remote_path = "vnncomp2024" + "/" + args["name"] + "/seed_0/" + upload_name
+remote_path = "vnncomp2024" + "/" + args["name"] + "/seed_933540974/" + upload_name
 
 upload_type = UploadType.NA
 

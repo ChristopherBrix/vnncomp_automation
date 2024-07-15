@@ -7,7 +7,7 @@ ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/vnncomp.pem ubuntu@${benchmark
             set -x
             cd benchmark/${script_dir} \
                 && (pip3 install -r requirements.txt || true) \
-                && python3 generate_properties.py 0 \
+                && python3 generate_properties.py ${seed} \
                 && (ls ${vnnlib_dir}/*.vnnlib || ls ${vnnlib_dir}/*/*.vnnlib) \
                 && cd ~ \
                 && ls benchmark/${script_dir}/${csv_file} \
