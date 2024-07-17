@@ -93,6 +93,7 @@ class ToolkitSubmissionFormAdmin(ToolkitSubmissionForm):
     split = IntegerField("Split submission into several, each with N benchmarks", default=0)
     export_results = BooleanField("Upload results to GitHub")
     force_pause = BooleanField("Force pause after installation")
+    force_no_pause = BooleanField("Force no pause after installation")
     submit = SubmitField(
         "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
     )

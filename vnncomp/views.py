@@ -214,8 +214,13 @@ def submit():
         if benchmarks_per_submission == 0:
             benchmarks_per_submission = len(selected_benchmarks)
         export_results = form.export_results.data
-        if not pause:
-            pause = form.force_pause.data
+        if form.force_pause.data and form.force_no_pause.data:
+            message = "You cannot both force a pause and force not to pause"
+            return render_template("toolkit/submission.html", form=form, message=message)
+        if not pause and form.force_pause.data:
+            pause = True
+        if pause and form.force_no_pause.data:
+            pause = False
     else:
         assert type(form) is ToolkitSubmissionForm
         benchmarks_per_submission = len(selected_benchmarks)
