@@ -94,6 +94,7 @@ class ToolkitSubmissionFormAdmin(ToolkitSubmissionForm):
     export_results = BooleanField("Upload results to GitHub")
     force_pause = BooleanField("Force pause after installation")
     force_no_pause = BooleanField("Force no pause after installation")
+    save_with_user_id = IntegerField("Submit this tool on behalf of another user (enter their user ID)", validators=[Optional()])
     submit = SubmitField(
         "Start Evaluation", render_kw={"style": "background: #212529; color: white"}
     )

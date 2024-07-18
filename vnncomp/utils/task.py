@@ -518,7 +518,9 @@ class ToolkitTask(Task):
         _export_results: bool,
         _pause_after_postinstallation: bool,
         _restart_after_postinstallation: bool,
+        _user_overwrite: Optional[User],
     ) -> "ToolkitTask":
+        user = _user_overwrite if _user_overwrite is not None else current_user
         task = ToolkitTask(
             _aws_instance_type=_aws_instance_type,
             _eni=_eni,
@@ -530,7 +532,7 @@ class ToolkitTask(Task):
             _yaml_config_content=_yaml_config_content,
             _script_dir=_script_dir,
             _post_install_tool=_post_install_tool,
-            _user=current_user,
+            _user=user,
             _run_networks=_run_networks,
             _run_install_as_root=_run_install_as_root,
             _run_post_install_as_root=_run_post_install_as_root,

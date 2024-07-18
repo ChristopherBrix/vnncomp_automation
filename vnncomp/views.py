@@ -221,10 +221,18 @@ def submit():
             pause = True
         if pause and form.force_no_pause.data:
             pause = False
+        if form.save_with_user_id.data is not None:
+            user_overwrite = User.query.get(form.save_with_user_id.data)
+            if user_overwrite is None:
+                message = "User ID not found"
+                return render_template("toolkit/submission.html", form=form, message=message)
+        else:
+            user_overwrite = None
     else:
         assert type(form) is ToolkitSubmissionForm
         benchmarks_per_submission = len(selected_benchmarks)
         export_results = False
+        user_overwrite = None
     if form.eni.data == "":
         eni = None
     else:
@@ -250,6 +258,7 @@ def submit():
             _export_results=export_results,
             _pause_after_postinstallation=form.pause_after_postinstallation.data,
             _restart_after_postinstallation=form.restart_after_postinstallation.data,
+            _user_overwrite=user_overwrite,
         )
 
     return redirect(url_for("toolkit_details", id=task.id))
