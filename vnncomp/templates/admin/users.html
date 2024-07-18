@@ -19,6 +19,7 @@
                             <td>Enabled?</td>
                             <td>ENI/MAC</td>
                             <td>Total runtime</td>
+                            <td>Login</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,6 +44,9 @@
                                 {{ user.total_used_runtime // (60 * 60 * 24) }} days,
                                 {{ user.total_used_runtime % (60 * 60 * 24) // (60 * 60) }} hours,
                                 {{ user.total_used_runtime % (60 * 60) // (60) }} minutes
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin_user_login', id=user.id) }}">Login</a>
                             </td>
                         </tr>
                         {% endfor %}

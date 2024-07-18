@@ -632,6 +632,17 @@ def admin_user_delete_eni(id: str):
     AwsManager.delete_eni(user)
     return redirect(url_for("admin_users"))
 
+@app.route("/admin/users/<id>/login", methods=["GET"])
+@login_required
+@admin_permissions_required
+def admin_user_login(id: str):
+    user = User.query.get(int(id))
+    if user is None:
+        return render_template("404.html")
+    logout_user()
+    login_user(user)
+    return redirect(url_for("index"))
+
 @app.route("/manual_update")
 def manual_update():
     if Settings.aws_enabled():
