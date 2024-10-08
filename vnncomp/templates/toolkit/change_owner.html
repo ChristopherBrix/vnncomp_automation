@@ -1,0 +1,32 @@
+{% import "components.html" as components %}
+
+{{ components.head(title="VNN-Comp 2024") }}
+
+{{ components.loggedIn_navbar(current_user=current_user) }}
+
+
+<section style="padding-bottom: 2rem;" class="bg-light">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center justify-content-lg-between">
+            <p style="margin-bottom:0.5em"><a href="/"
+               class="btn btn-light rounded-pill px-3 mb-2 mb-lg-0" style="padding-left: 0 !important;"
+            >
+                    <span class="d-flex align-items-center">
+                        <span class="small">
+                            < Back to Main Page
+                        </span>
+                    </span>
+            </a></p>
+
+            <h2>Change owner of <code>{{ task.name }} ({{ task.id }})</code></h2>
+
+            {% for user in users %}
+                <a href="{{ url_for('change_owner_submit', task_id=task.id, new_owner_id=user.id) }}">{{ user.username }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+{{ components.footer(current_user, env) }}
+{{ components.foot() }}
