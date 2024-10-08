@@ -599,6 +599,10 @@ class ToolkitTask(Task):
         self._db_post_install_tool = post_install_script
         db.session.commit()
 
+    def set_owner(self, new_owner: User):
+        self._db_user = new_owner
+        db.session.commit()
+
     @classmethod
     def get_all_uservisible(cls) -> List["ToolkitTask"]:
         print(current_user, current_user.admin)

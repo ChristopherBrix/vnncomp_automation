@@ -32,7 +32,9 @@
             {% if current_user.admin %}
             {% if not task.done and task.current_step == None %}
                 <a href="{{ url_for('toolkit_sanitize_abort', id=task.id) }}">Sanitize & abort</a>
+                <br>
             {% endif %}
+            <a href="{{ url_for('change_owner', task_id=task.id) }}">Change owner</a>
             {% endif %}
 
             <div class="d-flex flex-column flex-lg-row align-items-center" style="margin-bottom: 1rem">

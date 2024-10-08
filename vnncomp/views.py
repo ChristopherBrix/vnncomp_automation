@@ -395,6 +395,7 @@ def toolkit_abort(id):
     task.abort()
     return redirect(url_for("toolkit_details", id=id))
 
+
 @app.route("/toolkit/sanitize_abort/<id>", methods=["GET"])
 @login_required
 @admin_permissions_required
@@ -406,6 +407,32 @@ def toolkit_sanitize_abort(id):
         return f"The current step is {task.current_step}, no sanitization necessary"
     task.sanitize_abort()
     return redirect(url_for("toolkit_details", id=id))
+
+
+@app.route("/toolkit/change_owner/<task_id>", methods=["GET"])
+@login_required
+@admin_permissions_required
+def change_owner(task_id: str):
+    task: Task = Task.get(int(task_id))
+    if task is None:
+        return render_template("404.html")
+    users = User.query.all()
+    return render_template("toolkit/change_owner.html", task=task, users=users)
+
+
+@app.route("/toolkit/change_owner/<task_id>/<new_owner_id>", methods=["GET"])
+@login_required
+@admin_permissions_required
+def change_owner_submit(task_id: str, new_owner_id: str):
+    task: Task = Task.get(int(task_id))
+    if task is None:
+        return render_template("404.html")
+    user = User.query.get(int(new_owner_id))
+    if user is None:
+        return "User not found"
+    task.set_owner(user)
+    return redirect(url_for("toolkit_list"))
+
 
 @app.route("/benchmark/form", methods=["GET"])
 @login_required
@@ -540,7 +567,6 @@ def benchmark_abort(id: str):
     assert task.current_step.can_be_aborted() and not task.done
     task.abort()
     return redirect(url_for("benchmark_details", id=id))
-
 
 @app.route("/update/<id>/success")
 def update_success(id: str):
