@@ -194,7 +194,7 @@ def submit():
         "ami-0892d3c7ee96c0bf7",
         "ami-0d70546e43a941d70",
         "ami-0cce14f90c7ec05b5",
-        "ami-080fce32dc8c15ced",
+        "ami-05865edb0dba554ff",
         "ami-0aff18ec83b712f05",
         "ami-04fbaf1323e01bd2b",
     ]:
